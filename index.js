@@ -53,11 +53,11 @@ async function postLeadToZohoCRM(lead) {
         const data = qs.stringify({
             'data': JSON.stringify([
                 {
-                    'Company': lead.company,
-                    'Last_Name': lead.lastName,
-                    'First_Name': lead.firstName,
-                    'Email': lead.email,
-                    // Add more fields as needed
+                    "Company":"personal",
+                    "Last_Name":"test",
+                    "First_Name": "vishal",
+                    "Email":"test143@gmail.com"
+        
                 }
             ])
         });
@@ -76,6 +76,7 @@ async function postLeadToZohoCRM(lead) {
 app.post('/kylas-webhook', async (req, res) => {
     try {
         const newLead = req.body;
+        console.log(newLead);
         await postLeadToZohoCRM(newLead);
         console.log("somplete");
         res.status(200).send('Lead processed successfully');
