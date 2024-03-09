@@ -33,8 +33,8 @@ async function postLeadToZohoCRM(lead) {
         const leadData = {
             data: [
                 {
-                    First_Name: "uniquee",
-                    Last_Name: "20",
+                    First_Name: lead.entity.firstName,
+                    Last_Name: lead.entity.lastName,
                 },
             ],
         };
