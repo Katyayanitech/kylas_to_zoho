@@ -43,8 +43,8 @@ async function postLeadToZohoCRM(lead) {
         const data = qs.stringify({
             'data': JSON.stringify([
                 {
-                    "Last_Name": lead.lastName,
-                    "First_Name": lead.firstName,
+                    "Last_Name": "unique",
+                    "First_Name": "22",
                 }
             ])
         });
