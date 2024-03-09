@@ -27,13 +27,13 @@ async function postLead(leadData) {
 }
 
 async function postLeadToZohoCRM(lead) {
+    console(lead);
     try {
         const leadData = {
             data: [
                 {
                     First_Name: "uniquee",
-                    Last_Name: "20", // Mandatory field
-                    // Add other fields as necessary
+                    Last_Name: "20",
                 },
             ],
         };
