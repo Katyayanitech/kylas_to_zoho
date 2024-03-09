@@ -5,21 +5,21 @@ const qs = require('qs');
 const app = express();
 app.use(express.json());
 
-let ZOHO_CRM_ACCESS_TOKEN = ''; // This will be updated dynamically
+let ZOHO_CRM_ACCESS_TOKEN = '1000.483f160b1eebd6aab1802e2119fb573d.2e497e07714968b75e45d8526413ec41'; // This will be updated dynamically
 
 // Function to refresh the Zoho CRM access token
-async function refreshAccessToken() {
-    const tokenRefreshUrl = 'https://accounts.zoho.in/oauth/v2/token?grant_type=refresh_token&refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback';
+// async function refreshAccessToken() {
+//     const tokenRefreshUrl = 'https://accounts.zoho.in/oauth/v2/token?grant_type=refresh_token&refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback';
     
-    try {
-        const response = await axios.post(tokenRefreshUrl);
-        ZOHO_CRM_ACCESS_TOKEN = response.data.access_token;
-        console.log('Access token refreshed successfully:', ZOHO_CRM_ACCESS_TOKEN);
-    } catch (error) {
-        console.error('Error refreshing access token:', error);
-        throw new Error('Failed to refresh access token');
-    }
-}
+//     try {
+//         const response = await axios.post(tokenRefreshUrl);
+//         ZOHO_CRM_ACCESS_TOKEN = response.data.access_token;
+//         console.log('Access token refreshed successfully:', ZOHO_CRM_ACCESS_TOKEN);
+//     } catch (error) {
+//         console.error('Error refreshing access token:', error);
+//         throw new Error('Failed to refresh access token');
+//     }
+// }
 
 // Function to post a new lead to Zoho CRM API
 async function postLead(data) {
@@ -38,7 +38,7 @@ async function postLead(data) {
 
 async function postLeadToZohoCRM(lead) {
     try {
-        await refreshAccessToken(); // Ensure we have a fresh access token before attempting to post
+        // await refreshAccessToken(); // Ensure we have a fresh access token before attempting to post
 
         const data = qs.stringify({
             'data': JSON.stringify([
