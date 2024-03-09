@@ -1,65 +1,56 @@
 const express = require('express');
 const axios = require('axios');
-const qs = require('qs');
 
 const app = express();
 app.use(express.json());
 
 let ZOHO_CRM_ACCESS_TOKEN = '1000.0fad0bece2b4528bdb2b520493a08a74.4802d929d1b366c9532867a3abb521fb'; // This will be updated dynamically
 
-// Function to refresh the Zoho CRM access token
-// async function refreshAccessToken() {
-//     const tokenRefreshUrl = 'https://accounts.zoho.in/oauth/v2/token?grant_type=refresh_token&refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback';
-    
-//     try {
-//         const response = await axios.post(tokenRefreshUrl);
-//         ZOHO_CRM_ACCESS_TOKEN = response.data.access_token;
-//         console.log('Access token refreshed successfully:', ZOHO_CRM_ACCESS_TOKEN);
-//     } catch (error) {
-//         console.error('Error refreshing access token:', error);
-//         throw new Error('Failed to refresh access token');
-//     }
-// }
-
-// Function to post a new lead to Zoho CRM API
-async function postLead(data) {
+// Function to post a new lead to Zoho CRM API, correctly handling JSON data
+async function postLead(leadData) {
     const config = {
         method: 'post',
         url: 'https://www.zohoapis.in/crm/v2/Leads',
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json' // Ensure correct content type for JSON
         },
-        data: data
+        data: JSON.stringify(leadData) // Convert lead data to JSON string
     };
 
-    return await axios(config);
+    try {
+        return await axios(config);
+    } catch (error) {
+        console.error('Error in postLead function:', error);
+        throw error; // Rethrowing the error for handling in the calling function
+    }
 }
 
 async function postLeadToZohoCRM(lead) {
     try {
-        // await refreshAccessToken(); // Ensure we have a fresh access token before attempting to post
-
-        const data = qs.stringify({
-            'data': JSON.stringify([
+        const leadData = {
+            data: [
                 {
-                    "Last_Name": "unique",
-                    "First_Name": "22",
-                }
-            ])
-        });
+                    Company: lead.company || "Default Company", // Default value or provided value
+                    Last_Name: lead.lastName, // Mandatory field
+                    First_Name: lead.firstName,
+                    Email: lead.email,
+                    // Add other fields as necessary
+                },
+            ],
+        };
 
-        const response = await postLead(data);
+        const response = await postLead(leadData);
         console.log('Lead posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting lead to Zoho CRM:', error);
+        console.error('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
 
 // Endpoint to receive webhook requests from Kylas
 app.post('/kylas-webhook', async (req, res) => {
     try {
-        const newLead = req.body;
+        const newLead = req.body; // Assuming req.body is directly the lead object
         await postLeadToZohoCRM(newLead);
         res.status(200).send('Lead processed successfully');
     } catch (error) {
