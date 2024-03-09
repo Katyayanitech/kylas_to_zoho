@@ -27,7 +27,8 @@ async function postLead(leadData) {
 }
 
 async function postLeadToZohoCRM(lead) {
-    console(lead);
+    console.log("lead data");
+    console.log(lead);
     try {
         const leadData = {
             data: [
