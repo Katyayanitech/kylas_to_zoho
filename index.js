@@ -5,26 +5,16 @@ const qs = require('qs');
 const app = express();
 app.use(express.json());
 
-// Zoho CRM API credentials
 let ZOHO_CRM_ACCESS_TOKEN = ''; // This will be updated dynamically
-const ZOHO_CRM_REFRESH_TOKEN = '1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde';
-const CLIENT_ID = '1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV';
-const CLIENT_SECRET = '4c2bc771c7540978217ae92902c4d504de64bc3f96';
-const REDIRECT_URI = 'http://google.com/oauth2callback';
 
 // Function to refresh the Zoho CRM access token
 async function refreshAccessToken() {
-    const params = new URLSearchParams();
-    params.append('refresh_token', ZOHO_CRM_REFRESH_TOKEN);
-    params.append('client_id', CLIENT_ID);
-    params.append('client_secret', CLIENT_SECRET);
-    params.append('redirect_uri', REDIRECT_URI);
-    params.append('grant_type', 'refresh_token');
-
+    const tokenRefreshUrl = 'https://accounts.zoho.in/oauth/v2/token?grant_type=refresh_token&refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback';
+    
     try {
-        const response = await axios.post('https://accounts.zoho.in/oauth/v2/token', params);
+        const response = await axios.post(tokenRefreshUrl);
         ZOHO_CRM_ACCESS_TOKEN = response.data.access_token;
-        console.log('Access token refreshed successfully');
+        console.log('Access token refreshed successfully:', ZOHO_CRM_ACCESS_TOKEN);
     } catch (error) {
         console.error('Error refreshing access token:', error);
         throw new Error('Failed to refresh access token');
@@ -49,15 +39,12 @@ async function postLead(data) {
 async function postLeadToZohoCRM(lead) {
     try {
         await refreshAccessToken(); // Ensure we have a fresh access token before attempting to post
-        console.log(ZOHO_CRM_ACCESS_TOKEN);
+
         const data = qs.stringify({
             'data': JSON.stringify([
                 {
-                    "Company":"personal",
-                    "Last_Name":"test",
-                    "First_Name": "vishal",
-                    "Email":"test143@gmail.com"
-        
+                    "Last_Name": lead.lastName,
+                    "First_Name": lead.firstName,
                 }
             ])
         });
@@ -66,9 +53,6 @@ async function postLeadToZohoCRM(lead) {
         console.log('Lead posted to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.error('Error posting lead to Zoho CRM:', error);
-        if (error.response && error.response.status === 401) { // 401 indicates an Unauthorized response, suggesting an expired or invalid token
-            console.error('Access token might be expired or invalid. Please refresh and try again.');
-        }
     }
 }
 
@@ -76,9 +60,7 @@ async function postLeadToZohoCRM(lead) {
 app.post('/kylas-webhook', async (req, res) => {
     try {
         const newLead = req.body;
-        console.log(newLead);
         await postLeadToZohoCRM(newLead);
-        console.log("somplete");
         res.status(200).send('Lead processed successfully');
     } catch (error) {
         console.error('Error processing webhook request:', error);
