@@ -31,10 +31,8 @@ async function postLeadToZohoCRM(lead) {
         const leadData = {
             data: [
                 {
-                    Company: lead.company || "Default Company", // Default value or provided value
-                    Last_Name: lead.lastName, // Mandatory field
-                    First_Name: lead.firstName,
-                    Email: lead.email,
+                    First_Name: "uniquee",
+                    Last_Name: "20", // Mandatory field
                     // Add other fields as necessary
                 },
             ],
