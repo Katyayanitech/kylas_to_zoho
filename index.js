@@ -65,7 +65,7 @@ async function postLeadToZohoCRM(lead) {
                     First_Name: lead.entity.firstName,
                     Last_Name: lead.entity.lastName,
                     Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
-                    // Email: lead.entity.emails[0].value || "",
+                    Email: lead.entity.emails[0].value || [""],
                     City: lead.entity.city || "",
                     State: lead.entity.state || "",
                     Zip_Code: lead.entity.zipcode || "",
