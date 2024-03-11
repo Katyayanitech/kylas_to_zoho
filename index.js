@@ -57,14 +57,14 @@ async function postLeadToZohoCRM(lead) {
     console.log("lead data");
     console.log(lead);
     console.log("lead number");
-    console.log(lead.entity.phoneNumbers[0]);
+    console.log(lead.entity.phoneNumbers[0].value);
     try {
         const leadData = {
             data: [
                 {
                     First_Name: lead.entity.firstName,
                     Last_Name: lead.entity.lastName,
-                    phoneNumber: lead.entity.phoneNumbers[0].value || "",
+                    Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
                 },
             ],
         };
