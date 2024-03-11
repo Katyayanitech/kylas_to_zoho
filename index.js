@@ -82,7 +82,7 @@ async function postLeadToZohoCRM(lead) {
     }
 }
 
-app.post('/kylas-webhook', async (req, res) => {
+app.post('/kylas-Leads', async (req, res) => {
     try {
         const newLead = req.body;
         await postLeadToZohoCRM(newLead);
@@ -107,36 +107,45 @@ async function Postcontact(Contactdata) {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postLead function:', error);
+        console.error('Error in postContact function:', error);
         throw error; // Rethrowing the error for handling in the calling function
     }
 }
 async function Postcontactzoho(contact) {
     console.log("Contact Data ");
     console.log(contact);
-    // try {
-    //     const Contactdata = {
-    //         data: [
-    //             {
-    //                 First_Name: "Vaibhaw ",
-    //                 Last_Name: "Test",
-    //                 phoneNumber: "8365749632",
-    //             },
-    //         ],
-    //     };
+    try {
+        const Contactdata = {
+            data: [
+                {
+                    First_Name: contact.entity.firstName,
+                    Last_Name: contact.entity.lastName,
+                    phoneNumber: (contact.entity.phoneNumbers[0].dialCode + contact.entity.phoneNumbers[0].value) || "",
+                    Email: (contact.entity.emails == null) ? "" : (contact.entity.emails[0].value),
+                    City: contact.entity.city || "",
+                    State: contact.entity.state || "",
+                    Zip_Code: contact.entity.zipcode || "",
+                    Kylas_Contact_Owner: lead.entity.ownerId.value,
+                    Lead_Source: contact.entity.source.value || "",
+                    Main_Crop: contact.entity.customFieldValues.cfMainCrops || "",
+                    Identification: contact.entity.customFieldValues.cfIdentification || "",
+                    Acres_of_Land_If_Farmer: contact.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
+                },
+            ],
+        };
 
-    //     const response = await Postcontact(Contactdata);
-    //     console.log('Lead posted to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.error('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+        const response = await Postcontact(Contactdata);
+        console.log('Contact posted to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.error('Error posting Contact to Zoho CRM:', error.response ? error.response.data : error);
+    }
 }
 
-app.post('/kylas-Contact', async (req, res) => {
+app.post('/kylas-Contacts', async (req, res) => {
     try {
         const newcontact = req.body;
         await Postcontactzoho(newcontact);
-        res.status(200).send('Lead processed successfully');
+        res.status(200).send('Contact processed successfully');
     } catch (error) {
         console.error('Error processing webhook request:', error);
         res.status(500).send('Error processing webhook request');
