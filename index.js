@@ -96,7 +96,7 @@ app.post('/kylas-Leads', async (req, res) => {
 async function Postcontact(Contactdata) {
     const config = {
         method: 'post',
-        url: 'http://www.zohoapis.in/crm/v2/Contacts',
+        url: 'https://www.zohoapis.in/crm/v2/Contacts',
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ async function Postcontact(Contactdata) {
         return await axios(config);
     } catch (error) {
         console.error('Error in postContact function:', error);
-        throw error; // Rethrowing the error for handling in the calling function
+        throw error;
     }
 }
 async function Postcontactzoho(contact) {
@@ -125,7 +125,7 @@ async function Postcontactzoho(contact) {
                     City: contact.entity.city || "",
                     State: contact.entity.state || "",
                     Zip_Code: contact.entity.zipcode || "",
-                    Kylas_Contact_Owner: lead.entity.ownerId.value,
+                    Kylas_Contact_Owner: contact.entity.ownerId.value,
                     Lead_Source: contact.entity.source.value || "",
                     Main_Crop: contact.entity.customFieldValues.cfMainCrops || "",
                     Identification: contact.entity.customFieldValues.cfIdentification || "",
