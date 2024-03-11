@@ -63,7 +63,7 @@ async function postLeadToZohoCRM(lead) {
     console.log(lead.entity.city);
     console.log(lead.entity.state);
     console.log(lead.entity.zipcode);
-    console.log(lead.entity.source);
+    console.log(lead.entity.source.name);
     console.log(lead.entity.ownerId.value);
     try {
         const leadData = {
@@ -74,11 +74,11 @@ async function postLeadToZohoCRM(lead) {
                     Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
                     // Address: lead.entity.address,
                     // Email: lead.entity.emails[0].value || "",
-                    // City: lead.entity.city || "",
-                    // State: lead.entity.state || "",
-                    // Zip_Code: lead.entity.zipcode || "",
-                    // Lead_Source: lead.entity.source || "",
-                    // Owner: { name: lead.entity.ownerId.value || "" },
+                    City: lead.entity.city || "",
+                    State: lead.entity.state || "",
+                    Zip_Code: lead.entity.zipcode || "",
+                    Lead_Source: lead.entity.source || "",
+                    Owner: { name: lead.entity.ownerId.value || "" },
                 },
             ],
         };
