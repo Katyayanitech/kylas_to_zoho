@@ -115,7 +115,6 @@ async function Postcontactzoho(contact) {
     console.log("Contact Data ");
     console.log(contact);
     console.log(contact.entity.phoneNumbers[0]);
-    console.log(contact.entity.customFieldValues.cfIdentification);
 
     try {
         const Contactdata = {
