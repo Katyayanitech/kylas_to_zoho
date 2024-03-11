@@ -93,6 +93,56 @@ app.post('/kylas-webhook', async (req, res) => {
     }
 });
 
+async function Postcontact(Contactdata) {
+    const config = {
+        method: 'post',
+        url: 'https://www.zohoapis.in/crm/v2/Contacts',
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(Contactdata)
+    };
+
+    try {
+        return await axios(config);
+    } catch (error) {
+        console.error('Error in postLead function:', error);
+        throw error; // Rethrowing the error for handling in the calling function
+    }
+}
+async function Postcontactzoho(contact) {
+    console.log("Contact Data ");
+    console.log(contact);
+    // try {
+    //     const Contactdata = {
+    //         data: [
+    //             {
+    //                 First_Name: "Vaibhaw ",
+    //                 Last_Name: "Test",
+    //                 phoneNumber: "8365749632",
+    //             },
+    //         ],
+    //     };
+
+    //     const response = await Postcontact(Contactdata);
+    //     console.log('Lead posted to Zoho CRM successfully:', response.data);
+    // } catch (error) {
+    //     console.error('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
+    // }
+}
+
+app.post('/kylas-Contact', async (req, res) => {
+    try {
+        const newcontact = req.body;
+        await Postcontactzoho(newcontact);
+        res.status(200).send('Lead processed successfully');
+    } catch (error) {
+        console.error('Error processing webhook request:', error);
+        res.status(500).send('Error processing webhook request');
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
