@@ -131,7 +131,7 @@ async function Postcontactzoho(contact) {
                     Kylas_Contact_Owner: contact.entity.ownerId.value || "",
                     Lead_Source: contact.entity.source.name || "",
                     Main_Crop: contact.entity.customFieldValues.cfMainCrops || "",
-                    Identification: contact.entity.customFieldValues.cfIdentification || "",
+                    Identification: contact.entity.customFieldValues.cfIdentification.value || "",
                     Acres_of_Land_If_Farmer: contact.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
                 },
             ],
