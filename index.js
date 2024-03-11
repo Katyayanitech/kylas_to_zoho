@@ -120,7 +120,7 @@ async function Postcontactzoho(contact) {
                 {
                     First_Name: contact.entity.firstName,
                     Last_Name: contact.entity.lastName,
-                    phoneNumber: (contact.entity.phoneNumbers[0].dialCode + contact.entity.phoneNumbers[0].value) || "",
+                    Phone: (contact.entity.phoneNumbers[0].dialCode + contact.entity.phoneNumbers[0].value) || "",
                     Email: (contact.entity.emails == null) ? "" : (contact.entity.emails[0].value),
                     City: contact.entity.city || "",
                     State: contact.entity.state || "",
