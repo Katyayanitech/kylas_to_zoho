@@ -70,7 +70,7 @@ async function postLeadToZohoCRM(lead) {
                     State: lead.entity.state || "",
                     Zip_Code: lead.entity.zipcode || "",
                     Lead_Source: lead.entity.source.value || "",
-                    // Owner: { name: lead.entity.ownerId.value || "" },
+                    Kylas_Owner: lead.entity.ownerId.value,
                 },
             ],
         };
