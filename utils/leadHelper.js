@@ -68,13 +68,36 @@ const updateLead = async (leadData) => {
     }
 }
 
+const getLeadIdByPhoneNumber = async (phoneNumber) => {
+    const apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Phone:equals:${phoneNumber})`;
+
+    try {
+        const response = await axios.get(apiUrl, {
+            headers: {
+                'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Extract and return the lead ID
+        return response.data.data[0].id;
+    } catch (error) {
+        console.error('Error in getLeadIdByPhoneNumber function:', error);
+        throw error;
+    }
+};
+
+
 exports.updateLeadToZohoCRM = async (lead) => {
+    let phoneData = lead.entity.phoneNumbers[0].value;
     console.log("update lead data");
     console.log(lead);
-    console.log("phone numbers");
-    console.log(lead.entity.phoneNumbers);
-    console.log("phone numbers [0]");
-    console.log(lead.entity.phoneNumbers[0]);
+    console.log(phoneData);
+    const leadId = await getLeadIdByPhoneNumber(phoneNumber);
+    console.log("leadId");
+    console.log(leadId);
+
+
     // try {
     //     const leadData = {
     //         data: [
