@@ -69,7 +69,7 @@ const updateLead = async (leadData, leadId) => {
 }
 
 const getLeadIdByPhoneNumber = async (phoneNumber) => {
-    const apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Phone:equals:${phoneNumber})`;
+    const apiUrl = 'https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Phone:equals:${phoneNumber})';
 
     try {
         const response = await axios.get(apiUrl, {
@@ -79,7 +79,6 @@ const getLeadIdByPhoneNumber = async (phoneNumber) => {
             }
         });
 
-        // Extract and return the lead ID
         return response.data.data[0].id;
     } catch (error) {
         console.error('Error in getLeadIdByPhoneNumber function:', error);
@@ -99,27 +98,27 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log(leadId);
 
 
-    try {
-        const leadData = {
-            data: [
-                {
-                    First_Name: lead.entity.firstName,
-                    Last_Name: lead.entity.lastName,
-                    Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
-                    Email: (lead.entity.emails == null) ? "" : (lead.entity.emails[0].value),
-                    City: lead.entity.city || "",
-                    State: lead.entity.state || "",
-                    Zip_Code: lead.entity.zipcode || "",
-                    Lead_Source: lead.entity.source.value || "",
-                    Kylas_Owner: lead.entity.ownerId.value || "",
-                },
-            ],
-        };
+    // try {
+    //     const leadData = {
+    //         data: [
+    //             {
+    //                 First_Name: lead.entity.firstName,
+    //                 Last_Name: lead.entity.lastName,
+    //                 Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
+    //                 Email: (lead.entity.emails == null) ? "" : (lead.entity.emails[0].value),
+    //                 City: lead.entity.city || "",
+    //                 State: lead.entity.state || "",
+    //                 Zip_Code: lead.entity.zipcode || "",
+    //                 Lead_Source: lead.entity.source.value || "",
+    //                 Kylas_Owner: lead.entity.ownerId.value || "",
+    //             },
+    //         ],
+    //     };
 
-        const response = await updateLead(leadData, leadId);
-        console.log('Lead updated to Zoho CRM successfully:', response.data);
-    } catch (error) {
-        console.error('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
-    }
+    //     const response = await updateLead(leadData, leadId);
+    //     console.log('Lead updated to Zoho CRM successfully:', response.data);
+    // } catch (error) {
+    //     console.error('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
+    // }
 }
 
