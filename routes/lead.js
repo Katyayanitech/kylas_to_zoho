@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { postLeadToCRM } = require("../controller/lead.js");
+const { postLeadToCRM, postLead } = require("../controller/lead.js");
 
 const router = express.Router();
 
