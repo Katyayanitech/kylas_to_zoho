@@ -1,12 +1,4 @@
-const express = require("express");
-const axios = require("axios");
-const { postLeadToCRM } = require("../controller/lead.js");
-
-const router = express.Router();
-
-router.post('/kylas-Leads', postLeadToCRM);
-
-async function postLead(leadData) {
+exports.postLead = async (leadData) => {
     const config = {
         method: 'post',
         url: 'https://www.zohoapis.in/crm/v2/Leads',
@@ -25,7 +17,7 @@ async function postLead(leadData) {
     }
 }
 
-async function postLeadToZohoCRM(lead) {
+exports.postLeadToZohoCRM = async (lead) => {
     console.log("lead data");
     console.log(lead);
     console.log("lead number");
@@ -54,4 +46,3 @@ async function postLeadToZohoCRM(lead) {
     }
 }
 
-module.exports = router;
