@@ -93,7 +93,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log("update lead data");
     console.log(lead);
     console.log(phoneData);
-    const leadId = await getLeadIdByPhoneNumber(phoneNumber);
+    const leadId = await getLeadIdByPhoneNumber(phoneData);
     console.log("leadId");
     console.log(leadId);
 
