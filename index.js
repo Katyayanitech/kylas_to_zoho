@@ -70,7 +70,7 @@ async function postLeadToZohoCRM(lead) {
                     State: lead.entity.state || "",
                     Zip_Code: lead.entity.zipcode || "",
                     Lead_Source: lead.entity.source.value || "",
-                    Kylas_Owner: lead.entity.ownerId.value,
+                    Kylas_Owner: lead.entity.ownerId.value || "",
                 },
             ],
         };
@@ -120,8 +120,8 @@ async function Postcontactzoho(contact) {
         const Contactdata = {
             data: [
                 {
-                    First_Name: contact.entity.firstName,
-                    Last_Name: contact.entity.lastName,
+                    First_Name: contact.entity.firstName || "",
+                    Last_Name: contact.entity.lastName || "",
                     Phone: (contact.entity.phoneNumbers[0].dialCode + contact.entity.phoneNumbers[0].value) || "",
                     Email: (contact.entity.emails == null) ? "" : (contact.entity.emails[0].value),
                     City: contact.entity.city || "",
@@ -129,9 +129,9 @@ async function Postcontactzoho(contact) {
                     Zip_Code: contact.entity.zipcode || "",
                     Kylas_Contact_Owner: contact.entity.ownerId.value || "",
                     Lead_Source: contact.entity.source.name || "",
-                    Main_Crop: contact.entity.customFieldValues.cfMainCrops || "",
-                    Identification: contact.entity.customFieldValues.cfIdentification.value || "",
-                    Acres_of_Land_If_Farmer: contact.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
+                    Main_Crop: (contact.entity.customFieldValues && contact.entity.customFieldValues.cfMainCrops) ? contact.entity.customFieldValues.cfMainCrops || "" : "",
+                    Identification: (contact.entity.customFieldValues && contact.entity.customFieldValues.cfIdentification) ? contact.entity.customFieldValues.cfIdentification.value || "" : "",
+                    Acres_of_Land_If_Farmer: (contact.entity.customFieldValues && contact.entity.customFieldValues.cfAcresOfLandIfFarmer) ? contact.entity.customFieldValues.cfAcresOfLandIfFarmer || "" : "",
                 },
             ],
         };
