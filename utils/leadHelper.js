@@ -71,6 +71,10 @@ const updateLead = async (leadData) => {
 exports.updateLeadToZohoCRM = async (lead) => {
     console.log("update lead data");
     console.log(lead);
+    console.log("phone numbers");
+    console.log(lead.entity.phoneNumbers);
+    console.log("phone numbers [0]");
+    console.log(lead.entity.phoneNumbers[0]);
     // try {
     //     const leadData = {
     //         data: [
