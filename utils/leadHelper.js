@@ -52,7 +52,7 @@ exports.postLeadToZohoCRM = async (lead) => {
 const updateLead = async (leadData, leadId) => {
     const config = {
         method: 'put',
-        url: 'https://www.zohoapis.in/crm/v2/Leads/${leadId}',
+        url: `https://www.zohoapis.in/crm/v2/Leads/${leadId})`,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
@@ -92,7 +92,11 @@ exports.updateLeadToZohoCRM = async (lead) => {
     let phoneData = lead.entity.phoneNumbers[0].value;
     console.log("update lead data");
     console.log(lead);
+    console.log("phone number");
+    console.log(phoneData);
     const leadId = await getLeadIdByPhoneNumber(phoneData);
+    console.log("leadId");
+    console.log(leadId);
 
 
     try {
@@ -113,9 +117,9 @@ exports.updateLeadToZohoCRM = async (lead) => {
         };
 
         const response = await updateLead(leadData, leadId);
-        console.log('Lead posted to Zoho CRM successfully:', response.data);
+        console.log('Lead updated to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
+        console.error('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
 
