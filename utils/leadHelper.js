@@ -1,4 +1,4 @@
-exports.postLead = async (leadData) => {
+const postLead = async (leadData) => {
     const config = {
         method: 'post',
         url: 'https://www.zohoapis.in/crm/v2/Leads',

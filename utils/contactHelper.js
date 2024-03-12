@@ -1,4 +1,4 @@
-exports.Postcontact = async (Contactdata) => {
+const Postcontact = async (Contactdata) => {
     const config = {
         method: 'post',
         url: 'https://www.zohoapis.in/crm/v2/Contacts',
