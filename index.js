@@ -1,5 +1,6 @@
 const express = require('express');
 const contact = require("./routes/contact.js");
+const demo = require("./routes/demo.js");
 const { updateAccessToken, fetchAccessToken } = require("./utils/helpers.js")
 const lead = require("./routes/lead.js")
 const { setIntervalAsync } = require('set-interval-async/dynamic');
