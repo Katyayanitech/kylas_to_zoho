@@ -23,9 +23,14 @@ exports.PostDealzoho = async (deal) => {
     console.log("Deal Data ");
     console.log(deal);
     console.log("Pipeline Stage");
-    console.log(deal.entity.pipeline.stage);
-    const closureDate = new Date(deal.entity.estimatedClosureOn);
-    const formattedClosureDate = `${closureDate.getFullYear()}-${(closureDate.getMonth() + 1).toString().padStart(2, '0')}-${closureDate.getDate().toString().padStart(2, '0')}`;
+    const formattedClosureDate = "";
+
+    if (deal.entity.estimatedClosureOn != null) {
+        const closureDate = new Date(deal.entity.estimatedClosureOn);
+        formattedClosureDate = `${closureDate.getFullYear()}-${(closureDate.getMonth() + 1).toString().padStart(2, '0')}-${closureDate.getDate().toString().padStart(2, '0')}`;
+    } else {
+        formattedClosureDate = "";
+    }
 
     try {
         const Dealdata = {
@@ -33,7 +38,7 @@ exports.PostDealzoho = async (deal) => {
                 {
                     "Deal_Name": deal.entity.name || "",
                     "Amount": deal.entity.estimatedValue.value || "",
-                    "Stage": deal.entity.pipeline.stage.name || "",
+                    "Stage": (deal.entity.pipeline != null) ? (deal.entity.pipeline.stage.name || "") : "",
                     "Closing_Date": formattedClosureDate || "",
                     "Kylas_Deal_Owner": deal.entity.ownedBy.name || ""
                 },
