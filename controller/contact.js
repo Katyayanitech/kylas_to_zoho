@@ -1,4 +1,4 @@
-const { Postcontactzoho } = require("../utils/contactHelper.js");
+const { Postcontactzoho, updateContactToZohoCRM } = require("../utils/contactHelper.js");
 
 exports.postContactToCRM = async (req, res) => {
     try {
