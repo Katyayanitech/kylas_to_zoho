@@ -102,27 +102,27 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log(leadId);
 
 
-    // try {
-    //     const leadData = {
-    //         data: [
-    //             {
-    //                 First_Name: lead.entity.firstName,
-    //                 Last_Name: lead.entity.lastName,
-    //                 Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
-    //                 Email: (lead.entity.emails == null) ? "" : (lead.entity.emails[0].value),
-    //                 City: lead.entity.city || "",
-    //                 State: lead.entity.state || "",
-    //                 Zip_Code: lead.entity.zipcode || "",
-    //                 Lead_Source: lead.entity.source.value || "",
-    //                 Kylas_Owner: lead.entity.ownerId.value || "",
-    //             },
-    //         ],
-    //     };
+    try {
+        const leadData = {
+            data: [
+                {
+                    First_Name: lead.entity.firstName || "",
+                    Last_Name: lead.entity.lastName || "",
+                    Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
+                    Email: (lead.entity.emails == null) ? "" : (lead.entity.emails[0].value),
+                    City: lead.entity.city || "",
+                    State: lead.entity.state || "",
+                    Zip_Code: lead.entity.zipcode || "",
+                    Lead_Source: lead.entity.source.value || "",
+                    Kylas_Owner: lead.entity.ownerId.value || "",
+                },
+            ],
+        };
 
-    //     const response = await updateLead(leadData, leadId);
-    //     console.log('Lead updated to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.error('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+        const response = await updateLead(leadData, leadId);
+        console.log('Lead updated to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.error('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
+    }
 }
 
