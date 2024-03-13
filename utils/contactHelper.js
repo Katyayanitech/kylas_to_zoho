@@ -85,7 +85,6 @@ const getContactIdByPhoneNumber = async (phoneNumber) => {
 
     try {
         const response = await axios(config);
-        console.log(response.data.data[0]);
         return response.data.data[0].id;
     } catch (error) {
         console.error('Error in getContactIdByPhoneNumber function:', error);
@@ -96,13 +95,11 @@ const getContactIdByPhoneNumber = async (phoneNumber) => {
 
 exports.updateContactToZohoCRM = async (contact) => {
     let phoneData = contact.entity.phoneNumbers[0].value;
-    console.log("update contact data");
-    console.log(contact);
     console.log("phone number");
     console.log(phoneData);
     const contactId = await getContactIdByPhoneNumber(phoneData);
     console.log("contactId");
-    console.log(contact);
+    console.log(contactId);
 
 
     try {
