@@ -84,8 +84,9 @@ const getLeadIdByPhoneNumber = async (phoneNumber) => {
         const response = await axios(config);
         return response.data.data[0].id;
     } catch (error) {
-        console.error('Error in getLeadIdByPhoneNumber function:', error);
-        throw error;
+        console.log('Error in getLeadIdByPhoneNumber function:', error);
+        console.log('${phoneNumber} Lead Phone Not Found:', error);
+
     }
 };
 

@@ -87,8 +87,8 @@ const getContactIdByPhoneNumber = async (phoneNumber) => {
         const response = await axios(config);
         return response.data.data[0].id;
     } catch (error) {
-        console.error('Error in getContactIdByPhoneNumber function:', error);
-        throw error;
+        console.log('Error in getContactIdByPhoneNumber function:', error);
+        console.log('${phoneNumber} Contact Phone Not found:');
     }
 };
 
