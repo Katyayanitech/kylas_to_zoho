@@ -15,7 +15,7 @@ exports.updateContactToCRM = async (req, res) => {
     try {
         const updatedContact = req.body;
         await updateContactToZohoCRM(updatedContact);
-        return res.send(200).send('Contact Update Successfully')
+        return res.status(200).send('Contact Update Successfully')
     } catch (error) {
         console.error('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
