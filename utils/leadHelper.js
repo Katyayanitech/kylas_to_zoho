@@ -52,7 +52,7 @@ exports.postLeadToZohoCRM = async (lead) => {
 const updateLead = async (leadData, leadId) => {
     const config = {
         method: 'put',
-        url: `https://www.zohoapis.in/crm/v2/Leads/${leadId})`,
+        url: `https://www.zohoapis.in/crm/v2/Leads/${leadId}`,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
