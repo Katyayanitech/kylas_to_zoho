@@ -85,8 +85,8 @@ const getLeadIdByPhoneNumber = async (phoneNumber) => {
         return response.data.data[0].id;
     } catch (error) {
         console.log('Error in getLeadIdByPhoneNumber function:', error);
-        console.log('${phoneNumber} Lead Phone Not Found:', error);
-
+        console.log('Lead Phone Not Found:', phoneNumber);
+        throw error;
     }
 };
 

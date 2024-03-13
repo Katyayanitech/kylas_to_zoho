@@ -89,6 +89,7 @@ const getContactIdByPhoneNumber = async (phoneNumber) => {
     } catch (error) {
         console.log('Error in getContactIdByPhoneNumber function:', error);
         console.log('${phoneNumber} Contact Phone Not found:');
+        throw error;
     }
 };
 
