@@ -23,22 +23,22 @@ exports.PostDealzoho = async (deal) => {
     console.log("Deal Data ");
     console.log(deal);
 
-    // try {
-    //     // const Dealdata = {
-    //     //     data: [
-    //     //         {
-    //     //             "Deal_Name": ,
-    //     //             "Amount": ,
-    //     //             "Stage": ,
-    //     //             "Closing_Date": ,
-    //     //             "Lead_Source": 
-    //     //         },
-    //     //     ],
-    //     // };
+    try {
+        const Dealdata = {
+            data: [
+                {
+                    "Deal_Name": deal.entity.name || "",
+                    "Amount": deal.actualValue.value || "",
+                    "Stage": deal.pipelineStageReason || "",
+                    "Closing_Date": deal.actualClosureDate || "",
+                    "Lead_Source": deal.ownedBy.name || ""
+                },
+            ],
+        };
 
-    //     // const response = await PostDeal(Dealdata);
-    //     // console.log('Deal posted to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+        const response = await PostDeal(Dealdata);
+        console.log('Deal posted to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
+    }
 }
