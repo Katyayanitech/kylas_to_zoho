@@ -88,7 +88,7 @@ const getContactIdByPhoneNumber = async (phoneNumber) => {
         return response.data.data[0].id;
     } catch (error) {
         console.log('Error in getContactIdByPhoneNumber function:', error);
-        console.log('${phoneNumber} Contact Phone Not found:');
+        console.log('Contact Phone Not found:', phoneNumber);
         throw error;
     }
 };
