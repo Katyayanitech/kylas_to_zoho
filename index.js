@@ -4,6 +4,7 @@ const { setIntervalAsync } = require('set-interval-async/dynamic');
 const lead = require("./routes/lead.js");
 const contact = require("./routes/contact.js");
 const deal = require("./routes/deal.js");
+const task = require("./routes/task.js");
 
 require("dotenv").config();
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/lead", lead);
 app.use("/contact", contact);
 app.use("/deal", deal);
+app.use("/task", task);
 
 
 let ZOHO_CRM_ACCESS_TOKEN = '';
