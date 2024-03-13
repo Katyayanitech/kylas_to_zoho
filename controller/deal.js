@@ -1,4 +1,4 @@
-const { PostDealzoho } = require("../utils/dealHealper");
+const { PostDealzoho } = require("../utils/dealHelper");
 
 exports.postDealToCRM = async (req, res) => {
     try {
