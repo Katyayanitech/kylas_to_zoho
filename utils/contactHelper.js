@@ -72,7 +72,7 @@ const updateContact = async (contactData, contactId) => {
 }
 
 const getContactIdByPhoneNumber = async (phoneNumber) => {
-    const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?criteria=(Phone:equals:${phoneNumber})`;
+    const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber})`;
 
     const config = {
         method: 'get',
