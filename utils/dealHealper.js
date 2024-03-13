@@ -22,16 +22,18 @@ const PostDeal = async (Dealdata) => {
 exports.PostDealzoho = async (deal) => {
     console.log("Deal Data ");
     console.log(deal);
+    console.log("Pipeline Stage");
+    console.log(deal.pipeline.stage);
 
     try {
         const Dealdata = {
             data: [
                 {
                     "Deal_Name": deal.entity.name || "",
-                    "Amount": deal.actualValue.value || "",
-                    "Stage": deal.pipelineStageReason || "",
-                    "Closing_Date": deal.actualClosureDate || "",
-                    "Lead_Source": deal.ownedBy.name || ""
+                    "Amount": deal.estimatedValue.value || "",
+                    // "Stage": deal.pipelineStageReason || "",
+                    "Closing_Date": deal.estimatedClosureOn || "",
+                    "Kylas_Deal_Owner": deal.ownedBy.name || ""
                 },
             ],
         };
