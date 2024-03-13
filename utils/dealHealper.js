@@ -31,7 +31,7 @@ exports.PostDealzoho = async (deal) => {
                 {
                     "Deal_Name": deal.entity.name || "",
                     "Amount": deal.entity.estimatedValue.value || "",
-                    // "Stage": deal.pipelineStageReason || "",
+                    "Stage": deal.entity.pipeline.stage.name || "",
                     "Closing_Date": deal.entity.estimatedClosureOn || "",
                     "Kylas_Deal_Owner": deal.entity.ownedBy.name || ""
                 },
