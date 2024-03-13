@@ -16,7 +16,7 @@ let ZOHO_CRM_ACCESS_TOKEN = '';
 
 updateAccessToken();
 
-const accessTokenUpdateInterval = 60 * 60 * 1000;
+const accessTokenUpdateInterval = 10 * 60 * 1000;
 setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
 
 const PORT = process.env.PORT || 3000;
