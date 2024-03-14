@@ -1,20 +1,20 @@
 const axios = require('axios');
 
-const PostDeal = async (Dealdata) => {
+const PostCall = async (Calldata) => {
     const config = {
         method: 'post',
-        url: 'https://www.zohoapis.in/crm/v2/Deals',
+        url: 'https://www.zohoapis.in/crm/v2/Calls',
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(Dealdata)
+        data: JSON.stringify(Calldata)
     };
 
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postDeal function:', error);
+        console.error('Error in postCall function:', error);
         throw error;
     }
 }
@@ -22,36 +22,26 @@ const PostDeal = async (Dealdata) => {
 exports.PostCallzoho = async (call) => {
     console.log("Call Data ");
     console.log(call);
-    // let formattedClosureDate = "";
 
-    // if (deal.entity.estimatedClosureOn != null) {
-    //     const closureDate = new Date(deal.entity.estimatedClosureOn);
-    //     formattedClosureDate = `${closureDate.getFullYear()}-${(closureDate.getMonth() + 1).toString().padStart(2, '0')}-${closureDate.getDate().toString().padStart(2, '0')}`;
-    // } else {
-    //     formattedClosureDate = "";
-    // }
-    // console.log("Contact");
-    // console.log(deal.entity.associatedContacts[0]);
+    const startTime = new Date(call.entity.startTime);
+    const formattedStartTime = startTime.toISOString();
+    try {
+        const Calldata = {
+            data: [
+                {
+                    "Call_Duration": call.entity.duration || "",
+                    "Description": call.entity.callRecording != null ? call.entity.callRecording.url : "",
+                    "Call_Start_Time": call.entity.startTime || "",
+                    "Call_Type": formattedStartTime || "",
+                    "Dialled_Number": call.entity.phoneNumber || "",
+                    "Call_Status": call.entity.outcome || ""
+                }
+            ],
+        };
 
-    // try {
-    //     const Dealdata = {
-    //         data: [
-    //             {
-    //                 "Deal_Name": deal.entity.name || "",
-    //                 "Amount": deal.entity.estimatedValue.value || "",
-    //                 "Stage": (deal.entity.pipeline != null) ? (deal.entity.pipeline.stage.name || "") : "",
-    //                 "Closing_Date": formattedClosureDate || "",
-    //                 "Kylas_Deal_Owner": deal.entity.ownedBy.name || "",
-    //                 "Account_Name": {
-    //                     "name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
-    //                 }
-    //             },
-    //         ],
-    //     };
-
-    //     const response = await PostDeal(Dealdata);
-    //     console.log('Deal posted to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+        const response = await PostCall(Calldata);
+        console.log('Deal posted to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
+    }
 }
