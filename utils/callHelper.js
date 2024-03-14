@@ -32,7 +32,7 @@ exports.PostCallzoho = async (call) => {
     console.log(formattedStartTime);
     console.log(call.entity.relatedTo);
 
-    const callType = "";
+    let callType = "";
     if (call.entity.callType == "outgoing") {
         callType = "Outbound";
     } else if (call.entity.callType == "incoming") {
