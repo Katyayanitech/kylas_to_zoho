@@ -63,28 +63,28 @@ exports.PostDealzoho = async (deal) => {
 }
 
 // Update Contact 
-const updateContact = async (contactData, contactId) => {
+const updateDeal = async (dealData, dealId) => {
     const config = {
         method: 'put',
-        url: `https://www.zohoapis.in/crm/v2/Contacts/${contactId}`,
+        url: `https://www.zohoapis.in/crm/v2/Deals/${dealId}`,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(contactData)
+        data: JSON.stringify(dealData)
     };
 
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in updateContact function:', error);
+        console.error('Error in updateDeal function:', error);
         throw error;
     }
 }
 
 // Update Deal
-const getDealIdByPhoneNumber = async (phoneNumber) => {
-    const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber})`;
+const getDealIdByKylasDealId = async (kylasDealId) => {
+    const apiUrl = `https://www.zohoapis.in/crm/v2/Deals/search?criteria=(Kyla_s_Deal_id:equals:${kylasDealId})`;
 
     const config = {
         method: 'get',
@@ -99,40 +99,39 @@ const getDealIdByPhoneNumber = async (phoneNumber) => {
         const response = await axios(config);
         return response.data.data[0].id;
     } catch (error) {
-        console.log('Error in getContactIdByPhoneNumber function:', error);
-        console.log('Contact Phone Not found:', phoneNumber);
+        console.log('Error in getDealIdByKylasDealId function:', error);
+        console.log('Kylasdeal Id Not found:', kylasDealId);
         throw error;
     }
 };
 
 
 exports.updateDealToZohoCRM = async (deal) => {
-    const contactId = await getContactIdByPhoneNumber(phoneData);
-    console.log("contactId");
-    console.log(contactId);
-
+    console.log("deal");
+    console.log(deal);
+    const kylasDealId = deal.entity.id;
+    const dealId = await getDealIdByKylasDealId(kylasDealId);
+    console.log("dealId");
+    console.log(dealId);
 
     try {
-        const contactData = {
+        const dealData = {
             data: [
                 {
-                    First_Name: contact.entity.firstName || "",
-                    Last_Name: contact.entity.lastName || "",
-                    Phone: (contact.entity.phoneNumbers[0].dialCode + contact.entity.phoneNumbers[0].value) || "",
-                    Email: (contact.entity.emails == null) ? "" : (contact.entity.emails[0].value),
-                    City: contact.entity.city || "",
-                    State: contact.entity.state || "",
-                    Zip_Code: contact.entity.zipcode || "",
-                    Kylas_Contact_Owner: contact.entity.ownerId.value || "",
-                    Lead_Source: contact.entity.source.name || "",
-                    Main_Crop: (contact.entity.customFieldValues && contact.entity.customFieldValues.cfMainCrops) ? contact.entity.customFieldValues.cfMainCrops || "" : "",
-                    Identification: (contact.entity.customFieldValues && contact.entity.customFieldValues.cfIdentification) ? contact.entity.customFieldValues.cfIdentification.value || "" : "",
-                    Acres_of_Land_If_Farmer: (contact.entity.customFieldValues && contact.entity.customFieldValues.cfAcresOfLandIfFarmer) ? contact.entity.customFieldValues.cfAcresOfLandIfFarmer || "" : "",
+                    "Deal_Name": deal.entity.name || "",
+                    "Amount": deal.entity.estimatedValue.value || "",
+                    "Stage": (deal.entity.pipeline != null) ? (deal.entity.pipeline.stage.name || "") : "",
+                    "Closing_Date": formattedClosureDate || "",
+                    "Kylas_Deal_Owner": deal.entity.ownedBy.name || "",
+                    "Kyla_s_Deal_id": deal.entity.id.toString() || "",
+                    "Account_Name": {
+                        "name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
+                    },
                 },
             ],
         };
 
-        const response = await updateContact(contactData, contactId);
+        const response = await updateDeal(dealData, dealId);
         console.log('Contact updated to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.error('Error updating Contact to Zoho CRM:', error.response ? error.response.data : error);
