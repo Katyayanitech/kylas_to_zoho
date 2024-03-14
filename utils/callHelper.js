@@ -31,16 +31,26 @@ exports.PostCallzoho = async (call) => {
     const formattedStartTime = `${startTime.getFullYear()}-${(startTime.getMonth() + 1).toString().padStart(2, '0')}-${startTime.getDate().toString().padStart(2, '0')}T${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}:00${offsetSign}${offsetHours.toString().padStart(2, '0')}:${Math.abs(offsetMinutes % 60).toString().padStart(2, '0')}`;
     console.log(formattedStartTime);
     console.log(call.entity.relatedTo);
+
+    const callType = "";
+    if (call.entity.callType == "outgoing") {
+        callType = "Outbound";
+    } else if (call.entity.callType == "incoming") {
+        callType = "Inbound";
+    }
     try {
         const Calldata = {
             data: [
                 {
-                    "Call_Duration_in_seconds": call.entity.duration || "",
+                    "Call_Duration": call.entity.duration || "",
                     "Description": call.entity.callRecording != null ? call.entity.callRecording.url : "",
                     "Call_Start_Time": formattedStartTime || "",
-                    "Call_Type": call.entity.callType || "",
+                    "Call_Type": callType || "",
                     "Dialled_Number": call.entity.phoneNumber || "",
-                    "Call_Status": call.entity.outcome || ""
+                    "Call_Status": call.entity.outcome || "",
+                    "Who_Id": {
+                        "name": call.entity.relatedTo != null ? call.entity.relatedTo[0].name : "",
+                    },
                 }
             ],
         };
