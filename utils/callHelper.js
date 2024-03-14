@@ -24,13 +24,13 @@ exports.PostCallzoho = async (call) => {
     console.log(call);
 
     const startTime = new Date(call.entity.startTime);
-    const formattedStartTime = startTime.toISOString();
+    const formattedStartTime = startTime.toISOString().replace("Z", "+05:30");
     console.log(formattedStartTime);
     try {
         const Calldata = {
             data: [
                 {
-                    "Call_Duration": call.entity.duration || "",
+                    "Call_Duration_in_seconds": call.entity.duration || "",
                     "Description": call.entity.callRecording != null ? call.entity.callRecording.url : "",
                     "Call_Start_Time": formattedStartTime || "",
                     "Call_Type": call.entity.callType || "",
