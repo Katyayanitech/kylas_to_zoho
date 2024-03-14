@@ -33,6 +33,8 @@ exports.PostDealzoho = async (deal) => {
     }
     console.log("Contact");
     console.log(deal.entity.associatedContacts[0]);
+    console.log("deal Id");
+    console.log(deal.entity.id);
 
     try {
         const Dealdata = {
@@ -46,7 +48,7 @@ exports.PostDealzoho = async (deal) => {
                     "Account_Name": {
                         "name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
                     },
-                    // "Kyla_s_Deal_id": deal.entity.id.toString() || ""
+                    "Kyla_s_Deal_id": deal.entity.id || ""
                 },
             ],
         };
