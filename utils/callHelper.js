@@ -24,8 +24,13 @@ exports.PostCallzoho = async (call) => {
     console.log(call);
 
     const startTime = new Date(call.entity.startTime);
-    const formattedStartTime = startTime.toISOString().replace("Z", "+05:30");
+    const offsetMinutes = startTime.getTimezoneOffset();
+    const offsetHours = Math.abs(offsetMinutes / 60);
+    const offsetSign = offsetMinutes < 0 ? '+' : '-';
+
+    const formattedStartTime = `${startTime.getFullYear()}-${(startTime.getMonth() + 1).toString().padStart(2, '0')}-${startTime.getDate().toString().padStart(2, '0')}T${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}:00${offsetSign}${offsetHours.toString().padStart(2, '0')}:${Math.abs(offsetMinutes % 60).toString().padStart(2, '0')}`;
     console.log(formattedStartTime);
+    console.log(call.entity.relatedTo);
     try {
         const Calldata = {
             data: [
@@ -41,7 +46,7 @@ exports.PostCallzoho = async (call) => {
         };
 
         const response = await PostCall(Calldata);
-        console.log('Deal posted to Zoho CRM successfully:', response.data);
+        console.log('Call posted to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
     }
