@@ -31,6 +31,8 @@ exports.PostDealzoho = async (deal) => {
     } else {
         formattedClosureDate = "";
     }
+    console.log("Contact");
+    console.log(deal.entity.associatedContacts[0]);
 
     try {
         const Dealdata = {
@@ -40,7 +42,8 @@ exports.PostDealzoho = async (deal) => {
                     "Amount": deal.entity.estimatedValue.value || "",
                     "Stage": (deal.entity.pipeline != null) ? (deal.entity.pipeline.stage.name || "") : "",
                     "Closing_Date": formattedClosureDate || "",
-                    "Kylas_Deal_Owner": deal.entity.ownedBy.name || ""
+                    "Kylas_Deal_Owner": deal.entity.ownedBy.name || "",
+                    "Contact_Name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
                 },
             ],
         };

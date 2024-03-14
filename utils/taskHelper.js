@@ -20,11 +20,8 @@ const PostTask = async (Taskdata) => {
 }
 
 exports.PostTaskzoho = async (task) => {
-    console.log("Task Data");
-    console.log(task);
 
     const dueDate = new Date(task.entity.dueDate);
-    console.log("Parsed Due Date:", dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
 
