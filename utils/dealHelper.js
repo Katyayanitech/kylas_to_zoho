@@ -48,7 +48,7 @@ exports.PostDealzoho = async (deal) => {
                     "Account_Name": {
                         "name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
                     },
-                    "Kyla_s_Deal_id": deal.entity.id || ""
+                    "Kyla_s_Deal_id": deal.entity.id || "",
                 },
             ],
         };
