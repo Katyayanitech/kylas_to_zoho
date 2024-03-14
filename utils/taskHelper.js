@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function PostTask(Taskdata) {
+const PostTask = async (Taskdata) => {
     const config = {
         method: 'post',
         url: 'https://www.zohoapis.in/crm/v2/Tasks',
@@ -23,9 +23,10 @@ exports.PostTaskzoho = async (task) => {
     console.log("Task Data");
     console.log(task);
 
-    const dueDate = new Date(task.entity.dueData);
+    const dueDate = new Date(task.entity.dueDate);
+    console.log("Parsed Due Date:", dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
-    console.log(formattedDueDate);
+    console.log("Formatted Due Date:", formattedDueDate);
 
     try {
         const Taskdata = {
