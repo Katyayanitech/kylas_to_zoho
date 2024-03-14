@@ -1,8 +1,6 @@
-
-
 const axios = require('axios');
 
-const PostTask = async (Taskdata) => {
+async function PostTask(Taskdata) {
     const config = {
         method: 'post',
         url: 'https://www.zohoapis.in/crm/v2/Tasks',
@@ -25,29 +23,27 @@ exports.PostTaskzoho = async (task) => {
     console.log("Task Data");
     console.log(task);
 
-    // if (deal.entity.estimatedClosureOn != null) {
-    //     const closureDate = new Date(deal.entity.estimatedClosureOn);
-    //     formattedClosureDate = `${closureDate.getFullYear()}-${(closureDate.getMonth() + 1).toString().padStart(2, '0')}-${closureDate.getDate().toString().padStart(2, '0')}`;
-    // } else {
-    //     formattedClosureDate = "";
-    // }
+    const dueDate = new Date(task.entity.dueData);
+    const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
 
-    // try {
-    //     const Dealdata = {
-    //         data: [
-    //             {
-    //                 "Deal_Name": deal.entity.name || "",
-    //                 "Amount": deal.entity.estimatedValue.value || "",
-    //                 "Stage": (deal.entity.pipeline != null) ? (deal.entity.pipeline.stage.name || "") : "",
-    //                 "Closing_Date": formattedClosureDate || "",
-    //                 "Kylas_Deal_Owner": deal.entity.ownedBy.name || ""
-    //             },
-    //         ],
-    //     };
+    try {
+        const Taskdata = {
+            data: [
+                {
+                    "Subject": task.entity.name || "",
+                    "Description": task.entity.description || "",
+                    "Status": task.entity.status.name || "",
+                    "Priority": task.entity.priority.name || "",
+                    "Due_Date": formattedDueDate || "",
+                    "send_notification": true,
+                    "Send_Notification_Email": true,
+                },
+            ],
+        };
 
-    //     const response = await PostDeal(Dealdata);
-    //     console.log('Deal posted to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+        const response = await PostTask(Taskdata);
+        console.log('Task posted to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.error('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
+    }
 }
