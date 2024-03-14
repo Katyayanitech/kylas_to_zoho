@@ -15,7 +15,7 @@ app.use("/lead", lead);
 app.use("/contact", contact);
 app.use("/deal", deal);
 app.use("/task", task);
-app.use("/task", call);
+app.use("/call", call);
 
 
 let ZOHO_CRM_ACCESS_TOKEN = '';
