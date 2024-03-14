@@ -5,6 +5,7 @@ const lead = require("./routes/lead.js");
 const contact = require("./routes/contact.js");
 const deal = require("./routes/deal.js");
 const task = require("./routes/task.js");
+const call = require("./routes/call.js");
 
 require("dotenv").config();
 const app = express();
@@ -14,6 +15,7 @@ app.use("/lead", lead);
 app.use("/contact", contact);
 app.use("/deal", deal);
 app.use("/task", task);
+app.use("/task", call);
 
 
 let ZOHO_CRM_ACCESS_TOKEN = '';
