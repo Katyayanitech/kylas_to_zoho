@@ -25,6 +25,7 @@ exports.PostCallzoho = async (call) => {
 
     const startTime = new Date(call.entity.startTime);
     const formattedStartTime = startTime.toISOString();
+    console.log(formattedStartTime);
     try {
         const Calldata = {
             data: [
