@@ -62,7 +62,7 @@ exports.PostDealzoho = async (deal) => {
     }
 }
 
-// Update Contact 
+// Update Deal
 const updateDeal = async (dealData, dealId) => {
     const config = {
         method: 'put',
@@ -140,8 +140,8 @@ exports.updateDealToZohoCRM = async (deal) => {
         };
 
         const response = await updateDeal(dealData, dealId);
-        console.log('Contact updated to Zoho CRM successfully:', response.data);
+        console.log('Deal updated to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error updating Contact to Zoho CRM:', error.response ? error.response.data : error);
+        console.error('Error updating Deal to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
