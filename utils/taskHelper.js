@@ -37,6 +37,7 @@ exports.PostTaskzoho = async (task) => {
                     "Due_Date": formattedDueDate || "",
                     "send_notification": true,
                     "Send_Notification_Email": true,
+                    "Kyla_s_Task_Id": task.entity.id,
                 },
             ],
         };
