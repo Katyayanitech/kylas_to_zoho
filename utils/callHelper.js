@@ -1,5 +1,42 @@
 const axios = require('axios');
 
+const getZohoCRMRecordIdByName = async (module, name) => {
+  try {
+    const response = await axios.get(
+      `https://www.zohoapis.in/crm/v2/${module}/search`,
+      {
+        headers: {
+          'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        params: {
+          criteria: JSON.stringify({
+            "condition": [
+              {
+                "field": "name",
+                "operator": "equals",
+                "value": name
+              }
+            ]
+          }),
+          scope: 'everything',
+          selectColumns: 'id,name',
+          limit: 1,
+        },
+      }
+    );
+
+    if (response.data.data && response.data.data.length > 0) {
+      return response.data.data[0].id;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error getting Zoho CRM record ID by name:', error.response ? error.response.data : error);
+    throw error;
+  }
+};
+
 const PostCall = async (Calldata) => {
     const config = {
         method: 'post',
@@ -38,7 +75,16 @@ exports.PostCallzoho = async (call) => {
     } else if (call.entity.callType == "incoming") {
         callType = "Inbound";
     }
+
     try {
+        const relatedEntity = call.entity.relatedTo[0];
+        const relatedEntityId = await getZohoCRMRecordIdByName(relatedEntity.entity, relatedEntity.name);
+
+        if (!relatedEntityId) {
+          console.error(`Error: Could not find Zoho CRM record with name "${relatedEntity.name}" in module "${relatedEntity.entity}".`);
+          throw new Error(`Could not find Zoho CRM record withname "${relatedEntity.name}" in module "${relatedEntity.entity}".`);
+        }
+
         const Calldata = {
             data: [
                 {
@@ -48,9 +94,11 @@ exports.PostCallzoho = async (call) => {
                     "Call_Type": callType || "",
                     "Dialled_Number": call.entity.phoneNumber || "",
                     "Call_Status": call.entity.outcome || "",
-                    // "Who_Id": {
-                    //     "name": call.entity.relatedTo != null ? call.entity.relatedTo[0].name : "",
-                    // },
+                    "What_Id": {
+                        "id": relatedEntityId,
+                        "name": relatedEntity.name,
+                    },
+                    "$se_module": "Accounts",
                 }
             ],
         };
@@ -58,6 +106,6 @@ exports.PostCallzoho = async (call) => {
         const response = await PostCall(Calldata);
         console.log('Call posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
+        console.error('Error posting Call to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
