@@ -42,7 +42,7 @@ exports.PostCallzoho = async (call) => {
         const Calldata = {
             data: [
                 {
-                    "Call_Duration": call.entity.duration || "",
+                    "Call_Duration": call.entity.duration.toString() || "",
                     "Description": call.entity.callRecording != null ? call.entity.callRecording.url : "",
                     "Call_Start_Time": formattedStartTime || "",
                     "Call_Type": callType || "",
