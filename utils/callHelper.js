@@ -80,6 +80,8 @@ exports.PostCallzoho = async (call) => {
                 }
             ],
         };
+        console.log("Calldata");
+        console.log(Calldata);
 
         const response = await PostCall(Calldata);
         console.log('Call posted to Zoho CRM successfully:', response.data);
