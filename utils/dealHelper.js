@@ -113,6 +113,14 @@ exports.updateDealToZohoCRM = async (deal) => {
     const dealId = await getDealIdByKylasDealId(kylasDealId);
     console.log("dealId");
     console.log(dealId);
+    let formattedClosureDate = "";
+
+    if (deal.entity.estimatedClosureOn != null) {
+        const closureDate = new Date(deal.entity.estimatedClosureOn);
+        formattedClosureDate = `${closureDate.getFullYear()}-${(closureDate.getMonth() + 1).toString().padStart(2, '0')}-${closureDate.getDate().toString().padStart(2, '0')}`;
+    } else {
+        formattedClosureDate = "";
+    }
 
     try {
         const dealData = {
