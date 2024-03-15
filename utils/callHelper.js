@@ -1,5 +1,27 @@
 const axios = require('axios');
 
+const getWhoIdByPhonenumber = async (phoneNumber) => {
+    const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+
+    const config = {
+        method: 'get',
+        url: apiUrl,
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const response = await axios(config);
+        return response.data.data[0].id;
+    } catch (error) {
+        console.log('Error in getWhoIdByPhonenumber function:', error);
+        console.log('whoid Id Not found:', phoneNumber);
+        throw error;
+    }
+};
+
 const PostCall = async (Calldata) => {
     const config = {
         method: 'post',
@@ -32,6 +54,8 @@ exports.PostCallzoho = async (call) => {
     console.log(formattedStartTime);
     console.log(call.entity.relatedTo);
 
+    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber);
+
     let callType = "";
     if (call.entity.callType == "outgoing") {
         callType = "Outbound";
@@ -48,7 +72,11 @@ exports.PostCallzoho = async (call) => {
                     "Call_Type": callType || "",
                     "Dialled_Number": call.entity.phoneNumber || "",
                     "Call_Status": call.entity.outcome || "",
-                    "Call_Agenda": call.entity.relatedTo != null ? call.entity.relatedTo[0].name || "" : ""
+                    "Call_Agenda": call.entity.owner.name || "",
+                    "Who_Id": {
+                        "name": call.entity.relatedTo != null ? call.entity.relatedTo[0].name : "",
+                        "id": whoId,
+                    },
                 }
             ],
         };
