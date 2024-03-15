@@ -48,6 +48,7 @@ exports.PostCallzoho = async (call) => {
                     "Call_Type": callType || "",
                     "Dialled_Number": call.entity.phoneNumber || "",
                     "Call_Status": call.entity.outcome || "",
+                    "Call_Agenda": call.entity.relatedTo != null ? call.entity.relatedTo[0].name || "" : ""
                 }
             ],
         };
