@@ -17,7 +17,7 @@ exports.updateLeadToCRM = async (req, res) => {
         await updateLeadToZohoCRM(updatedLead);
         return res.status(200).send('Lead Update successfully');
     } catch (error) {
-        console.error('Error processing webhook request:', error);
+        console.log('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
     }
 }

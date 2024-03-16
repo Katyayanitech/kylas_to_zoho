@@ -47,7 +47,7 @@ exports.PostDealzoho = async (deal) => {
                     "Kylas_Deal_Owner": deal.entity.ownedBy.name || "",
                     "Kyla_s_Deal_id": deal.entity.id.toString() || "",
                     "Account_Name": {
-                        "name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
+                        "name": (deal.entity.associatedContacts && deal.entity.associatedContacts.length > 0) ? deal.entity.associatedContacts[0].name : ""
                     },
                 },
             ],
@@ -133,7 +133,7 @@ exports.updateDealToZohoCRM = async (deal) => {
                     "Kylas_Deal_Owner": deal.entity.ownedBy.name || "",
                     "Kyla_s_Deal_id": deal.entity.id.toString() || "",
                     "Account_Name": {
-                        "name": deal.entity.associatedContacts != null ? deal.entity.associatedContacts[0].name : ""
+                        "name": (deal.entity.associatedContacts && deal.entity.associatedContacts.length > 0) ? deal.entity.associatedContacts[0].name : ""
                     },
                 },
             ],
