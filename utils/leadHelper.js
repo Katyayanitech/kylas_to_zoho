@@ -37,7 +37,7 @@ exports.postLeadToZohoCRM = async (lead) => {
                     Zip_Code: lead.entity.zipcode || "",
                     Lead_Source: lead.entity.source.value || "",
                     Kylas_Owner: lead.entity.ownerId.value || "",
-                    // Lead_Status: lead.entity.status.name || ""
+                    Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : ""
                 },
             ],
         };
@@ -123,7 +123,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         Zip_Code: lead.entity.zipcode || "",
                         Lead_Source: lead.entity.source.value || "",
                         Kylas_Owner: lead.entity.ownerId.value || "",
-                        // Lead_Status: lead.entity.status.name || ""
+                        Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : ""
                     },
                 ],
             };
