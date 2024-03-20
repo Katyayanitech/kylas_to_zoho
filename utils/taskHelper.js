@@ -38,6 +38,7 @@ exports.PostTaskzoho = async (task) => {
                     "send_notification": true,
                     "Send_Notification_Email": true,
                     "Kyla_s_Task_Id": task.entity.id.toString() || "",
+                    "kylas_task_owner": task.entity.assignedTo.name || ""
                 },
             ],
         };
@@ -115,6 +116,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                     "send_notification": true,
                     "Send_Notification_Email": true,
                     "Kyla_s_Task_Id": task.entity.id.toString() || "",
+                    "kylas_task_owner": task.entity.assignedTo.name || ""
                 },
             ],
         };
