@@ -22,6 +22,7 @@ const PostTask = async (Taskdata) => {
 exports.PostTaskzoho = async (task) => {
     console.log("task Data");
     console.log(task);
+    console.log(task.entity.relations);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
@@ -96,6 +97,7 @@ const getTaskIdByKylasTaskId = async (kylasTaskId) => {
 exports.updateTaskToZohoCRM = async (task) => {
     console.log("task update section");
     console.log(task);
+
     const kylasTaskId = task.entity.id;
     const taskId = await getTaskIdByKylasTaskId(kylasTaskId);
     console.log("Task Id");
