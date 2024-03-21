@@ -149,7 +149,7 @@ const updateTask = async (taskData, taskId) => {
     }
 }
 
-const getTaskIdByKylasTaskId = async (kylasTaskId) => {
+const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
     const apiUrl = `https://www.zohoapis.in/crm/v2/Tasks/search?criteria=(Kyla_s_Task_Id:equals:${kylasTaskId})`;
 
     const config = {
@@ -163,10 +163,14 @@ const getTaskIdByKylasTaskId = async (kylasTaskId) => {
 
     try {
         const response = await axios(config);
-        return response.data.data[0].id;
+        const taskData = response.data.data[0];
+        return {
+            id: taskData.id,
+            AssociatedContactNumber: taskData.Assosiated_Contact_Number
+        };
     } catch (error) {
-        console.log('Error in getTaskIdByKylasTaskId function:', error);
-        console.log('KylasTask Id Not found:', kylasTaskId);
+        console.log('Error in getTaskIdAndContactByKylasTaskId function:', error);
+        console.log('KylasTask Id and Number Not found:', kylasTaskId);
         throw error;
     }
 };
@@ -177,9 +181,11 @@ exports.updateTaskToZohoCRM = async (task) => {
     console.log(task);
 
     const kylasTaskId = task.entity.id;
-    const taskId = await getTaskIdByKylasTaskId(kylasTaskId);
-    console.log("Task Id");
-    console.log(taskId);
+    const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
+    const taskId = taskIdAndContact.id;
+    const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
+    console.log("Task ID:", taskId);
+    console.log("Associated Contact Number:", associatedContactNumber);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
