@@ -68,7 +68,7 @@ exports.PostTaskzoho = async (task) => {
                     entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
                     console.log("entityNumber:", entityNumber);
                 } else {
-                    console.log("No phone number available for this lead.");
+                    console.log("No phone number available for this Deal.");
                 }
                 console.log("entityName:", entityName);
                 console.log("entityId:", entityId);
@@ -89,7 +89,7 @@ exports.PostTaskzoho = async (task) => {
                     entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
                     console.log("entityNumber:", entityNumber);
                 } else {
-                    console.log("No phone number available for this lead.");
+                    console.log("No phone number available for this Contact.");
                 }
                 console.log("entityName:", entityName);
                 console.log("entityId:", entityId);
@@ -119,6 +119,7 @@ exports.PostTaskzoho = async (task) => {
                 },
             ],
         };
+        console.log(Taskdata);
 
         const response = await PostTask(Taskdata);
         console.log('Task posted to Zoho CRM successfully:', response.data);
