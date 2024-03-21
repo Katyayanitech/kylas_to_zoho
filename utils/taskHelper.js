@@ -176,7 +176,7 @@ const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
     }
 };
 
-async function checkCallHistory(phoneNumber) {
+const checkCallHistory = async (phoneNumber) => {
     const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
 
     try {
