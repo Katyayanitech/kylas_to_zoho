@@ -112,7 +112,7 @@ exports.PostTaskzoho = async (task) => {
                     "Send_Notification_Email": true,
                     "Kyla_s_Task_Id": task.entity.id.toString() || "",
                     "kylas_task_owner": task.entity.assignedTo.name || "",
-                    "Entity": entityName || "",
+                    "Entity": entityType || "",
                     "Assosiated_Name": entityName || "",
                     "Assosiated_Contact_Number": entityNumber || "",
 
