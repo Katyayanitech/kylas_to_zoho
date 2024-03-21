@@ -20,12 +20,67 @@ const PostTask = async (Taskdata) => {
 }
 
 exports.PostTaskzoho = async (task) => {
+    let entityType;
+    let entityId;
+    let entityName;
+    let entityNumber;
     console.log("task Data");
     console.log(task);
-    console.log(task.entity.relations);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
+    console.log(task.entity.relations);
+    if (task.entity.relations != null) {
+        entityType = task.entity.relations[0].entityType;
+        entityId = task.entity.relations[0].entityId;
+
+        if (entityType = "LEAD") {
+            try {
+                const response = axios.get(`https://api.kylas.io/v1/leads/${entityId}`, {
+                    'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                });
+                var leadData = response.body;
+                entityName = leadData.data.lastName;
+                entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
+                console.log("entityName");
+                console.log(entityName);
+                console.log(entityId);
+            } catch (e) {
+                console.log(e.toString());
+            }
+
+        } else if (entityType = "DEAL") {
+            try {
+                const response = axios.get(`https://api.kylas.io/v1/deals/${entityId}`, {
+                    'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                });
+                var leadData = response.body;
+                entityName = leadData.data.lastName;
+                entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
+                console.log("entityName");
+                console.log(entityName);
+                console.log(entityId);
+            } catch (e) {
+                console.log(e.toString());
+            }
+        }
+        else if (entityType = "CONTACT") {
+            try {
+                const response = axios.get(`https://api.kylas.io/v1/contacts/${entityId}`, {
+                    'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                });
+                var leadData = response.body;
+                entityName = leadData.data.lastName;
+                entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
+                console.log(entityType);
+                console.log("entityName");
+                console.log(entityName);
+                console.log(entityId);
+            } catch (e) {
+                console.log(e.toString());
+            }
+        }
+    }
 
     try {
         const Taskdata = {
