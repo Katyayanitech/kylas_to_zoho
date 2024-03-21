@@ -181,7 +181,7 @@ const checkCallHistory = async (phoneNumber) => {
 
     const config = {
         method: 'get',
-        url: apiUrl,
+        url: url,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
