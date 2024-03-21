@@ -34,12 +34,14 @@ exports.PostTaskzoho = async (task) => {
         entityType = task.entity.relations[0].entityType;
         entityId = task.entity.relations[0].entityId;
 
-        if (entityType = "LEAD") {
+        if (entityType === "LEAD") {
             try {
-                const response = axios.get(`https://api.kylas.io/v1/leads/${entityId}`, {
-                    'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                const response = await axios.get(`https://api.kylas.io/v1/leads/${entityId}`, {
+                    headers: {
+                        'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                    }
                 });
-                var leadData = response.body;
+                const leadData = response.data;
                 entityName = leadData.data.lastName;
                 entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
                 console.log("entityName");
@@ -49,14 +51,16 @@ exports.PostTaskzoho = async (task) => {
                 console.log(e.toString());
             }
 
-        } else if (entityType = "DEAL") {
+        } else if (entityType === "DEAL") {
             try {
-                const response = axios.get(`https://api.kylas.io/v1/deals/${entityId}`, {
-                    'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                const response = await axios.get(`https://api.kylas.io/v1/deals/${entityId}`, {
+                    headers: {
+                        'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                    }
                 });
-                var leadData = response.body;
-                entityName = leadData.data.lastName;
-                entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
+                const dealData = response.data;
+                entityName = dealData.data.lastName;
+                entityNumber = dealData.data.phoneNumbers[0].dialCode + dealData.data.phoneNumbers[0].value;
                 console.log("entityName");
                 console.log(entityName);
                 console.log(entityId);
@@ -64,14 +68,16 @@ exports.PostTaskzoho = async (task) => {
                 console.log(e.toString());
             }
         }
-        else if (entityType = "CONTACT") {
+        else if (entityType === "CONTACT") {
             try {
-                const response = axios.get(`https://api.kylas.io/v1/contacts/${entityId}`, {
-                    'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                const response = await axios.get(`https://api.kylas.io/v1/contacts/${entityId}`, {
+                    headers: {
+                        'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+                    }
                 });
-                var leadData = response.body;
-                entityName = leadData.data.lastName;
-                entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
+                const contactData = response.data;
+                entityName = contactData.data.lastName;
+                entityNumber = contactData.data.phoneNumbers[0].dialCode + contactData.data.phoneNumbers[0].value;
                 console.log(entityType);
                 console.log("entityName");
                 console.log(entityName);
@@ -105,6 +111,7 @@ exports.PostTaskzoho = async (task) => {
         console.error('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
+
 
 // Update Task
 const updateTask = async (taskData, taskId) => {
