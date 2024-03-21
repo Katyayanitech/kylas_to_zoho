@@ -115,7 +115,7 @@ exports.PostTaskzoho = async (task) => {
                     "Entity": entityType || "",
                     "Assosiated_Name": entityName || "",
                     "Assosiated_Contact_Number": entityNumber || "",
-                    "Entity_Id": entityId || "",
+                    "Entity_Id": entityId.toString() || "",
                 },
             ],
         };
@@ -200,6 +200,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                 },
             ],
         };
+        console.log(taskData)
 
         const response = await updateTask(taskData, taskId);
         console.log('Task updated to Zoho CRM successfully:', response.data);
