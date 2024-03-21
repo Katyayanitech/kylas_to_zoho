@@ -179,8 +179,16 @@ const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
 const checkCallHistory = async (phoneNumber) => {
     const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
 
+    const config = {
+        method: 'get',
+        url: apiUrl,
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        }
+    };
     try {
-        const response = await axios.get(url);
+        const response = await axios(config);
         const callData = response.data.data;
 
         const currentTime = moment();
