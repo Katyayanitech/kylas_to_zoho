@@ -42,8 +42,8 @@ exports.PostTaskzoho = async (task) => {
                     }
                 });
                 const leadData = response.data;
-                entityName = leadData.data.lastName;
-                entityNumber = leadData.data.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
+                entityName = leadData.lastName;
+                entityNumber = leadData.phoneNumbers[0].dialCode + leadData.data.phoneNumbers[0].value;
                 console.log("entityName");
                 console.log(entityName);
                 console.log(entityId);
