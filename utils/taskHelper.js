@@ -62,14 +62,18 @@ exports.PostTaskzoho = async (task) => {
                         'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
                     }
                 });
-                const dealData = response.data;
-                entityName = dealData.data.lastName;
-                entityNumber = dealData.data.phoneNumbers[0].dialCode + dealData.data.phoneNumbers[0].value;
-                console.log("entityName");
-                console.log(entityName);
-                console.log(entityId);
+                const leadData = response.data;
+                entityName = leadData.lastName;
+                if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
+                    entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
+                    console.log("entityNumber:", entityNumber);
+                } else {
+                    console.log("No phone number available for this lead.");
+                }
+                console.log("entityName:", entityName);
+                console.log("entityId:", entityId);
             } catch (e) {
-                console.log(e.toString());
+                console.log("Error fetching lead data:", e.toString());
             }
         }
         else if (entityType === "CONTACT") {
@@ -79,15 +83,18 @@ exports.PostTaskzoho = async (task) => {
                         'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
                     }
                 });
-                const contactData = response.data;
-                entityName = contactData.data.lastName;
-                entityNumber = contactData.data.phoneNumbers[0].dialCode + contactData.data.phoneNumbers[0].value;
-                console.log(entityType);
-                console.log("entityName");
-                console.log(entityName);
-                console.log(entityId);
+                const leadData = response.data;
+                entityName = leadData.lastName;
+                if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
+                    entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
+                    console.log("entityNumber:", entityNumber);
+                } else {
+                    console.log("No phone number available for this lead.");
+                }
+                console.log("entityName:", entityName);
+                console.log("entityId:", entityId);
             } catch (e) {
-                console.log(e.toString());
+                console.log("Error fetching lead data:", e.toString());
             }
         }
     }
@@ -104,7 +111,12 @@ exports.PostTaskzoho = async (task) => {
                     "send_notification": true,
                     "Send_Notification_Email": true,
                     "Kyla_s_Task_Id": task.entity.id.toString() || "",
-                    "kylas_task_owner": task.entity.assignedTo.name || ""
+                    "kylas_task_owner": task.entity.assignedTo.name || "",
+                    "Entity": entityName || "",
+                    "Assosiated_Name": entityName || "",
+                    "Assosiated_Contact_Number": entityNumber || "",
+
+
                 },
             ],
         };
