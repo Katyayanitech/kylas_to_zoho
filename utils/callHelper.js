@@ -71,6 +71,7 @@ exports.PostCallzoho = async (call) => {
                     "Call_Start_Time": formattedStartTime || "",
                     "Call_Type": callType || "",
                     "Dialled_Number": call.entity.phoneNumber || "",
+                    "Phone_Number": call.entity.phoneNumber || "",
                     "Call_Status": call.entity.outcome || "",
                     "kylas_call_Owner": call.entity.owner.name || "",
                     "Who_Id": {
