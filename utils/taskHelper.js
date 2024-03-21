@@ -1,4 +1,5 @@
 const axios = require('axios');
+const moment = require('moment');
 
 const PostTask = async (Taskdata) => {
     const config = {
@@ -175,6 +176,36 @@ const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
     }
 };
 
+async function checkCallHistory(phoneNumber) {
+    const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
+
+    try {
+        // Fetch call data from API
+        const response = await axios.get(url);
+        const callData = response.data.data;
+
+        // Get current time
+        const currentTime = moment();
+
+        // Calculate total call duration within 1 hour from now
+        let totalDuration = 0;
+        callData.forEach(call => {
+            const callStartTime = moment(call.Call_Start_Time);
+            const durationInSeconds = call.Call_Duration_in_seconds || 0;
+            if (currentTime.diff(callStartTime, 'hours') <= 1) {
+                totalDuration += durationInSeconds;
+            }
+        });
+
+        // Return true if total duration is >= 15 seconds, otherwise false
+        return totalDuration >= 15;
+    } catch (error) {
+        console.error('Error fetching or filtering calls:', error);
+        // In case of error, return false
+        return false;
+    }
+}
+
 
 exports.updateTaskToZohoCRM = async (task) => {
     console.log("task update section");
@@ -186,6 +217,7 @@ exports.updateTaskToZohoCRM = async (task) => {
     const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
     console.log("Task ID:", taskId);
     console.log("Associated Contact Number:", associatedContactNumber);
+    const systemApproved = await checkCallHistory(associatedContactNumber);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
@@ -202,7 +234,8 @@ exports.updateTaskToZohoCRM = async (task) => {
                     "send_notification": true,
                     "Send_Notification_Email": true,
                     "Kyla_s_Task_Id": task.entity.id.toString() || "",
-                    "kylas_task_owner": task.entity.assignedTo.name || ""
+                    "kylas_task_owner": task.entity.assignedTo.name || "",
+                    "System_Updated": systemApproved ? true : false,
                 },
             ],
         };
