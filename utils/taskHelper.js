@@ -115,7 +115,7 @@ exports.PostTaskzoho = async (task) => {
                     "Entity": entityType || "",
                     "Assosiated_Name": entityName || "",
                     "Assosiated_Contact_Number": entityNumber || "",
-                    "Entity_Id": entityId,
+                    "Entity_Id": entityId || "",
                 },
             ],
         };
