@@ -43,12 +43,16 @@ exports.PostTaskzoho = async (task) => {
                 });
                 const leadData = response.data;
                 entityName = leadData.lastName;
-                entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                console.log("entityName");
-                console.log(entityName);
-                console.log(entityId);
+                if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
+                    entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
+                    console.log("entityNumber:", entityNumber);
+                } else {
+                    console.log("No phone number available for this lead.");
+                }
+                console.log("entityName:", entityName);
+                console.log("entityId:", entityId);
             } catch (e) {
-                console.log(e.toString());
+                console.log("Error fetching lead data:", e.toString());
             }
 
         } else if (entityType === "DEAL") {
