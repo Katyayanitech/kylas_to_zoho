@@ -180,14 +180,11 @@ async function checkCallHistory(phoneNumber) {
     const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
 
     try {
-        // Fetch call data from API
         const response = await axios.get(url);
         const callData = response.data.data;
 
-        // Get current time
         const currentTime = moment();
 
-        // Calculate total call duration within 1 hour from now
         let totalDuration = 0;
         callData.forEach(call => {
             const callStartTime = moment(call.Call_Start_Time);
@@ -197,11 +194,9 @@ async function checkCallHistory(phoneNumber) {
             }
         });
 
-        // Return true if total duration is >= 15 seconds, otherwise false
         return totalDuration >= 15;
     } catch (error) {
         console.error('Error fetching or filtering calls:', error);
-        // In case of error, return false
         return false;
     }
 }
