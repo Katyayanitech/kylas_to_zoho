@@ -97,11 +97,15 @@ const getDealIdByKylasDealId = async (kylasDealId) => {
 
     try {
         const response = await axios(config);
-        return response.data.data[0].id;
+        if (response.data && response.data.data && response.data.data.length > 0) {
+            return response.data.data[0].id;
+        } else {
+            console.log('No deal found with Kyla_s_Deal_id:', kylasDealId);
+            return null;
+        }
     } catch (error) {
         console.log('Error in getDealIdByKylasDealId function:', error);
-        console.log('Kylasdeal Id Not found:', kylasDealId);
-        throw error;
+        return null;
     }
 };
 
@@ -139,8 +143,12 @@ exports.updateDealToZohoCRM = async (deal) => {
             ],
         };
 
-        const response = await updateDeal(dealData, dealId);
-        console.log('Deal updated to Zoho CRM successfully:', response.data);
+        if (dealId !== undefined) {
+            const response = await updateDeal(dealData, dealId);
+            console.log('Deal updated to Zoho CRM successfully:', response.data);
+        } else {
+            console.log('No deal ID found for Kylas_Deal_id:', kylasDealId);
+        }
     } catch (error) {
         console.error('Error updating Deal to Zoho CRM:', error.response ? error.response.data : error);
     }
