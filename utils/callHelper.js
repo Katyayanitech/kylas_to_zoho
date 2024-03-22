@@ -1,7 +1,14 @@
 const axios = require('axios');
 
-const getWhoIdByPhonenumber = async (phoneNumber) => {
-    const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+const getWhoIdByPhonenumber = async (phoneNumber, entity) => {
+    var apiUrl;
+    if (entity === 'lead') {
+        apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?phone=${phoneNumber}`;
+    } else if (entity === 'contact') {
+        apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+    } else if (entity === 'deal') {
+        apiUrl = `https://www.zohoapis.in/crm/v2/Deals/search?phone=${phoneNumber}`;
+    }
 
     const config = {
         method: 'get',
@@ -54,7 +61,7 @@ exports.PostCallzoho = async (call) => {
     console.log(formattedStartTime);
     console.log(call.entity.relatedTo);
 
-    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber);
+    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber, call.entity.relatedTo[0].entity);
 
     let callType = "";
     if (call.entity.callType == "outgoing") {

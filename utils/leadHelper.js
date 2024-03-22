@@ -1,5 +1,4 @@
 const axios = require('axios');
-const { updateAccessToken } = require("../utils/helpers")
 
 const postLead = async (leadData) => {
     const config = {
@@ -21,7 +20,6 @@ const postLead = async (leadData) => {
 }
 
 exports.postLeadToZohoCRM = async (lead) => {
-    await updateAccessToken();
     console.log("lead data");
     console.log(lead);
     console.log("lead number");

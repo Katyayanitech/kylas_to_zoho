@@ -1,6 +1,5 @@
 const axios = require('axios');
 const moment = require('moment');
-const { updateAccessToken } = require("../utils/helpers.js")
 
 const PostTask = async (Taskdata) => {
     const config = {
@@ -22,7 +21,6 @@ const PostTask = async (Taskdata) => {
 }
 
 exports.PostTaskzoho = async (task) => {
-    await updateAccessToken();
     let entityType;
     let entityId;
     let entityName;
