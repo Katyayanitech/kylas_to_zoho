@@ -54,7 +54,7 @@ exports.PostCallzoho = async (call) => {
     console.log(formattedStartTime);
     console.log(call.entity.relatedTo);
 
-    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber, call.entity.relatedTo[0].entity);
+    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber);
 
     let callType = "";
     if (call.entity.callType == "outgoing") {
