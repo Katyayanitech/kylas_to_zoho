@@ -21,7 +21,7 @@ const postLead = async (leadData) => {
 }
 
 exports.postLeadToZohoCRM = async (lead) => {
-    updateAccessToken();
+    await updateAccessToken();
     console.log("lead data");
     console.log(lead);
     console.log("lead number");
