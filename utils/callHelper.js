@@ -1,7 +1,14 @@
 const axios = require('axios');
 
 const getWhoIdByPhonenumber = async (phoneNumber) => {
-    const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+
+    if () {
+        const apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?phone=${phoneNumber}`;
+
+    } else {
+
+        const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+    }
 
     const config = {
         method: 'get',
@@ -88,6 +95,6 @@ exports.PostCallzoho = async (call) => {
         const response = await PostCall(Calldata);
         console.log('Call posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.log('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error posting Call to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
