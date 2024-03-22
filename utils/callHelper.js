@@ -89,7 +89,8 @@ exports.PostCallzoho = async (call) => {
         };
         console.log("Calldata");
         console.log(Calldata);
-
+        console.log(call.entity.relatedTo != null ? call.entity.relatedTo[0].name : "");
+        console.log(whoId);
         const response = await PostCall(Calldata);
         console.log('Call posted to Zoho CRM successfully:', response.data);
     } catch (error) {
