@@ -7,7 +7,7 @@ async function fetchAccessToken() {
         const response = await axios.get(accessTokenUrl);
         return response.data.trim();
     } catch (error) {
-        console.error("Error fetching access token:", error);
+        console.log("Error fetching access token:", error);
         throw error;
     }
 }
@@ -19,7 +19,7 @@ async function updateAccessToken() {
         ZOHO_CRM_ACCESS_TOKEN = accessToken;
         console.log("Zoho CRM access token updated:", ZOHO_CRM_ACCESS_TOKEN);
     } catch (error) {
-        console.error("Error updating access token:", error);
+        console.log("Error updating access token:", error);
     }
 }
 

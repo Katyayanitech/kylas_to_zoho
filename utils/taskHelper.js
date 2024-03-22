@@ -16,7 +16,7 @@ const PostTask = async (Taskdata) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postTask function:', error);
+        console.log('Error in postTask function:', error);
         throw error;
     }
 }
@@ -127,7 +127,7 @@ exports.PostTaskzoho = async (task) => {
         const response = await PostTask(Taskdata);
         console.log('Task posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
 
@@ -147,7 +147,7 @@ const updateTask = async (taskData, taskId) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in updateTask function:', error);
+        console.log('Error in updateTask function:', error);
         return null;
     }
 }
@@ -206,7 +206,7 @@ const checkCallHistory = async (phoneNumber) => {
 
         return totalDuration >= 15;
     } catch (error) {
-        console.error('Error fetching or filtering calls:', error);
+        console.log('Error fetching or filtering calls:', error);
         return false;
     }
 }
@@ -249,6 +249,6 @@ exports.updateTaskToZohoCRM = async (task) => {
         const response = await updateTask(taskData, taskId);
         console.log('Task updated to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
     }
 }

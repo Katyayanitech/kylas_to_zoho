@@ -36,7 +36,7 @@ const PostCall = async (Calldata) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postCall function:', error);
+        console.log('Error in postCall function:', error);
         throw error;
     }
 }
@@ -86,6 +86,6 @@ exports.PostCallzoho = async (call) => {
         const response = await PostCall(Calldata);
         console.log('Call posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
     }
 }

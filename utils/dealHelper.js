@@ -14,7 +14,7 @@ const PostDeal = async (Dealdata) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postDeal function:', error);
+        console.log('Error in postDeal function:', error);
         throw error;
     }
 }
@@ -58,7 +58,7 @@ exports.PostDealzoho = async (deal) => {
         const response = await PostDeal(Dealdata);
         console.log('Deal posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error posting Deal to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
 
@@ -77,7 +77,7 @@ const updateDeal = async (dealData, dealId) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in updateDeal function:', error);
+        console.log('Error in updateDeal function:', error);
         return null;
     }
 }
@@ -150,6 +150,6 @@ exports.updateDealToZohoCRM = async (deal) => {
             console.log('No deal ID found for Kylas_Deal_id:', kylasDealId);
         }
     } catch (error) {
-        console.error('Error updating Deal to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error updating Deal to Zoho CRM:', error.response ? error.response.data : error);
     }
 }

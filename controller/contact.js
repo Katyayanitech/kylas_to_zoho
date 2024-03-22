@@ -6,7 +6,7 @@ exports.postContactToCRM = async (req, res) => {
         await Postcontactzoho(newcontact);
         return res.status(200).send('Contact processed successfully');
     } catch (error) {
-        console.error('Error processing webhook request:', error);
+        console.log('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
     }
 }
@@ -17,7 +17,7 @@ exports.updateContactToCRM = async (req, res) => {
         await updateContactToZohoCRM(updatedContact);
         return res.status(200).send('Contact Update Successfully')
     } catch (error) {
-        console.error('Error processing webhook request:', error);
+        console.log('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
     }
 }

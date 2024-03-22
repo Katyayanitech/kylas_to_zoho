@@ -6,7 +6,7 @@ exports.postTaskToCRM = async (req, res) => {
         await PostTaskzoho(newTask);
         return res.status(200).send('Task processed successfully');
     } catch (error) {
-        console.error('Error processing webhook request:', error);
+        console.log('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
     }
 }
@@ -17,7 +17,7 @@ exports.updateTaskToCRM = async (req, res) => {
         await updateTaskToZohoCRM(updatedTask);
         return res.status(200).send('Task Updated successfully');
     } catch (error) {
-        console.error('Error processing webhook request:', error);
+        console.log('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
     }
 }

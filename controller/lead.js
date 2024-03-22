@@ -6,7 +6,7 @@ exports.postLeadToCRM = async (req, res) => {
         await postLeadToZohoCRM(newLead);
         return res.status(200).send('Lead processed successfully');
     } catch (error) {
-        console.error('Error processing webhook request:', error);
+        console.log('Error processing webhook request:', error);
         return res.status(500).send('Error processing webhook request');
     }
 }

@@ -14,7 +14,7 @@ const Postcontact = async (Contactdata) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postContact function:', error);
+        console.log('Error in postContact function:', error);
         throw error;
     }
 }
@@ -47,7 +47,7 @@ exports.Postcontactzoho = async (contact) => {
         const response = await Postcontact(Contactdata);
         console.log('Contact posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting Contact to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error posting Contact to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
 
@@ -66,7 +66,7 @@ const updateContact = async (contactData, contactId) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in updateContact function:', error);
+        console.log('Error in updateContact function:', error);
         return null;
     }
 }
@@ -126,6 +126,6 @@ exports.updateContactToZohoCRM = async (contact) => {
         const response = await updateContact(contactData, contactId);
         console.log('Contact updated to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error updating Contact to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error updating Contact to Zoho CRM:', error.response ? error.response.data : error);
     }
 }

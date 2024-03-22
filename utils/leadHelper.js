@@ -15,7 +15,7 @@ const postLead = async (leadData) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postLead function:', error);
+        console.log('Error in postLead function:', error);
         throw error;
     }
 }
@@ -47,7 +47,7 @@ exports.postLeadToZohoCRM = async (lead) => {
         const response = await postLead(leadData);
         console.log('Lead posted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.error('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
 
@@ -66,7 +66,7 @@ const updateLead = async (leadData, leadId) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.error('Error in postLead function:', error);
+        console.log('Error in postLead function:', error);
         return null;
     }
 }
@@ -133,7 +133,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
             const response = await updateLead(leadData, leadId);
             console.log('Lead updated to Zoho CRM successfully:', response.data);
         } catch (error) {
-            console.error('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
+            console.log('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
         }
 
     }
