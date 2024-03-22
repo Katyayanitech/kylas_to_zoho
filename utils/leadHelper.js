@@ -65,7 +65,7 @@ const updateLead = async (leadData, leadId) => {
         return await axios(config);
     } catch (error) {
         console.error('Error in postLead function:', error);
-        throw error;
+        return null;
     }
 }
 
@@ -92,7 +92,7 @@ const getLeadIdByPhoneNumber = async (phoneNumber) => {
     } catch (error) {
         console.log('Error in getLeadIdByPhoneNumber function:', error);
         console.log('Lead Phone Not Found:', phoneNumber);
-        throw error;
+        return null;
     }
 };
 

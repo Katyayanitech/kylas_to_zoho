@@ -18,7 +18,7 @@ const getWhoIdByPhonenumber = async (phoneNumber) => {
     } catch (error) {
         console.log('Error in getWhoIdByPhonenumber function:', error);
         console.log('whoid Id Not found:', phoneNumber);
-        throw error;
+        return null;
     }
 };
 

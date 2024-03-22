@@ -78,7 +78,7 @@ const updateDeal = async (dealData, dealId) => {
         return await axios(config);
     } catch (error) {
         console.error('Error in updateDeal function:', error);
-        throw error;
+        return null;
     }
 }
 

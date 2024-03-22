@@ -67,7 +67,7 @@ const updateContact = async (contactData, contactId) => {
         return await axios(config);
     } catch (error) {
         console.error('Error in updateContact function:', error);
-        throw error;
+        return null;
     }
 }
 
@@ -89,7 +89,7 @@ const getContactIdByPhoneNumber = async (phoneNumber) => {
     } catch (error) {
         console.log('Error in getContactIdByPhoneNumber function:', error);
         console.log('Contact Phone Not found:', phoneNumber);
-        throw error;
+        return null;
     }
 };
 

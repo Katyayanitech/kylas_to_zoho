@@ -146,7 +146,7 @@ const updateTask = async (taskData, taskId) => {
         return await axios(config);
     } catch (error) {
         console.error('Error in updateTask function:', error);
-        throw error;
+        return null;
     }
 }
 
@@ -172,7 +172,7 @@ const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
     } catch (error) {
         console.log('Error in getTaskIdAndContactByKylasTaskId function:', error);
         console.log('KylasTask Id and Number Not found:', kylasTaskId);
-        throw error;
+        return null;
     }
 };
 
