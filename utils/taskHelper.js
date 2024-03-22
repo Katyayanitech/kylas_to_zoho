@@ -206,7 +206,7 @@ const checkCallHistory = async (phoneNumber) => {
 
         return totalDuration >= 15;
     } catch (error) {
-        console.log('Error fetching or filtering calls:', error);
+        console.log(`Error fetching or filtering calls: ${error}`);
         return false;
     }
 }
@@ -224,7 +224,7 @@ exports.updateTaskToZohoCRM = async (task) => {
     console.log("Associated Contact Number:", associatedContactNumber);
     const systemApproved = await checkCallHistory(associatedContactNumber);
     const dueDate = new Date(task.entity.dueDate);
-    const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
+    const formattedDueDate = `${dueDate.getFullYear()} - ${(dueDate.getMonth() + 1).toString().padStart(2, '0')} -${dueDate.getDate().toString().padStart(2, '0')} `;
     console.log("Formatted Due Date:", formattedDueDate);
 
     try {
@@ -233,7 +233,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                 {
                     "Subject": task.entity.name || "",
                     "Description": task.entity.description || "",
-                    "Status": task.entity.status.name || "",
+                    "Status": systemApproved ? "System Approve" : (task.entity.status.name || ""),
                     "Priority": task.entity.priority.name || "",
                     "Due_Date": formattedDueDate || "",
                     "send_notification": true,
