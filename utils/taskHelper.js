@@ -22,7 +22,7 @@ const PostTask = async (Taskdata) => {
 }
 
 exports.PostTaskzoho = async (task) => {
-    updateAccessToken();
+    await updateAccessToken();
     let entityType;
     let entityId;
     let entityName;
