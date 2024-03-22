@@ -224,7 +224,7 @@ exports.updateTaskToZohoCRM = async (task) => {
     console.log("Associated Contact Number:", associatedContactNumber);
     const systemApproved = await checkCallHistory(associatedContactNumber);
     const dueDate = new Date(task.entity.dueDate);
-    const formattedDueDate = `${dueDate.getFullYear()} - ${(dueDate.getMonth() + 1).toString().padStart(2, '0')} -${dueDate.getDate().toString().padStart(2, '0')} `;
+    const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
 
     try {
