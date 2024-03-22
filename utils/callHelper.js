@@ -1,30 +1,55 @@
 const axios = require('axios');
 
 const getWhoIdByPhonenumber = async (phoneNumber) => {
-
-    if () {
-        const apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?phone=${phoneNumber}`;
-
-    } else {
-
-        const apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
-    }
-
-    const config = {
-        method: 'get',
-        url: apiUrl,
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        }
-    };
+    let apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?phone=${phoneNumber}`;
+    let entityType = 'Leads'; // Default entity type
 
     try {
-        const response = await axios(config);
-        return response.data.data[0].id;
+        // Attempt to get data from Leads API
+        let config = {
+            method: 'get',
+            url: apiUrl,
+            headers: {
+                'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        };
+        let response = await axios(config);
+        if (response.data.data.length > 0) {
+            // If data is found in Leads, return the ID
+            return response.data.data[0].id;
+        } else {
+            // If no data found in Leads, switch to Contacts API
+            apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+            entityType = 'Contacts';
+        }
     } catch (error) {
         console.log('Error in getWhoIdByPhonenumber function:', error);
-        console.log('whoid Id Not found:', phoneNumber);
+        console.log('Error while searching in Leads:', error.message);
+        return null;
+    }
+
+    try {
+        // Attempt to get data from Contacts API
+        let config = {
+            method: 'get',
+            url: apiUrl,
+            headers: {
+                'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        };
+        let response = await axios(config);
+        if (response.data.data.length > 0) {
+            // If data is found in Contacts, return the ID
+            return response.data.data[0].id;
+        } else {
+            console.log(`${entityType} with phone number ${phoneNumber} not found.`);
+            return null;
+        }
+    } catch (error) {
+        console.log('Error in getWhoIdByPhonenumber function:', error);
+        console.log(`Error while searching in ${entityType}:`, error.message);
         return null;
     }
 };
