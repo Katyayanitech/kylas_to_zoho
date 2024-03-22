@@ -3,6 +3,6 @@ const { postBookInvoiceToCRM } = require("../controller/invoice");
 
 const router = express.Router();
 
-router.post('/kylas-Contacts', postBookInvoiceToCRM);
+router.post('/zohobook-invoice', postBookInvoiceToCRM);
 
 module.exports = router;
