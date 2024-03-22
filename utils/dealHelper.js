@@ -25,7 +25,7 @@ exports.PostDealzoho = async (deal) => {
     console.log("Pipeline Stage");
     let formattedClosureDate = "";
 
-    if (deal.entity.estimatedClosureOn != null) {
+    if (deal.entity.estimatedClosureOn != null && deal.entity.estimatedClosureOn !== undefined) {
         const closureDate = new Date(deal.entity.estimatedClosureOn);
         formattedClosureDate = `${closureDate.getFullYear()}-${(closureDate.getMonth() + 1).toString().padStart(2, '0')}-${closureDate.getDate().toString().padStart(2, '0')}`;
     } else {
