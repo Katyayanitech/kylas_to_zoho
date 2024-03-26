@@ -19,6 +19,25 @@ const searchProductBySKU = async (sku) => {
     }
 };
 
+const searchContactByPhone = async (phoneNumber) => {
+    const config = {
+        method: 'get',
+        url: `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`,
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const response = await axios(config);
+        return response.data.data[0]; // Assuming only one contact will be returned
+    } catch (error) {
+        console.log('Error searching contact by phone number:', error);
+        throw error;
+    }
+};
+
 const postInvoice = async (invoiceData) => {
     const config = {
         method: 'post',
@@ -71,6 +90,8 @@ exports.PostBookToCRM = async (invoice) => {
             productDetails.push(productDetail);
         }
 
+        const contact = await searchContactByPhone(invoice.invoice.billing_address.phone);
+
         const invoiceData = {
             data: [
                 {
@@ -79,10 +100,13 @@ exports.PostBookToCRM = async (invoice) => {
                     "Invoice_Date": invoice.invoice.date,
                     "Grand_Total": invoice.invoice.total,
                     "Sales_person": invoice.invoice.salesperson_name,
+                    "Contact_Name": {
+                        "id": contact.id,
+                    },
                     "Status": invoice.invoice.status,
                     "Shipping_State": invoice.invoice.shipping_address.state,
                     "Subject": invoice.invoice.invoice_number,
-                    "Product_Details": productDetails
+                    "Product_Details": productDetails,
                 },
             ],
         };
