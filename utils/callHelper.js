@@ -1,37 +1,19 @@
 const axios = require('axios');
 
-const getWhoIdByPhonenumber = async (phoneNumber) => {
-    let apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?phone=${phoneNumber}`;
-    let entityType = 'Leads'; // Default entity type
+const getWhoIdByPhonenumber = async (phoneNumber, entityType) => {
+    let apiUrl = '';
 
-    try {
-        // Attempt to get data from Leads API
-        let config = {
-            method: 'get',
-            url: apiUrl,
-            headers: {
-                'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-                'Content-Type': 'application/json'
-            }
-        };
-        let response = await axios(config);
-        if (response.data.data.length > 0) {
-            // If data is found in Leads, return the ID
-            return response.data.data[0].id;
-        } else {
-            // If no data found in Leads, switch to Contacts API
-            apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
-            entityType = 'Contacts';
-        }
-    } catch (error) {
-        console.log('Error in getWhoIdByPhonenumber function:', error);
-        console.log('Error while searching in Leads:', error.message);
+    if (entityType === 'lead') {
+        apiUrl = `https://www.zohoapis.in/crm/v2/Leads/search?phone=${phoneNumber}`;
+    } else if (entityType === 'contact') {
+        apiUrl = `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`;
+    } else {
+        console.log('Invalid entity type:', entityType);
         return null;
     }
 
     try {
-        // Attempt to get data from Contacts API
-        let config = {
+        const config = {
             method: 'get',
             url: apiUrl,
             headers: {
@@ -39,16 +21,14 @@ const getWhoIdByPhonenumber = async (phoneNumber) => {
                 'Content-Type': 'application/json'
             }
         };
-        let response = await axios(config);
+        const response = await axios(config);
         if (response.data.data.length > 0) {
-            // If data is found in Contacts, return the ID
             return response.data.data[0].id;
         } else {
             console.log(`${entityType} with phone number ${phoneNumber} not found.`);
             return null;
         }
     } catch (error) {
-        console.log('Error in getWhoIdByPhonenumber function:', error);
         console.log(`Error while searching in ${entityType}:`, error.message);
         return null;
     }
@@ -71,7 +51,7 @@ const PostCall = async (Calldata) => {
         console.log('Error in postCall function:', error);
         throw error;
     }
-}
+};
 
 exports.PostCallzoho = async (call) => {
     console.log("Call Data ");
@@ -86,7 +66,9 @@ exports.PostCallzoho = async (call) => {
     console.log(formattedStartTime);
     console.log(call.entity.relatedTo);
 
-    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber);
+    const relatedEntity = call.entity.relatedTo[0];
+    const entityType = relatedEntity.entity;
+    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber, entityType);
 
     let callType = "";
     if (call.entity.callType == "outgoing") {
@@ -95,7 +77,7 @@ exports.PostCallzoho = async (call) => {
         callType = "Inbound";
     }
     try {
-        const Calldata = {
+        let Calldata = {
             data: [
                 {
                     "Call_Duration": call.entity.duration.toString() || "",
@@ -106,20 +88,29 @@ exports.PostCallzoho = async (call) => {
                     "Call_Status": call.entity.outcome || "",
                     "Outcome": call.entity.outcome || "",
                     "kylas_call_Owner": call.entity.owner.name || "",
-                    "Who_Id": {
-                        "name": call.entity.relatedTo != null ? call.entity.relatedTo[0].name : "",
-                        "id": whoId,
-                    },
                 }
             ],
         };
+
+        if (entityType === 'lead') {
+            Calldata.data[0]["What_Id"] = {
+                "id": whoId,
+                "$se_module": "Leads"
+            };
+        } else if (entityType === 'contact') {
+            Calldata.data[0]["Who_Id"] = {
+                "name": relatedEntity.name || "",
+                "id": whoId,
+            };
+        }
+
         console.log("Calldata");
         console.log(Calldata);
-        console.log(call.entity.relatedTo != null ? call.entity.relatedTo[0].name : "");
+        console.log(relatedEntity.name || "");
         console.log(whoId);
         const response = await PostCall(Calldata);
         console.log('Call posted to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.log('Error posting Call to Zoho CRM:', error.response ? error.response.data : error);
     }
-}
+};
