@@ -78,6 +78,7 @@ exports.PostBookToCRM = async (invoice) => {
                     "Currency": invoice.invoice.currency_code,
                     "Invoice_Date": invoice.invoice.date,
                     "Grand_Total": invoice.invoice.total,
+                    "Sales_person": invoice.invoice.salesperson_name,
                     "Status": invoice.invoice.status,
                     "Shipping_State": invoice.invoice.shipping_address.state,
                     "Subject": invoice.invoice.invoice_number,
