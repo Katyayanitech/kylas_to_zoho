@@ -74,7 +74,7 @@ exports.PostBookToCRM = async (invoice) => {
         const invoiceData = {
             data: [
                 {
-                    "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment == "Cash on Delivery" ? "COD" : "Prepaid",
+                    "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment == "Cash on Delivery" ? "COD" : invoice.invoice.custom_field_hash.cf_terms_of_payment,
                     "Currency": invoice.invoice.currency_code,
                     "Invoice_Date": invoice.invoice.date,
                     "Grand_Total": invoice.invoice.total,
