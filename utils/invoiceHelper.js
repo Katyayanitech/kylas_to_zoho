@@ -96,18 +96,25 @@ exports.PostBookToCRM = async (invoice) => {
         const invoiceData = {
             data: [
                 {
-                    "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment == "Cash on Delivery" ? "COD" : invoice.invoice.custom_field_hash.cf_terms_of_payment,
-                    "Currency": invoice.invoice.currency_code,
-                    "Invoice_Date": invoice.invoice.date,
-                    "Grand_Total": invoice.invoice.total,
-                    "Sales_person": salesPerson,
+                    "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment == "Cash on Delivery" ? "COD" : invoice.invoice.custom_field_hash.cf_terms_of_payment || "",
+                    "Currency": invoice.invoice.currency_code || "",
+                    "Invoice_Date": invoice.invoice.date || "",
+                    "Grand_Total": invoice.invoice.total || "",
+                    "Sales_person": salesPerson || "",
                     "Contact_Name": {
-                        "id": contact.id,
+                        "id": contact.id || "",
                     },
-                    "Status": invoice.invoice.status,
-                    "Shipping_State": invoice.invoice.shipping_address.state,
-                    "Subject": invoice.invoice.invoice_number,
-                    "Product_Details": productDetails,
+                    "Status": invoice.invoice.status || "",
+                    "Shipping_State": invoice.invoice.shipping_address.state || "",
+                    "Subject": invoice.invoice.invoice_number || "",
+                    "Product_Details": productDetails || "",
+                    "Billing_Phone": invoice.invoice.customer_default_billing_address.phone || "",
+                    "Billing_City": invoice.invoice.customer_default_billing_address.city || "",
+                    "Billing_Street": invoice.invoice.customer_default_billing_address.street2 || "",
+                    "Billing_Country": invoice.invoice.customer_default_billing_address.country || "",
+                    "Billing_Code": invoice.invoice.customer_default_billing_address.zip || "",
+                    "Billing_Address": invoice.invoice.customer_default_billing_address.address || "",
+                    "Billing_State": invoice.invoice.customer_default_billing_address.state || ""
                 },
             ],
         };
