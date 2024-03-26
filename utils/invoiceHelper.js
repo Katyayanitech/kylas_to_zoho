@@ -91,6 +91,7 @@ exports.PostBookToCRM = async (invoice) => {
         }
 
         const contact = await searchContactByPhone(invoice.invoice.billing_address.phone);
+        const salesPerson = invoice.invoice.salesperson_name.toLowerCase().replace(/\s/g, '');
 
         const invoiceData = {
             data: [
@@ -99,7 +100,7 @@ exports.PostBookToCRM = async (invoice) => {
                     "Currency": invoice.invoice.currency_code,
                     "Invoice_Date": invoice.invoice.date,
                     "Grand_Total": invoice.invoice.total,
-                    "Sales_person": invoice.invoice.salesperson_name,
+                    "Sales_person": salesPerson,
                     "Contact_Name": {
                         "id": contact.id,
                     },
