@@ -74,23 +74,10 @@ exports.PostBookToCRM = async (invoice) => {
         const invoiceData = {
             data: [
                 {
-                    "Owner": {
-                        "name": "Katyayani Manager",
-                        "id": "431127000000257001",
-                        "email": "katyayanimanager@gmail.com"
-                    },
-                    "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment,
+                    "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment == "Cash on Delivery" ? "COD" : "Prepaid",
                     "Currency": invoice.invoice.currency_code,
                     "Invoice_Date": invoice.invoice.date,
                     "Grand_Total": invoice.invoice.total,
-                    "Contact_Name": {
-                        "name": "Katyayani organics",
-                        "id": "431127000007006876"
-                    },
-                    "Account_Name": {
-                        "name": "Katyayani Organics",
-                        "id": "431127000001985473"
-                    },
                     "Status": invoice.invoice.status,
                     "Shipping_State": invoice.invoice.shipping_address.state,
                     "Subject": invoice.invoice.invoice_number,
