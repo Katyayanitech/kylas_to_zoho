@@ -94,9 +94,9 @@ exports.PostCallzoho = async (call) => {
 
         if (entityType === 'lead') {
             Calldata.data[0]["What_Id"] = {
-                "id": whoId,
-                "$se_module": "Leads"
+                "id": whoId
             };
+            Calldata.data[0]["$se_module"] = "Leads";
         } else if (entityType === 'contact') {
             Calldata.data[0]["Who_Id"] = {
                 "name": relatedEntity.name || "",
