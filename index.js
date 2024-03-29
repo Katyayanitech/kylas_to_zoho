@@ -76,13 +76,15 @@ async function postLeadToKylas(lead) {
 
         console.log('IndiaMart Lead posted to Kylas:', response.data);
     } catch (error) {
-        console.error('Error posting lead to Kylas:', error.message);
+        console.error('Error posting lead to Kylas:', error);
     }
 }
 
 async function fetchLeads() {
     try {
         const currentTime = new Date();
+        console.log("currentTime");
+        console.log(currentTime);
 
         const endTime = formatDate(currentTime);
 
