@@ -33,7 +33,7 @@ setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
 let lastLeadQueryTime = null;
 let leadsArray = [];
 
-function formatDateIST(date) {
+function formatDate(date) {
     const ISTOffset = 5.5 * 60; // IST offset in minutes
     const localTime = date.getTime();
     const localOffset = date.getTimezoneOffset();
