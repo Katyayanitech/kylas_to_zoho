@@ -43,11 +43,50 @@ function formatDate(date) {
     return `${day}-${month}-${year}${hours}:${minutes}:${seconds}`;
 }
 
+function mapLeadToKylasFormat(lead) {
+    return {
+        "lastName": `${lead.SENDER_NAME}`,
+        "city": `${lead.SENDER_CITY}`,
+        "phoneNumbers": [
+            {
+                "type": "MOBILE",
+                "code": `${lead.SENDER_COUNTRY_ISO}`,
+                "value": lead.SENDER_MOBILE,
+                "primary": true
+            }
+        ],
+        "state": `${lead.SENDER_STATE}`,
+        "country": `${lead.SENDER_COUNTRY_ISO}`,
+        "source": 80347,
+        "companyName": `${lead.SENDER_COMPANY}`,
+        "requirementName": `${lead.SUBJECT}`,
+        "subSource": "Katyayani"
+    };
+}
+
+async function postLeadToKylas(lead) {
+    try {
+        const postData = mapLeadToKylasFormat(lead);
+
+        const response = await axios.post('https://api.kylas.io/v1/leads', postData, {
+            headers: {
+                'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
+            }
+        });
+
+        console.log('IndiaMart Lead posted to Kylas:', response.data);
+    } catch (error) {
+        console.error('Error posting lead to Kylas:', error.message);
+    }
+}
+
 async function fetchLeads() {
     try {
         const currentTime = new Date();
+
         const endTime = formatDate(currentTime);
-        const startTime = lastLeadQueryTime ? lastLeadQueryTime : formatDate(new Date(currentTime.getTime() - 5 * 60 * 1000));
+
+        const startTime = lastLeadQueryTime ?? formatDate(new Date(Date.now() - 5 * 60 * 1000));
 
         const apiUrl = `https://mapi.indiamart.com/wservce/crm/crmListing/v2/?glusr_crm_key=mRyyE71u4H/AS/eq4XCO7l2Ko1rNlDRk&start_time=${startTime}&end_time=${endTime}`;
 
@@ -62,12 +101,16 @@ async function fetchLeads() {
 
             leadsArray = leads;
 
-            console.log('Received Leads By IndiaMart :', leadsArray);
+            console.log('Received leads:', leadsArray);
+
+            for (const lead of leadsArray) {
+                await postLeadToKylas(lead);
+            }
         } else {
-            console.log('Error: Unable to fetch leads. Status:', response.status);
+            console.error('Error: Unable to fetch leads. Status:', response.status);
         }
     } catch (error) {
-        console.log('Error:', error.message);
+        console.error('Error:', error.message);
     }
 }
 
@@ -77,7 +120,10 @@ function scheduleAPIPolling() {
     setInterval(fetchLeads, 5 * 60 * 1000);
 }
 
+lastLeadQueryTime = formatDate(new Date(Date.now() - 5 * 60 * 1000));
+
 scheduleAPIPolling();
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
