@@ -89,12 +89,14 @@ async function fetchLeads() {
         const startTime = lastLeadQueryTime ?? formatDate(new Date(Date.now() - 5 * 60 * 1000));
 
         const apiUrl = `https://mapi.indiamart.com/wservce/crm/crmListing/v2/?glusr_crm_key=mRyyE71u4H/AS/eq4XCO7l2Ko1rNlDRk&start_time=${startTime}&end_time=${endTime}`;
+        console.log(apiurl);
 
         const response = await axios.get(apiUrl);
 
         if (response.status === 200 && response.data.STATUS === 'SUCCESS') {
             const leads = response.data.RESPONSE;
-
+            console.log("leads");
+            console.log(leads);
             if (leads.length > 0) {
                 lastLeadQueryTime = leads[leads.length - 1].QUERY_TIME;
             }
@@ -107,7 +109,7 @@ async function fetchLeads() {
                 await postLeadToKylas(lead);
             }
         } else {
-            console.error('Error: Unable to fetch leads. Status:', response.status);
+            console.error('Error: Unable to fetch leads. Status:', response.data.STATUS);
         }
     } catch (error) {
         console.error('Error:', error.message);
