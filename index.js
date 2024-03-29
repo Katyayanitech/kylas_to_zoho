@@ -48,8 +48,9 @@ function formatDate(date) {
     const minutes = ('0' + ISTDate.getMinutes()).slice(-2);
     const seconds = ('0' + ISTDate.getSeconds()).slice(-2);
 
-    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    return `${day}-${month}-${year}${hours}:${minutes}:${seconds}`;
 }
+
 
 
 function mapLeadToKylasFormat(lead) {
