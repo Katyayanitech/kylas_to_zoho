@@ -120,6 +120,7 @@ async function fetchLeads() {
             for (const lead of leadsArray) {
                 await postLeadToKylas(lead);
             }
+            leadsArray = [];
         } else {
             console.error('Error: Unable to fetch leads. Status:', response.data.STATUS);
         }
