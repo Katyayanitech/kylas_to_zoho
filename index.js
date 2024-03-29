@@ -33,15 +33,24 @@ setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
 let lastLeadQueryTime = null;
 let leadsArray = [];
 
-function formatDate(date) {
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    const hours = ('0' + date.getHours()).slice(-2);
-    const minutes = ('0' + date.getMinutes()).slice(-2);
-    const seconds = ('0' + date.getSeconds()).slice(-2);
-    return `${day}-${month}-${year}${hours}:${minutes}:${seconds}`;
+function formatDateIST(date) {
+    const ISTOffset = 5.5 * 60; // IST offset in minutes
+    const localTime = date.getTime();
+    const localOffset = date.getTimezoneOffset();
+    const utc = localTime + localOffset * 60000;
+    const ISTTime = utc + (ISTOffset * 60000);
+    const ISTDate = new Date(ISTTime);
+
+    const year = ISTDate.getFullYear();
+    const month = ('0' + (ISTDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + ISTDate.getDate()).slice(-2);
+    const hours = ('0' + ISTDate.getHours()).slice(-2);
+    const minutes = ('0' + ISTDate.getMinutes()).slice(-2);
+    const seconds = ('0' + ISTDate.getSeconds()).slice(-2);
+
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 }
+
 
 function mapLeadToKylasFormat(lead) {
     return {
