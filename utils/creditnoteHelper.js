@@ -19,7 +19,7 @@ const postCreditNote = async (creditnoteData, invoiceId) => {
     }
 };
 
-const searchInvoiceById = async (id) => {
+const invoiceSearchById = async (id) => {
     const apiUrl = `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${id})`;
     console.log(apiUrl);
     const config = {
@@ -38,7 +38,7 @@ const searchInvoiceById = async (id) => {
         // if (!invoice) {
         //     throw new Error('Invoice not found');
         // }
-        // const invoiceId = invoice.id;
+        // const invoiceId = invoice["id"];
         // console.log(invoiceId);
 
         // return { success: true, id: invoiceId };
@@ -47,7 +47,12 @@ const searchInvoiceById = async (id) => {
         console.error('Error searching invoice by ID:', error.message);
         throw error;
     }
+
 };
+
+// const searchInvoiceById = async (id) => {
+
+// };
 
 exports.PostBookToCRM = async (creditnote) => {
     console.log("creditnote");
@@ -55,7 +60,7 @@ exports.PostBookToCRM = async (creditnote) => {
     console.log('invoice id');
     console.log(creditnote.creditnote.invoice_id);
 
-    const invoiceData = await searchInvoiceById(creditnote.creditnote.invoice_id);
+    const invoiceData = await invoiceSearchById(creditnote.creditnote.invoice_id);
     const invoiceId = invoiceData.id;
     const Rto_Order = invoiceData.success;
     console.log("ZohoinvoiceId");
@@ -81,3 +86,15 @@ exports.PostBookToCRM = async (creditnote) => {
         console.log('Error posting invoice to Zoho CRM:', error.response ? error.response.data : error);
     }
 };
+
+
+// function check(id) {
+//     searchInvoiceById(id).then((res) => {
+//         console.log(res)
+//     }).catch((error) => {
+//         console.log(error)
+//     })
+
+// }
+
+// check(1155413000073016058);
