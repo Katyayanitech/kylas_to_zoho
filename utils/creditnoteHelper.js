@@ -66,24 +66,28 @@ exports.PostCreditBookToCRM = async (creditnote) => {
     console.log("ZohoinvoiceId");
     console.log(invoiceId);
     console.log(Rto_Order);
+    console.log(creditnote.creditnote.reason_for_creditnote_formatted);
 
+    if (creditnote.creditnote.reason_for_creditnote_formatted === 'Sales Return') {
+        try {
+            const creditnoteData = {
+                data: [
+                    {
+                        "Rto_Order": Rto_Order,
+                    },
+                ],
+            };
+            console.log(creditnoteData);
 
-    try {
-        const creditnoteData = {
-            data: [
-                {
-                    "Rto_Order": Rto_Order,
-                },
-            ],
-        };
-        console.log(creditnoteData);
+            const response = await postCreditNote(creditnoteData, invoiceId);
+            console.log('creditnote posted to Zoho CRM successfully:', response.data);
+        }
 
-        const response = await postCreditNote(creditnoteData, invoiceId);
-        console.log('creditnote posted to Zoho CRM successfully:', response.data);
-    }
-
-    catch (error) {
-        console.log('Error posting invoice to Zoho CRM:', error.response ? error.response.data : error);
+        catch (error) {
+            console.log('Error posting invoice to Zoho CRM:', error.response ? error.response.data : error);
+        }
+    } else {
+        console.log("Credit note reason is not that accurate");
     }
 };
 
