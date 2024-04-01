@@ -19,28 +19,28 @@ const postCreditNote = async (creditnoteData, invoiceId) => {
     }
 };
 
-// const searchInvoiceById = async (id) => {
-//     const config = {
-//         method: 'get',
-//         url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:$id)`,
-//         headers: {
-//             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-//             'Content-Type': 'application/json'
-//         }
-//     };
+const searchInvoiceById = async (id) => {
+    const config = {
+        method: 'get',
+        url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:$id)`,
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        }
+    };
 
-//     try {
-//         const response = await axios(config);
-//         if (response.status === 200) {
-//             return true;
-//         } else {
-//             return false;
-//         }
-//     } catch (error) {
-//         console.log('Error searching contact by phone number:', error);
-//         throw error;
-//     }
-// };
+    try {
+        const response = await axios(config);
+        if (response.status === 200) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log('Error searching contact by phone number:', error);
+        throw error;
+    }
+};
 
 exports.PostBookToCRM = async (creditnote) => {
     console.log("creditnote");
