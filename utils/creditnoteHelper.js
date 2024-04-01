@@ -38,7 +38,7 @@ const invoiceSearchById = async (id) => {
         if (!invoice) {
             throw new Error('Invoice not found');
         }
-        const invoiceId = invoice["id"];
+        const invoiceId = invoice.id;
         console.log(invoiceId);
 
         return { success: true, id: invoiceId };
@@ -54,7 +54,7 @@ const invoiceSearchById = async (id) => {
 
 // };
 
-exports.PostBookToCRM = async (creditnote) => {
+exports.PostCreditBookToCRM = async (creditnote) => {
     console.log("creditnote");
     console.log(creditnote);
     console.log('invoice id');
