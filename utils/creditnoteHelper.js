@@ -46,7 +46,7 @@ exports.PostBookToCRM = async (creditnote) => {
     console.log("creditnote");
     console.log(creditnote);
     console.log('invoice id');
-    console.log(creditnote.invoice_id);
+    console.log(creditnote.creditnote.invoice_id);
 
     const Rto_Order = searchInvoiceById(creditnote.invoice_id);
 
