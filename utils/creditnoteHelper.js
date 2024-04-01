@@ -3,7 +3,7 @@ const axios = require('axios');
 const postCreditNote = async (creditnoteData, invoiceId) => {
     const config = {
         method: 'put',
-        url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${invoiceId})`,
+        url: `https://www.zohoapis.in/crm/v2/Invoices/${invoiceId}`,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
@@ -24,17 +24,18 @@ const searchInvoiceById = async (id) => {
         method: 'get',
         url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${id})`,
         headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Authorization': `Bearer ${YOUR_BEARER_TOKEN}`,
             'Content-Type': 'application/json'
         }
     };
 
     try {
         const response = await axios(config);
-        if (response.status === 200) {
-            return true;
+        if (response.status === 200 && response.data.data.length > 0) {
+            const invoiceId = response.data.data[0].id;
+            return { success: true, id: invoiceId };
         } else {
-            return false;
+            return { success: false, id: null };
         }
     } catch (error) {
         console.log('Error searching contact by phone number:', error);
@@ -48,7 +49,9 @@ exports.PostBookToCRM = async (creditnote) => {
     console.log('invoice id');
     console.log(creditnote.creditnote.invoice_id);
 
-    const Rto_Order = searchInvoiceById(creditnote.invoice_id);
+    const invoiceData = searchInvoiceById(creditnote.invoice_id);
+    const invoiceId = (await invoiceData).id;
+    const Rto_Order = (await invoiceData).success;
 
 
     try {
@@ -60,7 +63,7 @@ exports.PostBookToCRM = async (creditnote) => {
             ],
         };
 
-        const response = await postCreditNote(creditnoteData, creditnote.invoice_id);
+        const response = await postCreditNote(creditnoteData, invoiceId);
         console.log('creditnote posted to Zoho CRM successfully:', response.data);
     }
 
