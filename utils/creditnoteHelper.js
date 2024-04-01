@@ -20,9 +20,11 @@ const postCreditNote = async (creditnoteData, invoiceId) => {
 };
 
 const searchInvoiceById = async (id) => {
+    const apiUrl = `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${id})`;
+    console.log(apiUrl);
     const config = {
         method: 'get',
-        url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${id})`,
+        url: apiUrl,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
@@ -37,6 +39,7 @@ const searchInvoiceById = async (id) => {
             throw new Error('Invoice not found');
         }
         const invoiceId = invoice.id;
+        console.log(invoiceId);
 
         return { success: true, id: invoiceId };
 
