@@ -49,9 +49,9 @@ exports.PostBookToCRM = async (creditnote) => {
     console.log('invoice id');
     console.log(creditnote.creditnote.invoice_id);
 
-    const invoiceData = searchInvoiceById(creditnote.invoice_id);
-    const invoiceId = (await invoiceData).id;
-    const Rto_Order = (await invoiceData).success;
+    const invoiceData = await searchInvoiceById(creditnote.invoice_id);
+    const invoiceId = invoiceData.id;
+    const Rto_Order = invoiceData.success;
     console.log("ZohoinvoiceId");
 
 
