@@ -1,52 +1,14 @@
 const axios = require('axios');
 
-const searchProductBySKU = async (sku) => {
+const postCreditNote = async (creditnoteData, invoiceId) => {
     const config = {
-        method: 'get',
-        url: `https://www.zohoapis.in/crm/v2/Products/search?criteria=(Product_Code:equals:${encodeURIComponent(sku)})`,
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        }
-    };
-
-    try {
-        const response = await axios(config);
-        return response.data.data[0];
-    } catch (error) {
-        console.log('Error searching product by SKU:', error);
-        throw error;
-    }
-};
-
-const searchContactByPhone = async (phoneNumber) => {
-    const config = {
-        method: 'get',
-        url: `https://www.zohoapis.in/crm/v2/Contacts/search?phone=${phoneNumber}`,
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        }
-    };
-
-    try {
-        const response = await axios(config);
-        return response.data.data[0]; // Assuming only one contact will be returned
-    } catch (error) {
-        console.log('Error searching contact by phone number:', error);
-        throw error;
-    }
-};
-
-const postInvoice = async (invoiceData) => {
-    const config = {
-        method: 'post',
-        url: 'https://www.zohoapis.in/crm/v2/Invoices',
+        method: 'put',
+        url: 'https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:$invoiceId)',
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(invoiceData)
+        data: JSON.stringify(creditnoteData)
     };
 
     try {
@@ -57,76 +19,52 @@ const postInvoice = async (invoiceData) => {
     }
 };
 
+// const searchInvoiceById = async (id) => {
+//     const config = {
+//         method: 'get',
+//         url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:$id)`,
+//         headers: {
+//             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+//             'Content-Type': 'application/json'
+//         }
+//     };
+
+//     try {
+//         const response = await axios(config);
+//         if (response.status === 200) {
+//             return true;
+//         } else {
+//             return false;
+//         }
+//     } catch (error) {
+//         console.log('Error searching contact by phone number:', error);
+//         throw error;
+//     }
+// };
+
 exports.PostBookToCRM = async (creditnote) => {
     console.log("creditnote");
     console.log(creditnote);
     console.log('invoice id');
     console.log(creditnote.invoice_id);
 
+    const Rto_Order = searchInvoiceById(creditnote.invoice_id);
 
 
-    // try {
-    //     const productDetails = [];
+    try {
+        const creditnoteData = {
+            data: [
+                {
+                    "Rto_Order": Rto_Order,
+                },
+            ],
+        };
 
-    //     for (let i = 0; i < invoice.invoice.line_items.length; i++) {
-    //         const lineItem = invoice.invoice.line_items[i];
-    //         const product = await searchProductBySKU(lineItem.sku);
+        const response = await postCreditNote(creditnoteData, creditnote.invoice_id);
+        console.log('creditnote posted to Zoho CRM successfully:', response.data);
+    }
 
-    //         const productDetail = {
-    //             "product": {
-    //                 "id": product.id
-    //             },
-    //             "quantity": lineItem.quantity,
-    //             "Discount": lineItem.discount,
-    //             "total_after_discount": lineItem.total - lineItem.discount,
-    //             "net_total": lineItem.total,
-    //             "Tax": lineItem.tax_total,
-    //             "list_price": lineItem.rate,
-    //             "unit_price": lineItem.rate,
-    //             "quantity_in_stock": lineItem.quantity,
-    //             "total": lineItem.total,
-    //             "product_description": lineItem.description || null,
-    //             "line_tax": []
-    //         };
-
-    //         productDetails.push(productDetail);
-    //     }
-
-    //     const contact = await searchContactByPhone(invoice.invoice.billing_address.phone);
-    //     const salesPerson = invoice.invoice.salesperson_name.toLowerCase().replace(/\s/g, '');
-
-    //     const invoiceData = {
-    //         data: [
-    //             {
-    //                 "Payment_Type": invoice.invoice.custom_field_hash.cf_terms_of_payment == "Cash on Delivery" ? "COD" : invoice.invoice.custom_field_hash.cf_terms_of_payment || "",
-    //                 "Currency": invoice.invoice.currency_code || "",
-    //                 "Invoice_Date": invoice.invoice.date || "",
-    //                 "Grand_Total": invoice.invoice.total || "",
-    //                 "Sales_person": salesPerson || "",
-    //                 "Contact_Name": {
-    //                     "id": contact.id || "",
-    //                 },
-    //                 "Status": invoice.invoice.status || "",
-    //                 "Shipping_State": invoice.invoice.shipping_address.state || "",
-    //                 "Subject": invoice.invoice.invoice_number || "",
-    //                 "Product_Details": productDetails || "",
-    //                 "Billing_Phone": invoice.invoice.customer_default_billing_address.phone || "",
-    //                 "Billing_City": invoice.invoice.customer_default_billing_address.city || "",
-    //                 "Billing_Street": invoice.invoice.customer_default_billing_address.street2 || "",
-    //                 "Billing_Country": invoice.invoice.customer_default_billing_address.country || "",
-    //                 "Billing_Code": invoice.invoice.customer_default_billing_address.zip || "",
-    //                 "Billing_Address": invoice.invoice.customer_default_billing_address.address || "",
-    //                 "Billing_State": invoice.invoice.customer_default_billing_address.state || ""
-    //             },
-    //         ],
-    //     };
-
-    //     console.log("invoiceData");
-    //     console.log(invoiceData);
-
-    //     const response = await postInvoice(invoiceData);
-    //     console.log('Invoice posted to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.log('Error posting invoice to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+    catch (error) {
+        console.log('Error posting invoice to Zoho CRM:', error.response ? error.response.data : error);
+    }
 };
