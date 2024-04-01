@@ -14,7 +14,7 @@ const postCreditNote = async (creditnoteData, invoiceId) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.log('Error posting invoice to Zoho CRM:', error);
+        console.log('Error posting creditnote to Zoho CRM:', error);
         throw error;
     }
 };
@@ -53,7 +53,8 @@ exports.PostBookToCRM = async (creditnote) => {
     const invoiceId = invoiceData.id;
     const Rto_Order = invoiceData.success;
     console.log("ZohoinvoiceId");
-
+    console.log(invoiceId);
+    console.log(Rto_Order);
 
 
     try {
@@ -64,6 +65,8 @@ exports.PostBookToCRM = async (creditnote) => {
                 },
             ],
         };
+        console.log("creditnoteData");
+        console.log(creditnoteData);
 
         const response = await postCreditNote(creditnoteData, invoiceId);
         console.log('creditnote posted to Zoho CRM successfully:', response.data);
