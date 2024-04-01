@@ -60,6 +60,10 @@ const postInvoice = async (invoiceData) => {
 exports.PostBookToCRM = async (creditnote) => {
     console.log("creditnote");
     console.log(creditnote);
+    console.log('invoice id');
+    console.log(creditnote.invoice_id);
+
+
 
     // try {
     //     const productDetails = [];

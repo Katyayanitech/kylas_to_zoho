@@ -108,6 +108,7 @@ exports.PostBookToCRM = async (invoice) => {
                     "Shipping_State": invoice.invoice.shipping_address.state || "",
                     "Subject": invoice.invoice.invoice_number || "",
                     "Product_Details": productDetails || "",
+                    "Book_Id": invoice.invoice.invoice_id,
                     "Billing_Phone": invoice.invoice.customer_default_billing_address.phone || "",
                     "Billing_City": invoice.invoice.customer_default_billing_address.city || "",
                     "Billing_Street": invoice.invoice.customer_default_billing_address.street2 || "",
