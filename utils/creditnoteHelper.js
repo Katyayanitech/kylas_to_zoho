@@ -24,7 +24,7 @@ const searchInvoiceById = async (id) => {
         method: 'get',
         url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${id})`,
         headers: {
-            'Authorization': `Bearer ${YOUR_BEARER_TOKEN}`,
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
         }
     };
