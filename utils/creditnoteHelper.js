@@ -31,14 +31,16 @@ const searchInvoiceById = async (id) => {
 
     try {
         const response = await axios(config);
-        if (response.status === 200 && response.data.data.length > 0) {
-            const invoiceId = response.data.data[0].id;
-            return { success: true, id: invoiceId };
-        } else {
-            return { success: false, id: null };
+        const invoice = response.data.data[0];
+        if (!invoice) {
+            throw new Error('Invoice not found');
         }
+        const invoiceId = invoice.id;
+
+        return { success: true, id: invoiceId };
+
     } catch (error) {
-        console.log('Error searching contact by phone number:', error);
+        console.error('Error searching invoice by ID:', error.message);
         throw error;
     }
 };
@@ -65,7 +67,6 @@ exports.PostBookToCRM = async (creditnote) => {
                 },
             ],
         };
-        console.log(creditnoteData);
         console.log(creditnoteData);
 
         const response = await postCreditNote(creditnoteData, invoiceId);
