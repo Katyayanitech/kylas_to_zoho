@@ -31,10 +31,12 @@ const searchInvoiceById = async (id) => {
 
     try {
         const response = await axios(config);
-
-        const invoiceId = response.data.data[0].id;
-        console.log(invoiceId);
-        return { success: true, id: invoiceId };
+        if (response.status === 200 && response.data.data.length > 0) {
+            const invoiceId = response.data.data[0].id;
+            return { success: true, id: invoiceId };
+        } else {
+            return { success: false, id: null };
+        }
     } catch (error) {
         console.log('Error searching contact by phone number:', error);
         throw error;
@@ -47,7 +49,7 @@ exports.PostBookToCRM = async (creditnote) => {
     console.log('invoice id');
     console.log(creditnote.creditnote.invoice_id);
 
-    const invoiceData = await searchInvoiceById(creditnote.invoice_id);
+    const invoiceData = await searchInvoiceById(creditnote.creditnote.invoice_id);
     const invoiceId = invoiceData.id;
     const Rto_Order = invoiceData.success;
     console.log("ZohoinvoiceId");
@@ -63,7 +65,7 @@ exports.PostBookToCRM = async (creditnote) => {
                 },
             ],
         };
-        console.log("creditnoteData");
+        console.log(creditnoteData);
         console.log(creditnoteData);
 
         const response = await postCreditNote(creditnoteData, invoiceId);
