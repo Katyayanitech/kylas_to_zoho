@@ -33,15 +33,15 @@ const searchInvoiceById = async (id) => {
 
     try {
         const response = await axios(config);
-        print(response.body);
-        const invoice = response.data.data[0];
-        if (!invoice) {
-            throw new Error('Invoice not found');
-        }
-        const invoiceId = invoice.id;
-        console.log(invoiceId);
+        console.log(response.data);
+        // const invoice = response.data.data[0];
+        // if (!invoice) {
+        //     throw new Error('Invoice not found');
+        // }
+        // const invoiceId = invoice.id;
+        // console.log(invoiceId);
 
-        return { success: true, id: invoiceId };
+        // return { success: true, id: invoiceId };
 
     } catch (error) {
         console.error('Error searching invoice by ID:', error.message);
