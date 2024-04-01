@@ -3,7 +3,7 @@ const axios = require('axios');
 const postCreditNote = async (creditnoteData, invoiceId) => {
     const config = {
         method: 'put',
-        url: 'https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:$invoiceId)',
+        url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${invoiceId})`,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ const postCreditNote = async (creditnoteData, invoiceId) => {
 const searchInvoiceById = async (id) => {
     const config = {
         method: 'get',
-        url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:$id)`,
+        url: `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${id})`,
         headers: {
             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json'
