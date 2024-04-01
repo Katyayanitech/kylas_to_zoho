@@ -31,6 +31,7 @@ const searchInvoiceById = async (id) => {
 
     try {
         const response = await axios(config);
+        print(response.body);
         const invoice = response.data.data[0];
         if (!invoice) {
             throw new Error('Invoice not found');
