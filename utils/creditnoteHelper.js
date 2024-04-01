@@ -31,12 +31,10 @@ const searchInvoiceById = async (id) => {
 
     try {
         const response = await axios(config);
-        if (response.status === 200 && response.data.data.length > 0) {
-            const invoiceId = response.data.data[0].id;
-            return { success: true, id: invoiceId };
-        } else {
-            return { success: false, id: null };
-        }
+
+        const invoiceId = response.data.data[0].id;
+        console.log(invoiceId);
+        return { success: true, id: invoiceId };
     } catch (error) {
         console.log('Error searching contact by phone number:', error);
         throw error;
