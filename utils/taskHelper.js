@@ -25,12 +25,8 @@ exports.PostTaskzoho = async (task) => {
     let entityId;
     let entityName;
     let entityNumber;
-    console.log("task Data");
-    console.log(task);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
-    console.log("Formatted Due Date:", formattedDueDate);
-    console.log(task.entity.relations);
     if (task.entity.relations != null) {
         entityType = task.entity.relations[0].entityType;
         entityId = task.entity.relations[0].entityId;
@@ -46,12 +42,9 @@ exports.PostTaskzoho = async (task) => {
                 entityName = leadData.lastName;
                 if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
                     entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                    console.log("entityNumber:", entityNumber);
                 } else {
                     console.log("No phone number available for this lead.");
                 }
-                console.log("entityName:", entityName);
-                console.log("entityId:", entityId);
             } catch (e) {
                 console.log("Error fetching lead data:", e.toString());
             }
@@ -67,12 +60,9 @@ exports.PostTaskzoho = async (task) => {
                 entityName = leadData.lastName;
                 if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
                     entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                    console.log("entityNumber:", entityNumber);
                 } else {
                     console.log("No phone number available for this Deal.");
                 }
-                console.log("entityName:", entityName);
-                console.log("entityId:", entityId);
             } catch (e) {
                 console.log("Error fetching lead data:", e.toString());
             }
@@ -88,12 +78,9 @@ exports.PostTaskzoho = async (task) => {
                 entityName = leadData.lastName;
                 if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
                     entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                    console.log("entityNumber:", entityNumber);
                 } else {
                     console.log("No phone number available for this Contact.");
                 }
-                console.log("entityName:", entityName);
-                console.log("entityId:", entityId);
             } catch (e) {
                 console.log("Error fetching lead data:", e.toString());
             }
@@ -120,10 +107,9 @@ exports.PostTaskzoho = async (task) => {
                 },
             ],
         };
-        console.log(Taskdata);
 
         const response = await PostTask(Taskdata);
-        console.log('Task posted to Zoho CRM successfully:', response.data);
+        // console.log('Task posted to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.log('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
     }
@@ -211,19 +197,13 @@ const checkCallHistory = async (phoneNumber) => {
 
 
 exports.updateTaskToZohoCRM = async (task) => {
-    console.log("task update section");
-    console.log(task);
-
     const kylasTaskId = task.entity.id;
     const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
     const taskId = taskIdAndContact.id;
     const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
-    console.log("Task ID:", taskId);
-    console.log("Associated Contact Number:", associatedContactNumber);
     const systemApproved = await checkCallHistory(associatedContactNumber);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
-    console.log("Formatted Due Date:", formattedDueDate);
 
     try {
         const taskData = {
@@ -242,10 +222,9 @@ exports.updateTaskToZohoCRM = async (task) => {
                 },
             ],
         };
-        console.log(taskData)
 
         const response = await updateTask(taskData, taskId);
-        console.log('Task updated to Zoho CRM successfully:', response.data);
+        // console.log('Task updated to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
     }
