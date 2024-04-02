@@ -36,7 +36,7 @@ exports.postLeadToZohoCRM = async (lead) => {
                     Lead_Source: lead.entity.source.value || "",
                     Kylas_Owner: lead.entity.ownerId.value || "",
                     Lead_Status: "Open",
-                    // Kylas_Lead_Id: lead.entity.id.toString(),
+                    Kylas_Lead_Id: lead.entity.id.toString(),
                 },
             ],
         };
