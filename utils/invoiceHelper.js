@@ -17,7 +17,7 @@ const fetchInvoicesData = async (authToken) => {
 
     try {
         const currentTime = new Date();
-        const oneHourAgo = new Date(currentTime - 5 * 60 * 1000);
+        const oneHourAgo = new Date(currentTime - 15 * 60 * 1000);
         const formattedOneHourAgo = oneHourAgo.toISOString();
 
         const response = await axios.get(
