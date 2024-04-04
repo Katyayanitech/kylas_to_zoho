@@ -17,7 +17,7 @@ const fetchInvoicesData = async (authToken) => {
 
     try {
         const currentTime = new Date();
-        const oneHourAgo = new Date(currentTime - 60 * 60 * 1000);
+        const oneHourAgo = new Date(currentTime - 5 * 60 * 1000);
         const formattedOneHourAgo = oneHourAgo.toISOString();
 
         const response = await axios.get(
@@ -55,6 +55,25 @@ const fetchInvoiceById = async (invoiceId, authToken) => {
         return response.data.invoice;
     } catch (error) {
         console.log('Error fetching invoice by ID:', error);
+        throw error;
+    }
+};
+
+const postInvoice = async (invoiceData) => {
+    const config = {
+        method: 'post',
+        url: 'https://www.zohoapis.in/crm/v2/Invoices',
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(invoiceData)
+    };
+
+    try {
+        return await axios(config);
+    } catch (error) {
+        console.log('Error posting invoice to Zoho CRM:', error);
         throw error;
     }
 };
@@ -175,6 +194,7 @@ const executeHourlyTask = async () => {
         for (const invoice of invoicesData) {
             const invoiceId = invoice.invoice_id;
             const invoiceData = await fetchInvoiceById(invoiceId, ZOHO_BOOK_ACCESS_TOKEN);
+            console.log(invoiceData);
 
             await postInvoiceToCRM({ invoice: invoiceData });
         }
