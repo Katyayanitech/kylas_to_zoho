@@ -10,6 +10,7 @@ const call = require("./routes/call.js");
 const creditnote = require("./routes/creditnote.js");
 const { scheduleAPIPolling } = require("./utils/indexHelpers/helper.js");
 const { ZohoBookToCRMInvoice } = require("./utils/invoiceHelper.js");
+const { ZohoCRMToKylasChatLeads } = require("./utils/chatLeadsHelper.js").default;
 
 require("dotenv").config();
 const app = express();
@@ -35,6 +36,7 @@ setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
 
 scheduleAPIPolling();
 ZohoBookToCRMInvoice();
+ZohoCRMToKylasChatLeads();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
