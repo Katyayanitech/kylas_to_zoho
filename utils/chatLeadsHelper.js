@@ -79,7 +79,7 @@ async function processLeadData() {
 
 function ZohoCRMToKylasChatLeads() {
     processLeadData();
-    setInterval(fetchAllLeadData, 30 * 60 * 1000);
+    setInterval(processLeadData, 30 * 60 * 1000);
 }
 
 module.exports = {

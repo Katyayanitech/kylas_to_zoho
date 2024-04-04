@@ -10,7 +10,7 @@ const call = require("./routes/call.js");
 const creditnote = require("./routes/creditnote.js");
 const { scheduleAPIPolling } = require("./utils/indexHelpers/helper.js");
 const { ZohoBookToCRMInvoice } = require("./utils/invoiceHelper.js");
-const { ZohoCRMToKylasChatLeads } = require("./utils/chatLeadsHelper.js").default;
+const { ZohoCRMToKylasChatLeads } = require("./utils/chatLeadsHelper.js");
 
 require("dotenv").config();
 const app = express();
