@@ -8,7 +8,7 @@ const generateAuthToken = async () => {
         return response.data.access_token;
     } catch (error) {
         console.error("Error generating auth token:", error.message);
-        throw error;
+        // throw error;
     }
 };
 
@@ -17,7 +17,7 @@ const fetchInvoicesData = async (authToken) => {
 
     try {
         const currentTime = new Date();
-        const oneHourAgo = new Date(currentTime - 15 * 60 * 1000);
+        const oneHourAgo = new Date(currentTime - 60 * 60 * 1000);
         const formattedOneHourAgo = oneHourAgo.toISOString();
 
         const response = await axios.get(
@@ -36,7 +36,7 @@ const fetchInvoicesData = async (authToken) => {
         return invoicesData;
     } catch (error) {
         console.error("Error fetching invoices data:", error.message);
-        throw error;
+        // throw error;
     }
 };
 
@@ -55,7 +55,7 @@ const fetchInvoiceById = async (invoiceId, authToken) => {
         return response.data.invoice;
     } catch (error) {
         console.log('Error fetching invoice by ID:', error);
-        throw error;
+        // throw error;
     }
 };
 
@@ -74,7 +74,7 @@ const postInvoice = async (invoiceData) => {
         return await axios(config);
     } catch (error) {
         console.log('Error posting invoice to Zoho CRM:', error);
-        throw error;
+        // throw error;
     }
 };
 
@@ -162,7 +162,7 @@ const searchProductBySKU = async (sku) => {
         return response.data.data[0];
     } catch (error) {
         console.log('Error searching product by SKU:', error);
-        throw error;
+        // throw error;
     }
 };
 
@@ -181,7 +181,7 @@ const searchContactByPhone = async (phoneNumber) => {
         return response.data.data[0];
     } catch (error) {
         console.log('Error searching contact by phone number:', error);
-        throw error;
+        // throw error;
     }
 };
 
