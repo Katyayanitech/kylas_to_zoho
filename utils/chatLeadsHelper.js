@@ -26,10 +26,10 @@ async function fetchAllLeadData() {
     }
 }
 
-function mapLeadToKylasFormat(lead) {
+function mapZohoLeadToKylasFormat(lead) {
     return {
-        "lastName": `${lead.First_Name}` ?? "",
-        "city": `${lead.Last_Name}` ?? "",
+        "firstName": `${lead.First_Name}` ?? "",
+        "lastName": `${lead.Last_Name}` ?? "",
         "phoneNumbers": [
             {
                 "type": "MOBILE",
@@ -48,7 +48,7 @@ function mapLeadToKylasFormat(lead) {
 
 async function postLeadToKylas(lead) {
     try {
-        const postData = mapLeadToKylasFormat(lead);
+        const postData = mapZohoLeadToKylasFormat(lead);
         console.log(postData);
         const url = 'https://api.kylas.io/v1/leads';
         const headers = {
