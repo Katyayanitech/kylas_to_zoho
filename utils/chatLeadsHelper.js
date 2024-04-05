@@ -40,7 +40,6 @@ function mapZohoLeadToKylasFormat(lead) {
         ],
         "city": `${lead.City}` ?? "",
         "state": `${lead.State}` ?? "",
-        "country": `${lead.Country}` ?? "",
         "source": 81564,
         "subSource": "Sales IQ"
     };
