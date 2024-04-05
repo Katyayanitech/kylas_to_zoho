@@ -4,7 +4,7 @@ const axios = require("axios");
 async function fetchAllLeadData() {
     try {
         const token =
-            "1000.2d75485e3f9624ede82ddc6b704c5a65.3e6c43921e923417b6e455963a3e20c3";
+            ZOHO_CRM_ACCESS_TOKEN;
         const url = "https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Lead_Source:equals:Chat)";
         const headers = {
             Authorization: `Zoho-oauthtoken ${token}`,
@@ -18,10 +18,10 @@ async function fetchAllLeadData() {
             return createdTime >= thirtyMinutesAgo;
         });
 
-        console.log("Lead data created in the last 30 minutes:", leads);
+        console.log("Lead data created in the last 30 minutes in Chat:", leads);
         return leads;
     } catch (error) {
-        console.error("Error fetching lead data:", error.message);
+        console.error("Error fetching lead data in Chat:", error.message);
         return [];
     }
 }

@@ -29,14 +29,37 @@ app.use("/creditnote", creditnote);
 
 let ZOHO_CRM_ACCESS_TOKEN = '';
 
-updateAccessToken();
+function updateAccessTokenPromise() {
+    return new Promise((resolve, reject) => {
+        updateAccessToken((err, token) => {
+            if (err) {
+                reject(err);
+            } else {
+                ZOHO_CRM_ACCESS_TOKEN = token;
+                resolve();
+            }
+        });
+    });
+}
 
-const accessTokenUpdateInterval = 10 * 60 * 1000;
-setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
+// Start by updating access token and then execute other functions
+updateAccessTokenPromise()
+    .then(() => {
+        const accessTokenUpdateInterval = 10 * 60 * 1000;
+        setIntervalAsync(updateAccessTokenPromise, accessTokenUpdateInterval);
 
-scheduleAPIPolling();
-ZohoBookToCRMInvoice();
-ZohoCRMToKylasChatLeads();
+        scheduleAPIPolling();
+        ZohoBookToCRMInvoice();
+        ZohoCRMToKylasChatLeads();
+
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('Error updating access token:', err);
+    });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
