@@ -4,7 +4,7 @@ const axios = require("axios");
 async function fetchAllLeadData() {
     try {
         const token =
-            ZOHO_CRM_ACCESS_TOKEN;
+            "1000.8ee6a709348c37a51cdcc6883e7a56b4.a6ee351d9383a5b5055ec4203d7ab21d";
         const url = "https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Lead_Source:equals:Chat)";
         const headers = {
             Authorization: `Zoho-oauthtoken ${token}`,
