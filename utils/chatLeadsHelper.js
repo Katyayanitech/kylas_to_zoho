@@ -41,8 +41,8 @@ function mapLeadToKylasFormat(lead) {
         "city": `${lead.City}` ?? "",
         "state": `${lead.State}` ?? "",
         "country": `${lead.Country}` ?? "",
-        "source": 81564,
-        "subSource": "Sales IQ"
+        // "source": 81564,
+        // "subSource": "Sales IQ"
         // "companyName": `${lead.SENDER_COMPANY}`,
         // "requirementName": `${lead.SUBJECT}`,
     };

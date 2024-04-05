@@ -1,59 +1,156 @@
-const axios = require("axios");
-
-async function generateAuthToken() {
-    try {
-        const response = await axios.post(
-            "https://accounts.zoho.in/oauth/v2/token?refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback&grant_type=refresh_token",
-        );
-
-        return response.data.access_token;
-    } catch (error) {
-        console.error("Error generating auth token:", error.message);
-        throw error;
-    }
-}
-
-async function fetchInvoicesData(authToken) {
-    const organizationId = "60019077540";
-
-    try {
-        const currentTime = new Date();
-        const oneHourAgo = new Date(currentTime - 60 * 60 * 1000);
-        const formattedOneHourAgo = oneHourAgo.toISOString();
-
-        const response = await axios.get(
-            `https://www.zohoapis.in/books/v3/invoices?organization_id=${organizationId}`,
-            {
-                headers: {
-                    Authorization: `Zoho-oauthtoken ${authToken}`,
-                },
-            },
-        );
-
-        const invoicesData = response.data.invoices.filter((invoice) => {
-            return new Date(invoice.created_time) > oneHourAgo;
-        });
-
-        return invoicesData;
-    } catch (error) {
-        console.error("Error fetching invoices data:", error.message);
-        throw error;
-    }
-}
-
-function printInvoicesData(invoicesData) {
-    console.log("Invoices data:", invoicesData);
-}
-
-async function executeHourlyTask() {
-    try {
-        const authToken = await generateAuthToken();
-        const invoicesData = await fetchInvoicesData(authToken);
-        printInvoicesData(invoicesData);
-    } catch (error) {
-        console.error("Error executing hourly task:", error.message);
-    }
-}
-
-executeHourlyTask();
-setInterval(executeHourlyTask, 3600000);
+// Lead data created in the last 30 minutes: [
+//     {
+//       Timezone: null,
+//       Owner: {
+//         name: 'Katyayani Manager',
+//         id: '431127000000257001',
+//         email: 'katyayanimanager@gmail.com'
+//       },
+//       GCLID: 'CjwKCAiAivGuBhBEEiwAWiFmYS9q-DmWmDH7SAGtxD3bfZy-4spo5MKyoviAnEVWW9b0LP99Gy6vCRoCmRQQAvD_BwE',
+//       Address: null,
+//       '$field_states': null,
+//       Created_Via_Id: null,
+//       Languages: null,
+//       Department: 'Katyayani Organics',
+//       Company_Country: null,
+//       '$state': 'save',
+//       '$process_flow': false,
+//       Currency: 'INR',
+//       Ad_Network: null,
+//       Street: null,
+//       id: '431127000014861093',
+//       Company_Phones: null,
+//       '$approval': { delegate: false, approve: false, reject: false, resubmit: false },
+//       Company_Zipcode: null,
+//       Created_Via_Name: null,
+//       Cost_per_Click: 0,
+//       First_Visited_URL: 'https://krishisevakendra.in/?utm_source=Google&utm_medium=Performance+Max+Campaign&utm_campaign=KSK+All+Products+Performance+Max&utm_id=Campaign1&gclid=CjwKCAiAivGuBhBEEiwAWiFmYS9q-DmWmDH7SAGtxD3bfZy-4spo5MKyoviAnEVWW9b0LP99Gy6vCRoCmRQQAvD_BwE',
+//       Crops: null,
+//       Created_Time: '2024-04-04T19:11:23+05:30',
+//       Company_Employees: null,
+//       No_of_Employees: null,
+//       Crops_Zaid: null,
+//       Requirement: null,
+//       Products_or_Services: null,
+//       Lead_Nature: null,
+//       Updated_Via_Id: null,
+//       Ad_Click_Date: null,
+//       Company_State: null,
+//       Imported_By: null,
+//       Country: 'India',
+//       Last_Visited_Time: '2024-04-04T19:10:47+05:30',
+//       Created_By: {
+//         name: 'Katyayani Manager',
+//         id: '431127000000257001',
+//         email: 'katyayanimanager@gmail.com'
+//       },
+//       Actual_Closure_Date: null,
+//       Annual_Revenue: null,
+//       Updated_At: null,
+//       UTM_Medium: null,
+//       Description: null,
+//       Ad: null,
+//       Number_Of_Chats: 0,
+//       Business_Type: null,
+//       Search_Partner_Network: null,
+//       '$review_process': { approve: false, reject: false, resubmit: false },
+//       Website: null,
+//       Total_Spent: null,
+//       Identification: null,
+//       Average_Time_Spent_Minutes: null,
+//       Salutation: null,
+//       Full_Name: 'Rohit',
+//       Lead_Status: null,
+//       Skype_ID: null,
+//       Lead_Type: null,
+//       Budget: null,
+//       leadchain0__Social_Lead_ID: null,
+//       Email_Opt_Out: false,
+//       Created_At: null,
+//       Designation: null,
+//       Keyword: null,
+//       Mobile: null,
+//       smsmagic4__LeadIdCPY: '431127000014861093',
+//       smsmagic4__Plain_Phone: '917974519802',
+//       '$orchestration': false,
+//       Pipeline: null,
+//       Created_Via_Type: null,
+//       Ad_Campaign_Name: null,
+//       Locked__s: false,
+//       Lead_Source: 'Chat',
+//       Tag: [],
+//       Reason_for_Conversion_Failure: null,
+//       Crops_Rabi: null,
+//       Company: null,
+//       Email: null,
+//       '$currency_symbol': '₹',
+//       Visitor_Score: '30',
+//       Latest_Activity_On: null,
+//       UTM_Term: null,
+//       Converted_At: null,
+//       Last_Activity_Time: '2024-04-04T19:11:28+05:30',
+//       Industry: null,
+//       Sub_Source: null,
+//       Unsubscribed_Mode: null,
+//       '$converted': false,
+//       Exchange_Rate: 1,
+//       '$locked_for_me': false,
+//       Zip_Code: null,
+//       Facebook: null,
+//       '$approved': true,
+//       Conversion_Exported_On: null,
+//       Crops_Kharif: null,
+//       Days_Visited: 2,
+//       Click_Type: null,
+//       '$editable': true,
+//       Converted_By: null,
+//       City: 'Bhopal',
+//       AdGroup_Name: null,
+//       Updated_By: null,
+//       Lead_customer_type: null,
+//       Updated_Via_Type: null,
+//       Campaign: null,
+//       UTM_Content: null,
+//       State: 'Madhya Pradesh',
+//       '$zia_owner_assignment': 'owner_recommendation_unavailable',
+//       Secondary_Email: null,
+//       Kylas_Lead_Id: null,
+//       Sales_Team: null,
+//       Rating: null,
+//       UTM_Campaign: null,
+//       Latest_Notes: null,
+//       Twitter: null,
+//       Lead_segment: null,
+//       First_Name: null,
+//       Conversion_Export_Status: 'Not started',
+//       Cost_per_Conversion: 0,
+//       Modified_By: {
+//         name: 'Katyayani Manager',
+//         id: '431127000000257001',
+//         email: 'katyayanimanager@gmail.com'
+//       },
+//       '$review': null,
+//       Phone: '+91 7974519802',
+//       Total_Orders: null,
+//       Company_City: null,
+//       Modified_Time: '2024-04-04T19:11:28+05:30',
+//       Kylas_Owner: null,
+//       '$converted_detail': {},
+//       Unsubscribed_Time: null,
+//       Device_Type: null,
+//       Meeting_Scheduled_On: null,
+//       Pipeline_Stage_Reason: null,
+//       First_Visited_Time: '2024-02-26T21:10:16+05:30',
+//       Last_Name: 'Rohit',
+//       '$in_merge': false,
+//       Forecasting_Type: null,
+//       Task_Due_On: null,
+//       Referrer: 'https://youtube.com/',
+//       Company_Address: null,
+//       UTM_Source: null,
+//       Fax: null,
+//       '$approval_state': 'approved',
+//       Updated_Via_Name: null,
+//       Acres_of_Land_if_Farmer: null
+//     }
+//   ]
