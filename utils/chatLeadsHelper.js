@@ -4,7 +4,7 @@ const axios = require("axios");
 async function fetchAllLeadData() {
     try {
         const token =
-            ZOHO_CRM_ACCESS_TOKEN;
+            "1000.2d75485e3f9624ede82ddc6b704c5a65.3e6c43921e923417b6e455963a3e20c3";
         const url = "https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Lead_Source:equals:Chat)";
         const headers = {
             Authorization: `Zoho-oauthtoken ${token}`,
@@ -41,10 +41,8 @@ function mapLeadToKylasFormat(lead) {
         "city": `${lead.City}` ?? "",
         "state": `${lead.State}` ?? "",
         "country": `${lead.Country}` ?? "",
-        // "source": 81564,
-        // "subSource": "Sales IQ"
-        // "companyName": `${lead.SENDER_COMPANY}`,
-        // "requirementName": `${lead.SUBJECT}`,
+        "source": 81564,
+        "subSource": "Sales IQ"
     };
 }
 

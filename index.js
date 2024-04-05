@@ -29,7 +29,7 @@ app.use("/creditnote", creditnote);
 
 let ZOHO_CRM_ACCESS_TOKEN = '';
 
-await updateAccessToken();
+updateAccessToken();
 
 const accessTokenUpdateInterval = 10 * 60 * 1000;
 setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
