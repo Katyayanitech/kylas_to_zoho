@@ -49,6 +49,7 @@ function mapLeadToKylasFormat(lead) {
 async function postLeadToKylas(lead) {
     try {
         const postData = mapLeadToKylasFormat(lead);
+        console.log(postData);
         const url = 'https://api.kylas.io/v1/leads';
         const headers = {
             'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
