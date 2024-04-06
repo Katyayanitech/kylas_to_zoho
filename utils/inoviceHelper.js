@@ -19,31 +19,42 @@ const axios = require('axios');
 //     }
 // }
 
+async function deleteInvoiceById(id) {
+    try {
+        const url = `https://www.zohoapis.in/crm/v2/Invoices/${id}`;
+
+        const response = await axios.delete(url, {
+            headers: {
+                'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        console.log('Invoice deleted successfully:', response.data);
+    } catch (error) {
+        console.error('Error deleting invoice:', error.response ? error.response.data : error);
+    }
+}
+
 exports.deleteInvoiceToZohoCRM = async (invoice) => {
     console.log("Invoice data");
     console.log(invoice);
-    // try {
-    //     const leadData = {
-    //         data: [
-    //             {
-    //                 First_Name: lead.entity.firstName || "",
-    //                 Last_Name: lead.entity.lastName || "",
-    //                 Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
-    //                 Email: (lead.entity.emails == null) ? "" : (lead.entity.emails[0].value),
-    //                 City: lead.entity.city || "",
-    //                 State: lead.entity.state || "",
-    //                 Zip_Code: lead.entity.zipcode || "",
-    //                 Lead_Source: lead.entity.source.value || "",
-    //                 Kylas_Owner: lead.entity.ownerId.value || "",
-    //                 Lead_Status: "Open",
-    //                 Kylas_Lead_Id: lead.entity.id.toString(),
-    //             },
-    //         ],
-    //     };
+    console.log(invoice.invoice.invoice_id);
+    const invoice_id = invoice.invoice.invoice_id;
+    try {
+        const url = `https://www.zohoapis.in/crm/v2/Invoices/search?criteria=(Book_Id:equals:${invoice_id})`;
+        const response = await axios.get(url, {
+            headers: {
+                'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const crmId = response.data.data[0].id;
 
-    //     const response = await postLead(leadData);
-    //     console.log('Lead posted to Zoho CRM successfully:', response.data);
-    // } catch (error) {
-    //     console.log('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
-    // }
+        await deleteInvoiceById(crmId);
+
+        console.log('Invoice Deleted to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.log('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
+    }
 }
