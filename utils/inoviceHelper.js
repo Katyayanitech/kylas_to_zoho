@@ -1,24 +1,5 @@
 const axios = require('axios');
 
-// const postLead = async (leadData) => {
-//     const config = {
-//         method: 'post',
-//         url: 'https://www.zohoapis.in/crm/v2/Leads',
-//         headers: {
-//             'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-//             'Content-Type': 'application/json'
-//         },
-//         data: JSON.stringify(leadData)
-//     };
-
-//     try {
-//         return await axios(config);
-//     } catch (error) {
-//         console.log('Error in postLead function:', error);
-//         throw error;
-//     }
-// }
-
 async function deleteInvoiceById(id) {
     try {
         const url = `https://www.zohoapis.in/crm/v2/Invoices/${id}`;
@@ -50,11 +31,12 @@ exports.deleteInvoiceToZohoCRM = async (invoice) => {
             }
         });
         const crmId = response.data.data[0].id;
+        console.log(crmId);
 
         await deleteInvoiceById(crmId);
 
         console.log('Invoice Deleted to Zoho CRM successfully:', response.data);
     } catch (error) {
-        console.log('Error posting lead to Zoho CRM:', error.response ? error.response.data : error);
+        console.log('Error deleting invoice to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
