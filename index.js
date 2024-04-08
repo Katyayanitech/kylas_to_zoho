@@ -8,6 +8,7 @@ const task = require("./routes/task.js");
 const call = require("./routes/call.js");
 const creditnote = require("./routes/creditnote.js");
 const invoice = require("./routes/invoice.js");
+const { indiamartToKylas } = require("./utils/indiamart.js");
 
 require("dotenv").config();
 const app = express();
@@ -27,8 +28,11 @@ let ZOHO_CRM_ACCESS_TOKEN = '';
 
 updateAccessToken();
 
-const accessTokenUpdateInterval = 10 * 60 * 1000;
-setIntervalAsync(updateAccessToken, accessTokenUpdateInterval);
+indiamartToKylas();
+
+setIntervalAsync(indiamartToKylas, 10 * 60 * 1000);
+
+setIntervalAsync(updateAccessToken, 10 * 60 * 1000);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
