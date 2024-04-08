@@ -184,7 +184,7 @@ const searchContactByPhone = async (phoneNumber) => {
 };
 
 const ZohoBookToCRMInvoice = async () => {
-    var ZOHO_BOOK_ACCESS_TOKEN = generateAuthToken();
+    var ZOHO_BOOK_ACCESS_TOKEN = await generateAuthToken();
     try {
         const invoicesData = await fetchInvoicesData(ZOHO_BOOK_ACCESS_TOKEN);
 
