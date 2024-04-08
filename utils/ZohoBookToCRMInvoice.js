@@ -40,7 +40,6 @@ const fetchInvoicesData = async (authToken) => {
 };
 
 const fetchInvoiceById = async (invoiceId, authToken) => {
-    var authToken = generateAuthToken();
     const config = {
         method: 'get',
         url: `https://www.zohoapis.in/books/v3/invoices/${invoiceId}?organization_id=60019077540`,
@@ -185,6 +184,7 @@ const searchContactByPhone = async (phoneNumber) => {
 };
 
 const ZohoBookToCRMInvoice = async () => {
+    var ZOHO_BOOK_ACCESS_TOKEN = generateAuthToken();
     try {
         const invoicesData = await fetchInvoicesData(ZOHO_BOOK_ACCESS_TOKEN);
 
