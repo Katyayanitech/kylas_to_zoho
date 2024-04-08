@@ -9,6 +9,8 @@ const call = require("./routes/call.js");
 const creditnote = require("./routes/creditnote.js");
 const invoice = require("./routes/invoice.js");
 const { indiamartToKylas } = require("./utils/indiamart.js");
+const { ZohoCRMToKylasChatLeads } = require("./utils/ZohoCrmToKylasChatLeads.js");
+const { ZohoBookToCRMInvoice } = require("./utils/ZohoBookToCRMInvoice.js");
 
 require("dotenv").config();
 const app = express();
@@ -27,12 +29,14 @@ app.use("/invoice", invoice);
 let ZOHO_CRM_ACCESS_TOKEN = '';
 
 updateAccessToken();
-
 indiamartToKylas();
-
-setIntervalAsync(indiamartToKylas, 10 * 60 * 1000);
+ZohoCRMToKylasChatLeads();
+ZohoBookToCRMInvoice();
 
 setIntervalAsync(updateAccessToken, 10 * 60 * 1000);
+setIntervalAsync(indiamartToKylas, 10 * 60 * 1000);
+setIntervalAsync(ZohoCRMToKylasChatLeads, 30 * 60 * 1000);
+setIntervalAsync(ZohoBookToCRMInvoice, 60 * 60 * 1000);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
