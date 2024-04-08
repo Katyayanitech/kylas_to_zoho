@@ -1,5 +1,17 @@
 const axios = require('axios');
 
+const generateAuthToken = async () => {
+    try {
+        const response = await axios.post(
+            "https://accounts.zoho.in/oauth/v2/token?refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback&grant_type=refresh_token",
+        );
+        return response.data.access_token;
+    } catch (error) {
+        console.error("Error generating auth token:", error.message);
+        // throw error;
+    }
+};
+
 const fetchInvoicesData = async (authToken) => {
     const organizationId = "60019077540";
 
@@ -28,6 +40,7 @@ const fetchInvoicesData = async (authToken) => {
 };
 
 const fetchInvoiceById = async (invoiceId, authToken) => {
+    var authToken = generateAuthToken();
     const config = {
         method: 'get',
         url: `https://www.zohoapis.in/books/v3/invoices/${invoiceId}?organization_id=60019077540`,
