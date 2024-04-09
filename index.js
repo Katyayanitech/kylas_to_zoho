@@ -29,9 +29,9 @@ app.use("/invoice", invoice);
 let ZOHO_CRM_ACCESS_TOKEN = '';
 
 updateAccessToken();
-// indiamartToKylas();
+indiamartToKylas();
 ZohoCRMToKylasChatLeads();
-// ZohoBookToCRMInvoice();
+ZohoBookToCRMInvoice();
 
 setIntervalAsync(updateAccessToken, 10 * 60 * 1000);
 setIntervalAsync(indiamartToKylas, 10 * 60 * 1000);
