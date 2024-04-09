@@ -158,7 +158,10 @@ const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
     } catch (error) {
         console.log('Error in getTaskIdAndContactByKylasTaskId function:', error);
         console.log('KylasTask Id and Number Not found:', kylasTaskId);
-        return null;
+        return {
+            id: '',
+            AssociatedContactNumber: ''
+        };;
     }
 };
 
