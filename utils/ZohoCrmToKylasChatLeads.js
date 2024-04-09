@@ -1,9 +1,21 @@
 const axios = require("axios");
 
-async function fetchAllLeadData() {
+async function fetchAccessToken() {
+    const accessTokenUrl = process.env.ACCESS_TOKEN_URL;
+
+    try {
+        const response = await axios.get(accessTokenUrl);
+        return response.data.trim();
+    } catch (error) {
+        console.log("Error fetching access token:", error);
+        throw error;
+    }
+}
+
+async function fetchAllLeadData(accessToken) {
     try {
         const token =
-            ZOHO_CRM_ACCESS_TOKEN;
+            accessToken;
         const url = "https://www.zohoapis.in/crm/v2/Leads/search?criteria=(Lead_Source:equals:Chat)";
         const headers = {
             Authorization: `Zoho-oauthtoken ${token}`,
@@ -64,7 +76,8 @@ async function postLeadToKylas(lead) {
 }
 
 async function ZohoCRMToKylasChatLeads() {
-    const leadsData = await fetchAllLeadData();
+    const accessToken = await fetchAccessToken();
+    const leadsData = await fetchAllLeadData(accessToken);
 
     for (const lead of leadsData) {
         await postLeadToKylas(lead);
