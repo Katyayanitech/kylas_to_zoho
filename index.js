@@ -30,8 +30,8 @@ let ZOHO_CRM_ACCESS_TOKEN = '';
 
 updateAccessToken();
 indiamartToKylas();
-ZohoCRMToKylasChatLeads();
-ZohoBookToCRMInvoice();
+// ZohoCRMToKylasChatLeads();
+// ZohoBookToCRMInvoice();
 
 setIntervalAsync(updateAccessToken, 10 * 60 * 1000);
 setIntervalAsync(indiamartToKylas, 10 * 60 * 1000);
