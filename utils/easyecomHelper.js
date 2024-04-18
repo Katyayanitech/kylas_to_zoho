@@ -34,14 +34,14 @@ const postInvoiceToBooks = async (easycomData) => {
 
 exports.postInvoiceToZohoBooks = async (invoice) => {
     console.log("easyecom invoice : ", invoice);
-    // try {
-    //     const easycomData = {
-    //         "customer_id": invoice[0].contact_num,
-    //     };
+    try {
+        const easycomData = {
+            "customer_id": invoice[0].contact_num,
+        };
 
-    //     const response = await postInvoiceToBooks(easycomData);
-    //     console.log('easyecom invoice posted to Zoho books successfully:', response.data);
-    // } catch (error) {
-    //     console.log('Error posting easyecom invoice to Zoho books:', error.response ? error.response.data : error);
-    // }
+        const response = await postInvoiceToBooks(easycomData);
+        console.log('easyecom invoice posted to Zoho books successfully:', response.data);
+    } catch (error) {
+        console.log('Error posting easyecom invoice to Zoho books:', error.response ? error.response.data : error);
+    }
 }

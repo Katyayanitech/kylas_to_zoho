@@ -21,6 +21,7 @@ const PostTask = async (Taskdata) => {
 }
 
 exports.PostTaskzoho = async (task) => {
+    console.log(task);
     let entityType;
     let entityId;
     let entityName;
