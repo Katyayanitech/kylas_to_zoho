@@ -20,6 +20,8 @@ const axios = require('axios');
 // }
 
 exports.postInvoiceToZohoBooks = async (invoice) => {
+    console.log("easyecom");
+    console.log(invoice);
     console.log("easyecom invoice : ", invoice);
     // try {
     //     const leadData = {
