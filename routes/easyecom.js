@@ -1,5 +1,5 @@
 const express = require("express");
-const { postInvoiceToBooks } = require("../controller/easyecom");
+const { postInvoiceToBooks } = require("../controller/easyecom.js");
 
 const router = express.Router();
 
