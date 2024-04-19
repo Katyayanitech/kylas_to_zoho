@@ -103,7 +103,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "api_name": "cf_sales_account",
                     "show_in_all_pdf": true,
                     "selected_option_id": "1155413000002568033",
-                    "value_formatted": "Other's Sales",
+                    "value_formatted": invoice[0].marketplace,
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
