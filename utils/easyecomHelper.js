@@ -55,6 +55,26 @@ const postInvoiceToBooks = async (easycomData) => {
     }
 }
 
+const getItemIdFromSKU = async (sku) => {
+    try {
+        const ZOHO_BOOK_ACCESS_TOKEN = await generateAuthToken();
+        const response = await axios.get(
+            `https://www.zohoapis.in/books/v3/items?organization_id=60019077540&sku=${sku}`,
+            {
+                headers: {
+                    Authorization: `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+                },
+            }
+        );
+
+        const itemId = response.data.items[0].item_id;
+        return itemId;
+    } catch (error) {
+        console.error("Error getting item ID:", error);
+        return null;
+    }
+};
+
 
 
 exports.postInvoiceToZohoBooks = async (invoice) => {
@@ -64,12 +84,18 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
     try {
         const easycomData = {
             "customer_id": customerId,
+            "line_items": [],
         };
+
+        for (const item of invoice[0].order_items) {
+            const itemId = await getItemIdFromSKU(item.sku);
+            easycomData.line_items.push({ item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity) });
+        }
 
         console.log(easycomData);
 
-        // const response = await postInvoiceToBooks(easycomData);
-        // console.log('easyecom invoice posted to Zoho books successfully:', response.data);
+        const response = await postInvoiceToBooks(easycomData);
+        console.log('easyecom invoice posted to Zoho books successfully:', response.data);
     } catch (error) {
         console.log('Error posting easyecom invoice to Zoho books:', error.response ? error.response.data : error);
     }
