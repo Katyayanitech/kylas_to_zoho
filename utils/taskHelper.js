@@ -105,6 +105,7 @@ exports.PostTaskzoho = async (task) => {
                     "Assosiated_Name": entityName || "",
                     "Assosiated_Contact_Number": entityNumber || "",
                     "Entity_Id": entityId.toString() || "",
+                    "Pipeline_Stage": task.entity.name.substring(task.entity.name.indexOf('{') + 1, task.entity.name.indexOf('}'))
                 },
             ],
         };
@@ -223,6 +224,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                     "Kyla_s_Task_Id": task.entity.id.toString() || "",
                     "kylas_task_owner": task.entity.assignedTo.name || "",
                     "System_Updated": systemApproved ? true : false,
+                    "Pipeline_Stage": task.entity.name.substring(task.entity.name.indexOf('{') + 1, task.entity.name.indexOf('}'))
                 },
             ],
         };
