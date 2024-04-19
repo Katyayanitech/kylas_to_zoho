@@ -6,6 +6,7 @@ const marketPlaces = {
     "Shopify": "New Website (KSK)",
     "Katyayani": "Other's Sales",
     "Amazon.in": "Amazon India",
+    "Offline": "Other's Sales",
 }
 
 const termsOfPayment = {
@@ -115,11 +116,11 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "api_name": "cf_sales_account",
                     "show_in_all_pdf": true,
                     "selected_option_id": "1155413000002568033",
-                    "value_formatted": marketPlaces[invoice[0].marketplace] || invoice[0].marketplace,
+                    "value_formatted": marketPlaces[invoice[0].marketplace],
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
-                    "value": marketPlaces[invoice[0].marketplace] || invoice[0].marketplace,
+                    "value": marketPlaces[invoice[0].marketplace],
                     "is_dependent_field": false
                 },
                 {
