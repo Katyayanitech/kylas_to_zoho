@@ -88,6 +88,38 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
             "customer_id": customerId,
             "invoice_number": invoice[0].reference_code,
             "line_items": [],
+            "custom_fields": [
+                {
+                    "field_id": "1155413000002568031",
+                    "customfield_id": "1155413000002568031",
+                    "show_in_store": false,
+                    "show_in_portal": false,
+                    "is_active": true,
+                    "index": 1,
+                    "label": "Marketplace",
+                    "show_on_pdf": true,
+                    "edit_on_portal": false,
+                    "edit_on_store": false,
+                    "api_name": "cf_sales_account",
+                    "show_in_all_pdf": true,
+                    "selected_option_id": "1155413000002568033",
+                    "value_formatted": "Other's Sales",
+                    "search_entity": "invoice",
+                    "data_type": "dropdown",
+                    "placeholder": "cf_sales_account",
+                    "value": invoice[0].marketplace,
+                    "is_dependent_field": false
+                }
+            ],
+            "billing_address": {
+                "address": invoice[0].billing_address_1,
+                "street2": invoice[0].billing_address_2,
+                "city": invoice[0].billing_city,
+                "state": invoice[0].billing_state,
+                "zipcode": invoice[0].billing_pin_code,
+                "country": invoice[0].billing_country,
+                "phone": invoice[0].billing_mobile
+            },
         };
 
         for (const item of invoice[0].order_items) {
