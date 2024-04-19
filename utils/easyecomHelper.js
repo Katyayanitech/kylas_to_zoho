@@ -1,5 +1,17 @@
 const axios = require('axios');
-const FormData = require('form-data');
+
+const marketPlaces = {
+    "Shopify13": "GGV Canada",
+    "Woocommerce": "Website Sales",
+    "Shopify": "New Website (KSK)",
+    "Katyayani": "Other's Sales",
+    "Amazon.in": "Amazon India",
+}
+
+const termsOfPayment = {
+    "COD": "Cash on Delivery",
+    "PrePaid": "Prepaid",
+}
 
 const generateAuthToken = async () => {
     try {
@@ -103,11 +115,11 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "api_name": "cf_sales_account",
                     "show_in_all_pdf": true,
                     "selected_option_id": "1155413000002568033",
-                    "value_formatted": invoice[0].marketplace == "Katyayani" ? "Other's Sales" : invoice[0].marketplace,
+                    "value_formatted": marketPlaces[invoice[0].marketplace] || invoice[0].marketplace,
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
-                    "value": invoice[0].marketplace == "Katyayani" ? "Other's Sales" : invoice[0].marketplace,
+                    "value": marketPlaces[invoice[0].marketplace] || invoice[0].marketplace,
                     "is_dependent_field": false
                 },
                 {
@@ -123,12 +135,12 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "edit_on_store": false,
                     "api_name": "cf_terms_of_payment",
                     "show_in_all_pdf": true,
-                    "value_formatted": invoice[0].payment_mode == "PrePaid" ? "Prepaid" : "Cash on Delivery",
+                    "value_formatted": termsOfPayment[invoice[0].payment_mode],
                     "search_entity": "invoice",
                     "data_type": "multiselect",
                     "placeholder": "cf_terms_of_payment",
                     "value": [
-                        invoice[0].payment_mode == "PrePaid" ? "Prepaid" : "Cash on Delivery"
+                        termsOfPayment[invoice[0].payment_mode]
                     ],
                     "is_dependent_field": false
                 },
