@@ -41,8 +41,8 @@ const postInvoiceToBooks = async (easycomData) => {
         method: 'post',
         url: 'https://www.zohoapis.in/books/v3/invoices?organization_id=60019077540',
         headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Zoho-authtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+            'content-type': 'application/json'
         },
         data: JSON.stringify(easycomData)
     };
