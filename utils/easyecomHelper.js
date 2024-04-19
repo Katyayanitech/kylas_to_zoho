@@ -2,10 +2,10 @@ const axios = require('axios');
 
 const generateAuthToken = async () => {
     try {
-        const response = await axios.post(
-            "https://accounts.zoho.in/oauth/v2/token?refresh_token=1000.73c649ffc57208adbb3d98c93d5fb695.2743446b34d737820919b76f80736cde&client_id=1000.M5D17N2P0XNFGB8T3B2WL8UCXDBOBV&client_secret=4c2bc771c7540978217ae92902c4d504de64bc3f96&redirect_uri=http://google.com/oauth2callback&grant_type=refresh_token",
+        const response = await axios.get(
+            "https://script.google.com/macros/s/AKfycbz4HwSNCuMV-s1Bz9-G-37E1tHp7bxQ35ICns48cXgwd6mdgE4KqIT8LDuxjMr7w7Gzww/exec",
         );
-        return response.data.access_token;
+        return response.data.trim();
     } catch (error) {
         console.error("Error generating auth token:", error.message);
         // throw error;
@@ -41,7 +41,7 @@ const postInvoiceToBooks = async (easycomData) => {
         method: 'post',
         url: 'https://www.zohoapis.in/books/v3/invoices?organization_id=60019077540',
         headers: {
-            'Authorization': `Zoho-authtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+            'Authorization': `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
             'content-type': 'application/json'
         },
         data: JSON.stringify(easycomData)
