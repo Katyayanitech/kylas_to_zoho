@@ -12,6 +12,28 @@ const generateAuthToken = async () => {
     }
 };
 
+const getCustomerId = async (phoneNumber) => {
+    const ZOHO_BOOK_ACCESS_TOKEN = await generateAuthToken();
+    console.log("ZohoBookToken", ZOHO_BOOK_ACCESS_TOKEN);
+    try {
+        const response = await axios.get(
+            `https://www.zohoapis.in/books/v3/contacts/?organization_id=60019077540&phone=${phoneNumber}`,
+            {
+                headers: {
+                    Authorization: `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+                },
+            }
+        );
+
+        const contactId = response.data.contacts[0].contact_id;
+        return contactId;
+    } catch (e) {
+        console.error("Error:", e);
+        return null;
+    }
+};
+
+
 const postInvoiceToBooks = async (easycomData) => {
     const ZOHO_BOOK_ACCESS_TOKEN = await generateAuthToken();
     console.log("ZohoBookToken", ZOHO_BOOK_ACCESS_TOKEN);
@@ -19,7 +41,8 @@ const postInvoiceToBooks = async (easycomData) => {
         method: 'post',
         url: 'https://www.zohoapis.in/books/v3/invoices?organization_id=60019077540',
         headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`
+            'Authorization': `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
         },
         data: JSON.stringify(easycomData)
     };
@@ -32,15 +55,21 @@ const postInvoiceToBooks = async (easycomData) => {
     }
 }
 
+
+
 exports.postInvoiceToZohoBooks = async (invoice) => {
     console.log("easyecom invoice : ", invoice);
+    const customerId = await getCustomerId(invoice[0].contact_num);
+    console.log(invoice[0].order_items);
     try {
         const easycomData = {
-            "customer_id": invoice[0].contact_num,
+            "customer_id": customerId,
         };
 
-        const response = await postInvoiceToBooks(easycomData);
-        console.log('easyecom invoice posted to Zoho books successfully:', response.data);
+        console.log(easycomData);
+
+        // const response = await postInvoiceToBooks(easycomData);
+        // console.log('easyecom invoice posted to Zoho books successfully:', response.data);
     } catch (error) {
         console.log('Error posting easyecom invoice to Zoho books:', error.response ? error.response.data : error);
     }
