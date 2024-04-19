@@ -38,22 +38,18 @@ const getCustomerId = async (phoneNumber) => {
 const postInvoiceToBooks = async (easycomData) => {
     const ZOHO_BOOK_ACCESS_TOKEN = await generateAuthToken();
     console.log("ZohoBookToken", ZOHO_BOOK_ACCESS_TOKEN);
-
-    const form = new FormData();
-    form.append('JSONString', JSON.stringify(easycomData));
-
-    const headers = {
-        ...form.getHeaders(),
-        'Authorization': `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+    const config = {
+        method: 'post',
+        url: 'https://www.zohoapis.in/books/v3/invoices?organization_id=60019077540',
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+            'content-type': 'application/json'
+        },
+        data: JSON.stringify(easycomData)
     };
 
     try {
-        const response = await axios.post(
-            'https://www.zohoapis.in/books/v3/invoices?organization_id=60019077540',
-            form,
-            { headers }
-        );
-        return response.data;
+        return await axios(config);
     } catch (error) {
         console.log('Error in postLead function:', error);
         // throw error;
@@ -89,6 +85,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
     try {
         const easycomData = {
             "customer_id": customerId,
+            "invoice_number": invoice[0].reference_code,
             "line_items": [],
         };
 
