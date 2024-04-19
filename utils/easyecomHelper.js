@@ -103,11 +103,11 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "api_name": "cf_sales_account",
                     "show_in_all_pdf": true,
                     "selected_option_id": "1155413000002568033",
-                    "value_formatted": invoice[0].marketplace,
+                    "value_formatted": invoice[0].marketplace == "Katyayani" ? "Other's Sales" : invoice[0].marketplace,
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
-                    "value": invoice[0].marketplace,
+                    "value": invoice[0].marketplace == "Katyayani" ? "Other's Sales" : invoice[0].marketplace,
                     "is_dependent_field": false
                 },
                 {
@@ -132,25 +132,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     ],
                     "is_dependent_field": false
                 },
-            ],
-            "billing_address": {
-                "address": invoice[0].billing_address_1,
-                "street2": invoice[0].billing_address_2,
-                "city": invoice[0].billing_city,
-                "state": invoice[0].billing_state,
-                "zipcode": invoice[0].billing_pin_code,
-                "country": invoice[0].billing_country,
-                "phone": invoice[0].billing_mobile
-            },
-            "shipping_address": {
-                "address": invoice[0].billing_address_1,
-                "street2": invoice[0].billing_address_2,
-                "city": invoice[0].billing_city,
-                "state": invoice[0].billing_state,
-                "zipcode": invoice[0].billing_pin_code,
-                "country": invoice[0].billing_country,
-                "phone": invoice[0].billing_mobile
-            },
+            ]
         };
 
         for (const item of invoice[0].order_items) {
