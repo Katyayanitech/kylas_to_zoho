@@ -109,9 +109,40 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "placeholder": "cf_sales_account",
                     "value": invoice[0].marketplace,
                     "is_dependent_field": false
-                }
+                },
+                {
+                    "field_id": "1155413000001759107",
+                    "customfield_id": "1155413000001759107",
+                    "show_in_store": false,
+                    "show_in_portal": false,
+                    "is_active": true,
+                    "index": 1,
+                    "label": "Terms of Payment",
+                    "show_on_pdf": true,
+                    "edit_on_portal": false,
+                    "edit_on_store": false,
+                    "api_name": "cf_terms_of_payment",
+                    "show_in_all_pdf": true,
+                    "value_formatted": invoice[0].payment_mode == "PrePaid" ? "Prepaid" : "Cash on Delivery",
+                    "search_entity": "invoice",
+                    "data_type": "multiselect",
+                    "placeholder": "cf_terms_of_payment",
+                    "value": [
+                        invoice[0].payment_mode == "PrePaid" ? "Prepaid" : "Cash on Delivery"
+                    ],
+                    "is_dependent_field": false
+                },
             ],
             "billing_address": {
+                "address": invoice[0].billing_address_1,
+                "street2": invoice[0].billing_address_2,
+                "city": invoice[0].billing_city,
+                "state": invoice[0].billing_state,
+                "zipcode": invoice[0].billing_pin_code,
+                "country": invoice[0].billing_country,
+                "phone": invoice[0].billing_mobile
+            },
+            "shipping_address": {
                 "address": invoice[0].billing_address_1,
                 "street2": invoice[0].billing_address_2,
                 "city": invoice[0].billing_city,
