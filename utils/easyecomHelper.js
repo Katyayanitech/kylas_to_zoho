@@ -180,11 +180,11 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "edit_on_store": false,
                     "api_name": "cf_order_date",
                     "show_in_all_pdf": true,
-                    "value_formatted": invoice[0].order_date,
+                    "value_formatted": "20/04/2024",
                     "search_entity": "invoice",
                     "data_type": "date",
                     "placeholder": "cf_order_date",
-                    "value": invoice[0].order_date,
+                    "value": Date(invoice[0].order_date).toString().split('T')[0],
                     "is_dependent_field": false
                 },
 
