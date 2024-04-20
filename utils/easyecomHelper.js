@@ -184,7 +184,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "search_entity": "invoice",
                     "data_type": "date",
                     "placeholder": "cf_order_date",
-                    "value": Date(invoice[0].order_date).toString().split('T')[0],
+                    "value": new Date(invoice[0].order_date).toISOString().split('T')[0],
                     "is_dependent_field": false
                 },
 
