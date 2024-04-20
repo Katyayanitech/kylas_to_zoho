@@ -9,6 +9,7 @@ const call = require("./routes/call.js");
 const creditnote = require("./routes/creditnote.js");
 const invoice = require("./routes/invoice.js");
 const easyecominvoice = require("./routes/easyecom.js");
+const easyecomcreditnote = require("./routes/easyecomcreditnote.js");
 const { indiamartToKylas } = require("./utils/indiamart.js");
 const { ZohoCRMToKylasChatLeads } = require("./utils/ZohoCrmToKylasChatLeads.js");
 // const { ZohoBookToCRMInvoice } = require("./utils/ZohoBookToCRMInvoice.js");
@@ -26,6 +27,7 @@ app.use("/call", call);
 app.use("/creditnote", creditnote);
 app.use("/invoice", invoice);
 app.use("/easyecom", easyecominvoice);
+app.use("/easyecomcreditnote", easyecomcreditnote);
 
 
 let ZOHO_CRM_ACCESS_TOKEN = '';
