@@ -7,6 +7,7 @@ const marketPlaces = {
     "Katyayani": "Other's Sales",
     "Amazon.in": "Amazon India",
     "Offline": "Other's Sales",
+    "Shopify2": "Bighaat"
 }
 
 const termsOfPayment = {
@@ -100,6 +101,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
         const easycomData = {
             "customer_id": customerId,
             "invoice_number": invoice[0].reference_code,
+            "reference_number": invoice[0].reference_code,
             "line_items": [],
             "custom_fields": [
                 {
@@ -116,11 +118,11 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "api_name": "cf_sales_account",
                     "show_in_all_pdf": true,
                     "selected_option_id": "1155413000002568033",
-                    "value_formatted": marketPlaces[invoice[0].marketplace],
+                    "value_formatted": marketPlaces[invoice[0].marketplace] || invoice[0].marketPlaces,
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
-                    "value": marketPlaces[invoice[0].marketplace],
+                    "value": marketPlaces[invoice[0].marketplace] || invoice[0].marketPlaces,
                     "is_dependent_field": false
                 },
                 {
@@ -145,6 +147,47 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     ],
                     "is_dependent_field": false
                 },
+                {
+                    "field_id": "1155413000001759115",
+                    "customfield_id": "1155413000001759115",
+                    "show_in_store": false,
+                    "show_in_portal": false,
+                    "is_active": true,
+                    "index": 2,
+                    "label": "Payment to be Collected (If COD)",
+                    "show_on_pdf": true,
+                    "edit_on_portal": false,
+                    "edit_on_store": false,
+                    "api_name": "cf_payment_to_be_collected_if_",
+                    "show_in_all_pdf": true,
+                    "value_formatted": invoice[0].payment_mode == "COD" ? invoice[0].collectable_amount : "0",
+                    "search_entity": "invoice",
+                    "data_type": "string",
+                    "placeholder": "cf_payment_to_be_collected_if_",
+                    "value": invoice[0].payment_mode == "COD" ? invoice[0].collectable_amount : "0",
+                    "is_dependent_field": false
+                },
+                {
+                    "field_id": "1155413000014100001",
+                    "customfield_id": "1155413000014100001",
+                    "show_in_store": false,
+                    "show_in_portal": false,
+                    "is_active": true,
+                    "index": 5,
+                    "label": "Order Date",
+                    "show_on_pdf": true,
+                    "edit_on_portal": false,
+                    "edit_on_store": false,
+                    "api_name": "cf_order_date",
+                    "show_in_all_pdf": true,
+                    "value_formatted": invoice[0].order_date,
+                    "search_entity": "invoice",
+                    "data_type": "date",
+                    "placeholder": "cf_order_date",
+                    "value": invoice[0].order_date,
+                    "is_dependent_field": false
+                },
+
             ]
         };
 
