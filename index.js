@@ -12,7 +12,6 @@ const easyecominvoice = require("./routes/easyecom.js");
 const easyecomcreditnote = require("./routes/easyecomcreditnote.js");
 const { indiamartToKylas } = require("./utils/indiamart.js");
 const { ZohoCRMToKylasChatLeads } = require("./utils/ZohoCrmToKylasChatLeads.js");
-// const { ZohoBookToCRMInvoice } = require("./utils/ZohoBookToCRMInvoice.js");
 
 require("dotenv").config();
 const app = express();
@@ -35,12 +34,10 @@ let ZOHO_CRM_ACCESS_TOKEN = '';
 updateAccessToken();
 indiamartToKylas();
 ZohoCRMToKylasChatLeads();
-// ZohoBookToCRMInvoice();
 
-setIntervalAsync(updateAccessToken, 10 * 60 * 1000);
+setIntervalAsync(updateAccessToken, 45 * 60 * 1000);
 setIntervalAsync(indiamartToKylas, 10 * 60 * 1000);
 setIntervalAsync(ZohoCRMToKylasChatLeads, 30 * 60 * 1000);
-// setIntervalAsync(ZohoBookToCRMInvoice, 60 * 60 * 1000);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
