@@ -146,13 +146,13 @@ const platformTags = {
 }
 
 const marketPlaces = {
-    "Shopify13": "GGV Canada", //Ecommerce
-    "Woocommerce": "Website Sales", //Web
-    "Shopify": "New Website (KSK)", //Web
-    "Katyayani": "Other's Sales", //Others
-    "Amazon.in": "Amazon India",//Ecommerce
-    "Offline": "Other's Sales", //Others
-    "Shopify2": "Bighaat", //Ecommerce
+    "Shopify13": "GGV Canada",
+    "Woocommerce": "Website Sales",
+    "Shopify": "New Website (KSK)",
+    "Katyayani": "Other's Sales",
+    "Amazon.in": "Amazon India",
+    "Offline": "Other's Sales",
+    "Shopify2": "Bighaat",
     "Shopify14": "GGV USA",
     "Amazon.ca": "Amazon Canada",
     "Amazon.ae": "Amazon UAE",
@@ -160,7 +160,6 @@ const marketPlaces = {
     "Amazon.com": "Amazon USA",
     "Amazon.co.jp": "Amazon Japan",
     "Jio mart": "JioMart"
-
 }
 
 const salesSectorTags = {
@@ -172,12 +171,12 @@ const salesSectorTags = {
 
 const salesSector = {
     "Shopify13": "Ecommerce",
-    "Woocommerce": "Web", //Web
-    "Shopify": "Web", //Web
-    "Katyayani": "Others", //Others
-    "Amazon.in": "Ecommerce",//Ecommerce
-    "Offline": "Others", //Others
-    "Shopify2": "Ecommerce" //Ecommerce
+    "Woocommerce": "Web",
+    "Shopify": "Web",
+    "Katyayani": "Others",
+    "Amazon.in": "Ecommerce",
+    "Offline": "Others",
+    "Shopify2": "Ecommerce"
 }
 
 const termsOfPayment = {
