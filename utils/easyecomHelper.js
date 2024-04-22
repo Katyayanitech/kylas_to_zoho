@@ -1,13 +1,126 @@
 const axios = require('axios');
 
+const salesPersons = {
+    'uqqo2': 'sales1',
+    'bkze3': 'sales2',
+    'qgzz4': 'sales3',
+    'nqjg5': 'sales4',
+    'ydju6': 'sales5',
+    'wumj7': 'sales6',
+    'ymrh8': 'sales7',
+    'yfer9': 'sales8',
+    'kscs0': 'sales9',
+    'jvxe1': 'sales10',
+    'sssk2': 'ksk11',
+    'mgsq3': 'sales12',
+    'kxwo4': 'sales13',
+    'dzyp5': 'sales14',
+    'ezgh6': 'sales15',
+    'qtqw7': 'sales16',
+    'aoos8': 'sales17',
+    'egmy9': 'sales18',
+    'jylo0': 'sales19',
+    'njsi1': 'sales20',
+    'mxmd2': 'sales21',
+    'emsa3': 'sales22',
+    'pvpt4': 'sales23',
+    'sefv5': 'sales24',
+    'uaji6': 'sales25',
+    'znoi7': 'sales26',
+    'beap8': 'sales27',
+    'vtob9': 'sales28',
+    'yqrz0': 'sales29',
+    'tskm1': 'sales30',
+    'vjby2': 'sales31',
+    'voik3': 'sales32',
+    'syzf4': 'sales33',
+    'pray5': 'sales34',
+    'qfis6': 'sales35',
+    'vhbw7': 'sales36',
+    'wtwd8': 'sales37',
+    'czgh9': 'sales38',
+    'eanw0': 'sales39',
+    'xpyw1': 'sales40',
+    'rblj2': 'sales41',
+    'zoxw3': 'ksk44',
+    'webm4': 'sales45',
+    'lghb5': 'sales46',
+    'ocfz6': 'sales47',
+    'zmyc7': 'sales48',
+    'eyjp8': 'sales49',
+    'bnmv9': 'sales50',
+    'irhj0': 'sales51',
+    'bzmh1': 'sales52',
+    'yxhr2': 'sales53',
+    'zoov3': 'ksk55',
+    'cigd4': 'sales56',
+    'npre5': 'sales57',
+    'eftn6': 'sales58',
+    'onzb7': 'sales59',
+    'dbpl8': 'sales60',
+    'kafs9': 'sales61',
+    'qihf0': 'sales62',
+    'guuu1': 'sales63',
+    'juya2': 'sales64',
+    'qtbt3': 'ksk66',
+    'pkdn4': 'sales67',
+    'dcmq5': 'sales68',
+    'ekls6': 'sales69',
+    'dbkg7': 'sales70',
+    'ioaj8': 'sales71',
+    'ykur9': 'sales72',
+    'hcit0': 'sales73',
+    'adam1': 'sales74',
+    'qokt2': 'sales75',
+    'mirj3': 'ksk77',
+    'bazs4': 'sales78',
+    'lhaq5': 'sales79',
+    'zuvn6': 'sales80',
+    'kaov7': 'sales81',
+    'qroq8': 'sales82',
+    'puea9': 'sales83',
+    'gdpc0': 'sales84',
+    'bijy1': 'sales85',
+    'nczi2': 'sales86',
+    'matd3': 'sales87',
+    'ykge4': 'ksk88',
+    'juuw5': 'sales89',
+    'estf6': 'sales90',
+    'wjuo7': 'sales91',
+    'klxa8': 'sales92',
+    'ngyz9': 'sales93',
+    'jvxs0': 'sales94',
+    'ydpa1': 'sales95',
+    'koro2': 'sales96',
+    'wjak3': 'sales97',
+    'yscs4': 'sales98',
+    'quau5': 'ksk99',
+    'fycm6': 'sales100',
+    'rsek7': 'sales101',
+    'svlt8': 'sales102',
+    'qjfn9': 'sales103',
+    'dsmm0': 'sales104',
+    'ircn1': 'sales105'
+}
+
 const marketPlaces = {
-    "Shopify13": "GGV Canada",
-    "Woocommerce": "Website Sales",
-    "Shopify": "New Website (KSK)",
-    "Katyayani": "Other's Sales",
-    "Amazon.in": "Amazon India",
-    "Offline": "Other's Sales",
-    "Shopify2": "Bighaat"
+    "Shopify13": "GGV Canada", //Ecommerce
+    "Woocommerce": "Website Sales", //Web
+    "Shopify": "New Website (KSK)", //Web
+    "Katyayani": "Other's Sales", //Others
+    "Amazon.in": "Amazon India",//Ecommerce
+    "Offline": "Other's Sales", //Others
+    "Shopify2": "Bighaat" //Ecommerce
+}
+
+const salesSector = {
+    "Shopify13": "Ecommerce",
+    "Woocommerce": "Web", //Web
+    "Shopify": "Web", //Web
+    "Katyayani": "Others", //Others
+    "Amazon.in": "Ecommerce",//Ecommerce
+    "Offline": "Others", //Others
+    "Shopify2": "Ecommerce" //Ecommerce
 }
 
 const termsOfPayment = {
@@ -32,7 +145,7 @@ const getCustomerId = async (phoneNumber) => {
     console.log("ZohoBookToken", ZOHO_BOOK_ACCESS_TOKEN);
     try {
         const response = await axios.get(
-            `https://www.zohoapis.in/books/v3/contacts/?organization_id=60019077540&phone=91${phoneNumber}`,
+            `https://www.zohoapis.in/books/v3/contacts/?organization_id=60019077540&phone=%2B91${phoneNumber}`,
             {
                 headers: {
                     Authorization: `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
@@ -97,13 +210,14 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
     console.log("easyecom invoice : ", invoice);
     const customerId = await getCustomerId(invoice[0].contact_num);
     console.log(invoice[0].order_items);
+    console.log("Salesperson Id ", invoice[0].reference_code.split("/")[1]);
     try {
         const easycomData = {
             "customer_id": customerId,
-            "invoice_number": invoice[0].reference_code,
+            "invoice_number": invoice[0].reference_code.length > 16 ? invoice[0].reference_code.substring(0, 6) + Math.floor(Math.random() * 1000000000).toString().padStart(10, '0') : invoice[0].reference_code,
             "reference_number": invoice[0].reference_code,
             "line_items": [],
-            "status": "sent",
+            // "salesperson_name": salesPersons[invoice[0].reference_code.split("/")[1]] || "",
             "custom_fields": [
                 {
                     "field_id": "1155413000002568031",
@@ -194,7 +308,24 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
 
         for (const item of invoice[0].order_items) {
             const itemId = await getItemIdFromSKU(item.sku);
-            easycomData.line_items.push({ item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity) });
+            easycomData.line_items.push({
+                item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity), tags: [
+                    {
+                        "tag_option_id": "1155413000009542011",
+                        "is_tag_mandatory": false,
+                        "tag_name": "Sales Sector",
+                        "tag_id": "1155413000000000638",
+                        "tag_option_name": salesSector[invoice[0].marketplace] || invoice[0].marketPlaces,
+                    },
+                    {
+                        "tag_option_id": "1155413000012339214",
+                        "is_tag_mandatory": false,
+                        "tag_name": "Platform",
+                        "tag_id": "1155413000000000640",
+                        "tag_option_name": marketPlaces[invoice[0].marketplace] || invoice[0].marketPlaces,
+                    }
+                ],
+            });
         }
 
         console.log(easycomData);

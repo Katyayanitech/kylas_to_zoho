@@ -10,6 +10,16 @@ const marketPlaces = {
     "Shopify2": "Bighaat"
 }
 
+const salesSector = {
+    "Shopify13": "Ecommerce",
+    "Woocommerce": "Web", //Web
+    "Shopify": "Web", //Web
+    "Katyayani": "Others", //Others
+    "Amazon.in": "Ecommerce",//Ecommerce
+    "Offline": "Others", //Others
+    "Shopify2": "Ecommerce" //Ecommerce
+}
+
 const termsOfPayment = {
     "COD": "Cash on Delivery",
     "PrePaid": "Prepaid",
@@ -42,6 +52,27 @@ const getCustomerId = async (phoneNumber) => {
 
         const contactId = response.data.contacts[0].contact_id;
         return contactId;
+    } catch (e) {
+        console.error("Error:", e);
+        return null;
+    }
+};
+
+const getInvoiceData = async (referenceCode) => {
+    const ZOHO_BOOK_ACCESS_TOKEN = await generateAuthToken();
+    console.log("ZohoBookToken", ZOHO_BOOK_ACCESS_TOKEN);
+    try {
+        const response = await axios.get(
+            `https://www.zohoapis.in/books/v3/contacts/?organization_id=60019077540&&reference_number=${referenceCode}`,
+            {
+                headers: {
+                    Authorization: `Zoho-oauthtoken ${ZOHO_BOOK_ACCESS_TOKEN}`,
+                },
+            }
+        );
+
+        const invoiceData = response.data.invoices[0];
+        return invoiceData;
     } catch (e) {
         console.error("Error:", e);
         return null;
@@ -93,105 +124,38 @@ const getItemIdFromSKU = async (sku) => {
 
 exports.postCreditnoteToZohoBooks = async (creditnote) => {
     console.log("easyecom creditnote : ", creditnote);
-    const customerId = await getCustomerId(creditnote[0][0].contact_num);
+    const customerId = await getCustomerId(creditnote[0][0].forward_shipment_customer_contact_num);
+    const invoiceData = await getInvoiceData(creditnote[0][0].reference_code);
     console.log(creditnote[0][0].order_items);
     try {
         const easycomData = {
             "customer_id": customerId,
-            "invoice_number": creditnote[0][0].reference_code,
-            "reference_number": creditnote[0][0].reference_code,
+            "invoice_number": invoiceData.invoice_number,
+            "reference_number": invoiceData.reference_number,
             "line_items": [],
-            "custom_fields": [
-                {
-                    "field_id": "1155413000002568031",
-                    "customfield_id": "1155413000002568031",
-                    "show_in_store": false,
-                    "show_in_portal": false,
-                    "is_active": true,
-                    "index": 1,
-                    "label": "Marketplace",
-                    "show_on_pdf": true,
-                    "edit_on_portal": false,
-                    "edit_on_store": false,
-                    "api_name": "cf_sales_account",
-                    "show_in_all_pdf": true,
-                    "selected_option_id": "1155413000002568033",
-                    "value_formatted": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
-                    "search_entity": "invoice",
-                    "data_type": "dropdown",
-                    "placeholder": "cf_sales_account",
-                    "value": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
-                    "is_dependent_field": false
-                },
-                {
-                    "field_id": "1155413000001759107",
-                    "customfield_id": "1155413000001759107",
-                    "show_in_store": false,
-                    "show_in_portal": false,
-                    "is_active": true,
-                    "index": 1,
-                    "label": "Terms of Payment",
-                    "show_on_pdf": true,
-                    "edit_on_portal": false,
-                    "edit_on_store": false,
-                    "api_name": "cf_terms_of_payment",
-                    "show_in_all_pdf": true,
-                    "value_formatted": termsOfPayment[creditnote[0][0].payment_mode],
-                    "search_entity": "invoice",
-                    "data_type": "multiselect",
-                    "placeholder": "cf_terms_of_payment",
-                    "value": [
-                        termsOfPayment[creditnote[0][0].payment_mode]
-                    ],
-                    "is_dependent_field": false
-                },
-                {
-                    "field_id": "1155413000001759115",
-                    "customfield_id": "1155413000001759115",
-                    "show_in_store": false,
-                    "show_in_portal": false,
-                    "is_active": true,
-                    "index": 2,
-                    "label": "Payment to be Collected (If COD)",
-                    "show_on_pdf": true,
-                    "edit_on_portal": false,
-                    "edit_on_store": false,
-                    "api_name": "cf_payment_to_be_collected_if_",
-                    "show_in_all_pdf": true,
-                    "value_formatted": creditnote[0][0].payment_mode == "COD" ? creditnote[0][0].collectable_amount : "0",
-                    "search_entity": "invoice",
-                    "data_type": "string",
-                    "placeholder": "cf_payment_to_be_collected_if_",
-                    "value": creditnote[0][0].payment_mode == "COD" ? creditnote[0][0].collectable_amount : "0",
-                    "is_dependent_field": false
-                },
-                {
-                    "field_id": "1155413000014100001",
-                    "customfield_id": "1155413000014100001",
-                    "show_in_store": false,
-                    "show_in_portal": false,
-                    "is_active": true,
-                    "index": 5,
-                    "label": "Order Date",
-                    "show_on_pdf": true,
-                    "edit_on_portal": false,
-                    "edit_on_store": false,
-                    "api_name": "cf_order_date",
-                    "show_in_all_pdf": true,
-                    "value_formatted": "20/04/2024",
-                    "search_entity": "invoice",
-                    "data_type": "date",
-                    "placeholder": "cf_order_date",
-                    "value": new Date(creditnote[0][0].order_date).toISOString().split('T')[0],
-                    "is_dependent_field": false
-                },
-
-            ]
+            "custom_fields": invoiceData.custom_fields,
         };
 
-        for (const item of creditnote[0][0].order_items) {
+        for (const item of invoiceData.order_items) {
             const itemId = await getItemIdFromSKU(item.sku);
-            easycomData.line_items.push({ item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity) });
+            easycomData.line_items.push({
+                item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity), tags: [
+                    {
+                        "tag_option_id": "1155413000009542011",
+                        "is_tag_mandatory": false,
+                        "tag_name": "Sales Sector",
+                        "tag_id": "1155413000000000638",
+                        "tag_option_name": salesSector[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
+                    },
+                    {
+                        "tag_option_id": "1155413000012339214",
+                        "is_tag_mandatory": false,
+                        "tag_name": "Platform",
+                        "tag_id": "1155413000000000640",
+                        "tag_option_name": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
+                    }
+                ],
+            });
         }
 
         console.log(easycomData);
