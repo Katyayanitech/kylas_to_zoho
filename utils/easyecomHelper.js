@@ -267,6 +267,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
             "reference_number": invoice[0].reference_code,
             "line_items": [],
             "salesperson_name": salesPersons[invoice[0].reference_code.split("/")[1]] || "",
+            "is_inclusive_tax": true,
             "custom_fields": [
                 {
                     "field_id": "1155413000002568031",
