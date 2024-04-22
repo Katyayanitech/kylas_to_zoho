@@ -92,14 +92,14 @@ const getItemIdFromSKU = async (sku) => {
 };
 
 exports.postCreditnoteToZohoBooks = async (creditnote) => {
-    console.log("easyecom invoice : ", creditnote);
-    const customerId = await getCustomerId(creditnote[0].contact_num);
-    console.log(creditnote[0].order_items);
+    console.log("easyecom creditnote : ", creditnote);
+    const customerId = await getCustomerId(creditnote[0][0].contact_num);
+    console.log(creditnote[0][0].order_items);
     try {
         const easycomData = {
             "customer_id": customerId,
-            "invoice_number": creditnote[0].reference_code,
-            "reference_number": creditnote[0].reference_code,
+            "invoice_number": creditnote[0][0].reference_code,
+            "reference_number": creditnote[0][0].reference_code,
             "line_items": [],
             "custom_fields": [
                 {
@@ -116,11 +116,11 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
                     "api_name": "cf_sales_account",
                     "show_in_all_pdf": true,
                     "selected_option_id": "1155413000002568033",
-                    "value_formatted": marketPlaces[creditnote[0].marketplace] || creditnote[0].marketPlaces,
+                    "value_formatted": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
-                    "value": marketPlaces[creditnote[0].marketplace] || creditnote[0].marketPlaces,
+                    "value": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     "is_dependent_field": false
                 },
                 {
@@ -136,12 +136,12 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
                     "edit_on_store": false,
                     "api_name": "cf_terms_of_payment",
                     "show_in_all_pdf": true,
-                    "value_formatted": termsOfPayment[creditnote[0].payment_mode],
+                    "value_formatted": termsOfPayment[creditnote[0][0].payment_mode],
                     "search_entity": "invoice",
                     "data_type": "multiselect",
                     "placeholder": "cf_terms_of_payment",
                     "value": [
-                        termsOfPayment[creditnote[0].payment_mode]
+                        termsOfPayment[creditnote[0][0].payment_mode]
                     ],
                     "is_dependent_field": false
                 },
@@ -158,11 +158,11 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
                     "edit_on_store": false,
                     "api_name": "cf_payment_to_be_collected_if_",
                     "show_in_all_pdf": true,
-                    "value_formatted": creditnote[0].payment_mode == "COD" ? creditnote[0].collectable_amount : "0",
+                    "value_formatted": creditnote[0][0].payment_mode == "COD" ? creditnote[0][0].collectable_amount : "0",
                     "search_entity": "invoice",
                     "data_type": "string",
                     "placeholder": "cf_payment_to_be_collected_if_",
-                    "value": creditnote[0].payment_mode == "COD" ? creditnote[0].collectable_amount : "0",
+                    "value": creditnote[0][0].payment_mode == "COD" ? creditnote[0][0].collectable_amount : "0",
                     "is_dependent_field": false
                 },
                 {
@@ -182,14 +182,14 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
                     "search_entity": "invoice",
                     "data_type": "date",
                     "placeholder": "cf_order_date",
-                    "value": new Date(creditnote[0].order_date).toISOString().split('T')[0],
+                    "value": new Date(creditnote[0][0].order_date).toISOString().split('T')[0],
                     "is_dependent_field": false
                 },
 
             ]
         };
 
-        for (const item of creditnote[0].order_items) {
+        for (const item of creditnote[0][0].order_items) {
             const itemId = await getItemIdFromSKU(item.sku);
             easycomData.line_items.push({ item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity) });
         }

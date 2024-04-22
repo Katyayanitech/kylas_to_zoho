@@ -103,6 +103,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
             "invoice_number": invoice[0].reference_code,
             "reference_number": invoice[0].reference_code,
             "line_items": [],
+            "status": "sent",
             "custom_fields": [
                 {
                     "field_id": "1155413000002568031",
