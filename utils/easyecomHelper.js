@@ -107,7 +107,7 @@ const platformTags = {
     "KO Website": "1155413000012339214",
     "Agribegri": "1155413000012339222",
     "Amazon Saudi Arabia": "1155413000012339230",
-    "AmazonJapan": "1155413000012339238",
+    "Amazon Japan": "1155413000012339238",
     "GGV UAE": "1155413000012339246",
     "Amazon France": "1155413000019461798",
     "Amazon Belgium": "1155413000019461810",
@@ -116,7 +116,7 @@ const platformTags = {
     "JioMart": "1155413000077342092",
     "KSK Website": "1155413000012339216",
     "Amazon UAE": "1155413000012339224",
-    "AmazonCanada": "1155413000012339232",
+    "Amazon Canada": "1155413000012339232",
     "Amazon Sweden": "1155413000012339240",
     "Amazon Ireland": "1155413000019461802",
     "E Kisani Store": "1155413000041144149",
@@ -152,7 +152,15 @@ const marketPlaces = {
     "Katyayani": "Other's Sales", //Others
     "Amazon.in": "Amazon India",//Ecommerce
     "Offline": "Other's Sales", //Others
-    "Shopify2": "Bighaat" //Ecommerce
+    "Shopify2": "Bighaat", //Ecommerce
+    "Shopify14": "GGV USA",
+    "Amazon.ca": "Amazon Canada",
+    "Amazon.ae": "Amazon UAE",
+    "Amazon.co.uk": "Amazon UK",
+    "Amazon.com": "Amazon USA",
+    "Amazon.co.jp": "Amazon Japan",
+    "Jio mart": "JioMart"
+
 }
 
 const salesSectorTags = {
