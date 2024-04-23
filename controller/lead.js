@@ -16,8 +16,8 @@ exports.updateLeadToCRM = async (req, res) => {
         const updatedLead = req.body;
         console.log('Kylas Body : ', updatedLead);
         console.log('lead type: ', updatedLead.entity.customFieldValues.leadType);
-        console.log('lead type value: ', updatedLead.entity.customFieldValues.leadType.value);
-        console.log('lead type Category: ', updatedLead.entity.customFieldValues.cfLeadCategory);
+        // console.log('lead type value: ', updatedLead.entity.customFieldValues.leadType.value);
+        // console.log('lead type Category: ', updatedLead.entity.customFieldValues.cfLeadCategory);
         
         await updateLeadToZohoCRM(updatedLead);
         return res.status(200).send('Lead Update successfully');
