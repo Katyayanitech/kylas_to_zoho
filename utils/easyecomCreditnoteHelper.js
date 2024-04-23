@@ -131,7 +131,7 @@ const salesAccounts = {
     "Industry Buying Sales": "1155413000055259001",
     "JioMart": "1155413000077342084",
     "Website Sales": "1155413000010057958",
-    "New Website (KSK)": "1155413000010057962",
+    "KSK Website": "1155413000010057962",
     "Meesho Sales": "1155413000075607071",
     "Moglix Sales": "1155413000061392038",
     "Plantlane Sales": "1155413000014011730",
@@ -185,7 +185,7 @@ const platformTags = {
 const marketPlaces = {
     "Shopify13": "GGV Canada",
     "Woocommerce": "Website Sales",
-    "Shopify": "New Website (KSK)",
+    "Shopify": "KSK Website",
     "Katyayani": "Other's Sales",
     "Amazon.in": "Amazon India",
     "Offline": "Other's Sales",
@@ -339,7 +339,7 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
         for (const item of creditnote[0][0].order_items) {
             const itemId = await getItemIdBySKU(item.sku);
             easycomData.line_items.push({
-                item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity), tags: [
+                item_id: itemId, quantity: item.suborder_quantity, rate: (item.selling_price / item.suborder_quantity), tags: [
                     {
                         "tag_option_id": salesSectorTags[salesSector[creditnote[0][0].marketplace]],
                         "is_tag_mandatory": false,
@@ -348,7 +348,7 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
                         "tag_option_name": salesSector[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     },
                     {
-                        "tag_option_id": "1155413000012339214",
+                        "tag_option_id": platformTags[marketPlaces[creditnote[0][0].marketplace]],
                         "is_tag_mandatory": false,
                         "tag_name": "Platform",
                         "tag_id": "1155413000000000640",
