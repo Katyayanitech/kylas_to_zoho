@@ -136,7 +136,8 @@ const salesAccounts = {
     "Moglix Sales": "1155413000061392038",
     "Plantlane Sales": "1155413000014011730",
     "Shopclues Sales": "1155413000077328107",
-    "Snapdeal Sales": "1155413000076851690"
+    "Snapdeal Sales": "1155413000076851690",
+    "Other's Sales": "1155413000000000486"
 }
 
 const platformTags = {
