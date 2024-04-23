@@ -293,7 +293,7 @@ const postCreditNoteToBooks = async (easycomData) => {
     try {
         return await axios(config);
     } catch (error) {
-        console.log('Error in postInvoiceToBooks function:', error);
+        console.log('Error in postCreditNOteToBooks function:', error);
         // throw error;
     }
 }
@@ -335,33 +335,34 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
             "is_draft": false,
             "date": new Date(creditnote[0][0].credit_note_date).toISOString().split('T')[0]
         };
+
         for (const item of creditnote[0][0].order_items) {
             const itemId = await getItemIdBySKU(item.sku);
             easycomData.line_items.push({
-                item_id: itemId, quantity: item.suborder_quantity, rate: (item.selling_price / item.item_quantity), tags: [
+                item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity), tags: [
                     {
-                        "tag_option_id": salesSectorTags[salesSector[invoice[0].marketplace]],
+                        "tag_option_id": salesSectorTags[salesSector[creditnote[0][0].marketplace]],
                         "is_tag_mandatory": false,
                         "tag_name": "Sales Sector",
                         "tag_id": "1155413000000000638",
                         "tag_option_name": salesSector[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     },
                     {
-                        "tag_option_id": platformTags[marketPlaces[creditnote[0][0].marketplace]],
+                        "tag_option_id": "1155413000012339214",
                         "is_tag_mandatory": false,
                         "tag_name": "Platform",
                         "tag_id": "1155413000000000640",
                         "tag_option_name": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     }
-                ], "account_id": salesAccounts[marketPlaces[creditnote[0][0].marketplace]] || salesAccounts['In-house Sales'],
+                ], "account_id": salesAccounts[marketPlaces[creditnote[0][0].marketplace]] || salesAccounts['In-house Sales']
             });
         }
 
         console.log(easycomData);
 
         const response = await postCreditNoteToBooks(easycomData);
-        console.log('easyecom invoice posted to Zoho books successfully:', response.data);
+        console.log('easyecom creditnote posted to Zoho books successfully:', response.data);
     } catch (error) {
-        console.log('Error posting easyecom invoice to Zoho books:', error.response ? error.response.data : error);
+        console.log('Error posting easyecom creditnote to Zoho books:', error.response ? error.response.data : error);
     }
 }
