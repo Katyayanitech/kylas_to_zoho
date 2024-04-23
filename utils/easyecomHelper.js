@@ -312,7 +312,6 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
             "line_items": [],
             "salesperson_name": salesPersons[invoice[0].reference_code.split("/")[1]] || "",
             "is_inclusive_tax": true,
-            "account_id": salesAccounts[marketPlaces[invoice[0].marketplace]] || salesAccounts['In-house Sales'],
             "custom_fields": [
                 {
                     "field_id": "1155413000002568031",
@@ -419,7 +418,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                         "tag_id": "1155413000000000640",
                         "tag_option_name": marketPlaces[invoice[0].marketplace] || invoice[0].marketPlaces,
                     }
-                ],
+                ], "account_id": salesAccounts[marketPlaces[invoice[0].marketplace]] || salesAccounts['In-house Sales'],
             });
         }
 
