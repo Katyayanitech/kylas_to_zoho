@@ -103,6 +103,42 @@ const salesPersons = {
     'ircn1': 'sales105'
 }
 
+const salesAccounts = {
+    "Agribegri Sales": "1155413000009230527",
+    "Agrociaa Sales": "1155413000060100017",
+    "Amazon Australia": "1155413000010254387",
+    "Amazon Canada": "1155413000010221121",
+    "Amazon France": "1155413000010221125",
+    "Amazon India Sales": "1155413000009433763",
+    "Amazon Italy": "1155413000065841288",
+    "Amazon Japan": "1155413000010221129",
+    "Amazon Mexico": "1155413000010221133",
+    "Amazon Netherlands": "1155413000010221137",
+    "Amazon Saudi Arabia": "1155413000005827253",
+    "Amazon Singapore": "1155413000005827257",
+    "Amazon Spain": "1155413000077342078",
+    "Amazon Sweden": "1155413000010221145",
+    "Amazon UAE": "1155413000005837898",
+    "Amazon UK": "1155413000005827265",
+    "Amazon USA": "1155413000010221117",
+    "Badikheti Sales": "1155413000065257955",
+    "BharatAgri": "1155413000077328119",
+    "Bighaat Sales": "1155413000010066291",
+    "GGV Canada": "1155413000010221169",
+    "GGV UAE": "1155413000010221173",
+    "GGV USA": "1155413000071930430",
+    "In-house Sales": "1155413000000000486",
+    "Industry Buying Sales": "1155413000055259001",
+    "JioMart": "1155413000077342084",
+    "KO Website Sale": "1155413000010057958",
+    "KSK Sale": "1155413000010057962",
+    "Meesho Sales": "1155413000075607071",
+    "Moglix Sales": "1155413000061392038",
+    "Plantlane Sales": "1155413000014011730",
+    "Shopclues Sales": "1155413000077328107",
+    "Snapdeal Sales": "1155413000076851690"
+}
+
 const platformTags = {
     "KO Website": "1155413000012339214",
     "Agribegri": "1155413000012339222",
@@ -275,8 +311,8 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
             "line_items": [],
             "salesperson_name": salesPersons[invoice[0].reference_code.split("/")[1]] || "",
             "is_inclusive_tax": true,
-            "account_id": "1155413000010057962",
-            "account_name": "KSK Sale",
+            "account_id": salesAccounts[marketPlaces[invoice[0].marketplace]] || salesAccounts['In-house Sales'],
+            "account_name": marketPlaces[invoice[0].marketplace] || 'In-house Sales',
             "custom_fields": [
                 {
                     "field_id": "1155413000002568031",
