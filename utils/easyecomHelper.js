@@ -131,7 +131,7 @@ const salesAccounts = {
     "Industry Buying Sales": "1155413000055259001",
     "JioMart": "1155413000077342084",
     "Website Sales": "1155413000010057958",
-    "New Website (KSK)": "1155413000010057962",
+    "KSK Website": "1155413000010057962",
     "Meesho Sales": "1155413000075607071",
     "Moglix Sales": "1155413000061392038",
     "Plantlane Sales": "1155413000014011730",
@@ -185,7 +185,7 @@ const platformTags = {
 const marketPlaces = {
     "Shopify13": "GGV Canada",
     "Woocommerce": "Website Sales",
-    "Shopify": "New Website (KSK)",
+    "Shopify": "KSK Website",
     "Katyayani": "Other's Sales",
     "Amazon.in": "Amazon India",
     "Offline": "Other's Sales",
@@ -331,7 +331,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
                     "search_entity": "invoice",
                     "data_type": "dropdown",
                     "placeholder": "cf_sales_account",
-                    "value": marketPlaces[invoice[0].marketplace] || invoice[0].marketPlaces,
+                    "value": marketPlaces[invoice[0].marketplace] || "",
                     "is_dependent_field": false
                 },
                 {
@@ -403,7 +403,7 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
         for (const item of invoice[0].order_items) {
             const itemId = await getItemIdFromSKU(item.sku);
             easycomData.line_items.push({
-                item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity), tags: [
+                item_id: itemId, quantity: item.suborder_quantity, rate: (item.selling_price / item.item_quantity), tags: [
                     {
                         "tag_option_id": salesSectorTags[salesSector[invoice[0].marketplace]],
                         "is_tag_mandatory": false,

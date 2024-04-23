@@ -335,11 +335,10 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
             "is_draft": false,
             "date": new Date(creditnote[0][0].credit_note_date).toISOString().split('T')[0]
         };
-
-        for (const item of invoiceData.order_items) {
+        for (const item of creditnote[0][0].order_items) {
             const itemId = await getItemIdBySKU(item.sku);
             easycomData.line_items.push({
-                item_id: itemId, quantity: item.item_quantity, rate: (item.selling_price / item.item_quantity), tags: [
+                item_id: itemId, quantity: item.suborder_quantity, rate: (item.selling_price / item.item_quantity), tags: [
                     {
                         "tag_option_id": salesSectorTags[salesSector[invoice[0].marketplace]],
                         "is_tag_mandatory": false,
@@ -348,13 +347,13 @@ exports.postCreditnoteToZohoBooks = async (creditnote) => {
                         "tag_option_name": salesSector[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     },
                     {
-                        "tag_option_id": "1155413000012339214",
+                        "tag_option_id": platformTags[marketPlaces[creditnote[0][0].marketplace]],
                         "is_tag_mandatory": false,
                         "tag_name": "Platform",
                         "tag_id": "1155413000000000640",
                         "tag_option_name": marketPlaces[creditnote[0][0].marketplace] || creditnote[0][0].marketPlaces,
                     }
-                ], "account_id": salesAccounts[marketPlaces[invoice[0].marketplace]] || salesAccounts['In-house Sales']
+                ], "account_id": salesAccounts[marketPlaces[creditnote[0][0].marketplace]] || salesAccounts['In-house Sales'],
             });
         }
 
