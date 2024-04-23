@@ -125,7 +125,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : "",
                         Acres_of_Land_if_Farmer: lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
                         Identification: "Farmer",
-                        Details_Updated: true,
+                        Details_Updated: "true",
                     },
                 ],
             };
