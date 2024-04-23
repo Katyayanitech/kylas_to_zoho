@@ -130,8 +130,8 @@ const salesAccounts = {
     "In-house Sales": "1155413000000000486",
     "Industry Buying Sales": "1155413000055259001",
     "JioMart": "1155413000077342084",
-    "KO Website Sale": "1155413000010057958",
-    "KSK Sale": "1155413000010057962",
+    "Website Sales": "1155413000010057958",
+    "New Website (KSK)": "1155413000010057962",
     "Meesho Sales": "1155413000075607071",
     "Moglix Sales": "1155413000061392038",
     "Plantlane Sales": "1155413000014011730",
@@ -313,7 +313,6 @@ exports.postInvoiceToZohoBooks = async (invoice) => {
             "salesperson_name": salesPersons[invoice[0].reference_code.split("/")[1]] || "",
             "is_inclusive_tax": true,
             "account_id": salesAccounts[marketPlaces[invoice[0].marketplace]] || salesAccounts['In-house Sales'],
-            "account_name": marketPlaces[invoice[0].marketplace] || 'In-house Sales',
             "custom_fields": [
                 {
                     "field_id": "1155413000002568031",
