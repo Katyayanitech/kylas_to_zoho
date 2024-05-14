@@ -217,7 +217,6 @@ exports.updateTaskToZohoCRM = async (task) => {
                     "Subject": "test",
                     "Status": "System Approve",
                     "System_Updated": true
-}
                 },
             ],
         };
