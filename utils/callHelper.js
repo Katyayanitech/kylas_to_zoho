@@ -80,6 +80,7 @@ exports.PostCallzoho = async (call) => {
         let Calldata = {
             data: [
                 {
+                    "Subject": "Kylas Call",
                     "Call_Duration": call.entity.duration !== null ? call.entity.duration.toString() : "",
                     "Description": call.entity.callRecording != null ? call.entity.callRecording.url : "",
                     "Call_Start_Time": formattedStartTime || "",
