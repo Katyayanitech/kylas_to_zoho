@@ -214,9 +214,16 @@ exports.updateTaskToZohoCRM = async (task) => {
             data: [
     
                   {
-                    "Subject": "test",
+                     "Subject": task.entity.name || "",
+                    "Description": task.entity.description || "",
                     "Status": "System Approve",
-                    "System_Updated": true
+                    "Priority": task.entity.priority.name || "",
+                    "Due_Date": formattedDueDate || "",
+                    "send_notification": true,
+                    "Send_Notification_Email": true,
+                    "Kyla_s_Task_Id": task.entity.id.toString() || "",
+                    "kylas_task_owner": task.entity.assignedTo.name || "",
+                    "System_Updated": true,
                 },
             ],
         };
