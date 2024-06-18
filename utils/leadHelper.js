@@ -101,8 +101,8 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log("phone number");
     console.log(phoneData);
     console.log(lead);
-        console.log(`Identification ${lead.entity.customFieldValues.leadType}`);
-    console.log(`Identification json: ${JSON.stringify(lead.entity.customFieldValues.leadType)}`);
+        console.log(`Identification ${lead.entity.customFieldValues.cfLeadCategory}`);
+    console.log(`Identification json: ${JSON.stringify(lead.entity.customFieldValues.cfLeadCategory)}`);
     
     const leadId = await getLeadIdByPhoneNumber(phoneData);
     if (leadId == null) {
