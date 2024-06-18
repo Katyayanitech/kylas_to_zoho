@@ -109,7 +109,6 @@ exports.updateLeadToZohoCRM = async (lead) => {
         console.log("leadId");
         console.log(leadId);
 
-
         try {
             const leadData = {
                 data: [
@@ -117,13 +116,15 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         First_Name: lead.entity.firstName || "",
                         Last_Name: lead.entity.lastName || "",
                         Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
-                        Email: (lead.entity.emails == null) ? "" : (lead.entity.emails[0].value),
                         City: lead.entity.city || "",
                         State: lead.entity.state || "",
                         Zip_Code: lead.entity.zipcode || "",
                         Lead_Source: lead.entity.source.value || "",
                         Kylas_Owner: lead.entity.ownerId.value || "",
-                        Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : ""
+                        Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : "",
+                        Acres_of_Land_if_Farmer:  lead.entity.customFieldValues.cfAcresOfLandIfFarmer != null ? lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "" : "",
+                        Identification: lead.entity.customFieldValues.leadType.value || "",
+                        Details_Updated: lead.entity.updatedViaName === 'User' ? true : false
                     },
                 ],
             };

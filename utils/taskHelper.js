@@ -221,6 +221,7 @@ exports.updateTaskToZohoCRM = async (task) => {
     console.log("Task ID:", taskId);
     console.log("Associated Contact Number:", associatedContactNumber);
     const systemApproved = await checkCallHistory(associatedContactNumber);
+    console.log(`System : ${systemApproved}`);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
     console.log("Formatted Due Date:", formattedDueDate);
@@ -231,7 +232,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                 {
                     "Subject": task.entity.name || "",
                     "Description": task.entity.description || "",
-                    "Status": systemApproved ? "System Approve" : (task.entity.status.name || ""),
+                    "Status": systemApproved ? "System Approve" : task.entity.status,
                     "Priority": task.entity.priority.name || "",
                     "Due_Date": formattedDueDate || "",
                     "send_notification": true,
@@ -242,9 +243,11 @@ exports.updateTaskToZohoCRM = async (task) => {
                 },
             ],
         };
+
         console.log(taskData)
 
         const response = await updateTask(taskData, taskId);
+
         console.log('Task updated to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
