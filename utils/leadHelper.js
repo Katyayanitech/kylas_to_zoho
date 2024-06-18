@@ -20,8 +20,6 @@ const postLead = async (leadData) => {
 }
 
 exports.postLeadToZohoCRM = async (lead) => {
-    console.log("lead data");
-    console.log(lead);
     console.log("lead number");
     console.log(lead.entity.phoneNumbers[0].value);
     try {
@@ -37,7 +35,8 @@ exports.postLeadToZohoCRM = async (lead) => {
                     Zip_Code: lead.entity.zipcode || "",
                     Lead_Source: lead.entity.source.value || "",
                     Kylas_Owner: lead.entity.ownerId.value || "",
-                    Lead_Status: "Open"
+                    Lead_Status: "Open",
+                    Kylas_Lead_Id: lead.entity.id.toString(),
                 },
             ],
         };
@@ -122,9 +121,11 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         Lead_Source: lead.entity.source.value || "",
                         Kylas_Owner: lead.entity.ownerId.value || "",
                         Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : "",
+
                         Acres_of_Land_if_Farmer:  lead.entity.customFieldValues.cfAcresOfLandIfFarmer != null ? lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "" : "",
                         Identification: lead.entity.customFieldValues.leadType.value || "",
                         Details_Updated: lead.entity.updatedViaName === 'User' ? true : false
+
                     },
                 ],
             };
