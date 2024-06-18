@@ -13,6 +13,7 @@ exports.postTaskToCRM = async (req, res) => {
 
 exports.updateTaskToCRM = async (req, res) => {
     try {
+        console.log(`Update Task Log ${req.body}`);
         const updatedTask = req.body;
         await updateTaskToZohoCRM(updatedTask);
         return res.status(200).send('Task Updated successfully');
