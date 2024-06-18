@@ -125,11 +125,10 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         Zip_Code: lead.entity.zipcode || "",
                         Lead_Source: lead.entity.source.value || "",
                         Kylas_Owner: lead.entity.ownerId.value || "",
-                        Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : "",
-                        Acres_of_Land_if_Farmer:  lead.entity.customFieldValues.cfAcresOfLandIfFarmer != null ? lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "" : "",
-                        Identification: lead.entity.customFieldValues.leadType.value || "",
+                        Lead_Status: lead.entity.pipelineStage.value || "",
+                        Acres_of_Land_if_Farmer: lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
+                    
                         Details_Updated: lead.entity.updatedViaName === 'User' ? true : false
-
                     },
                 ],
             };
