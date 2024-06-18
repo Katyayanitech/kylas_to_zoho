@@ -101,6 +101,9 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log("phone number");
     console.log(phoneData);
     console.log(lead);
+        console.log(`Identification ${lead.entity.customFieldValues.leadType}`);
+    console.log(`Identification json: ${JSON.stringify(lead.entity.customFieldValues.leadType)}`);
+    
     const leadId = await getLeadIdByPhoneNumber(phoneData);
     if (leadId == null) {
         console.log('Lead is not updated to Zoho CRM');
