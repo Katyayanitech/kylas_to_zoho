@@ -216,8 +216,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                   {
                      "Subject": task.entity.name || "",
                     "Description": task.entity.description || "",
-
-                    "Status": systemApproved ?  "System Approve" : (task.entity.status.name === "System Approve" ? '' : task.entity.status.name),
+                      "Status": systemApproved ? "System Approve" : task.entity.status.name,
 
                     "Priority": task.entity.priority.name || "",
                     "Due_Date": formattedDueDate || "",
