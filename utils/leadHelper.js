@@ -120,6 +120,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         First_Name: lead.entity.firstName || "",
                         Last_Name: lead.entity.lastName || "",
                         Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
+                        Street: lead.entity.address || "",
                         City: lead.entity.city || "",
                         State: lead.entity.state || "",
                         Zip_Code: lead.entity.zipcode || "",
