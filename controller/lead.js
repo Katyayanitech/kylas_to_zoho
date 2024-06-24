@@ -1,5 +1,4 @@
 const { json } = require("express");
-
 const { postLeadToZohoCRM, updateLeadToZohoCRM } = require("../utils/leadHelper.js");
 
 
@@ -15,17 +14,14 @@ exports.postLeadToCRM = async (req, res) => {
     }
 }
 
-
 exports.updateLeadToCRM = async (req, res) => {
     try {
         const updatedLead = req.body;
         console.log(`Lead Update Log ${JSON.stringify(updatedLead)}`);
         await updateLeadToZohoCRM(updatedLead);
-    
         res.status(200).send('Lead Update successfully');
     } catch (error) {
         console.log('Error processing webhook request for Lead :', error);
-    
         res.status(200).json({ message: 'Error processing Update webhook request', error: error.message });
     }
 }
