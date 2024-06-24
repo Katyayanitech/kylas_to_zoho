@@ -18,6 +18,6 @@ exports.updateContactToCRM = async (req, res) => {
         return res.status(200).send('Contact Update Successfully')
     } catch (error) {
         console.log('Error processing webhook request:', error);
-        return res.status(500).send('Error processing webhook request');
+        return null;
     }
 }

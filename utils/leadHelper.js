@@ -20,8 +20,6 @@ const postLead = async (leadData) => {
 }
 
 exports.postLeadToZohoCRM = async (lead) => {
-    console.log("lead data");
-    console.log(lead);
     console.log("lead number");
     console.log(lead.entity.phoneNumbers[0].value);
     try {
@@ -37,7 +35,8 @@ exports.postLeadToZohoCRM = async (lead) => {
                     Zip_Code: lead.entity.zipcode || "",
                     Lead_Source: lead.entity.source.value || "",
                     Kylas_Owner: lead.entity.ownerId.value || "",
-                    Lead_Status: "Open"
+                    Lead_Status: "Open",
+                    Kylas_Lead_Id: lead.entity.id.toString(),
                 },
             ],
         };
@@ -102,6 +101,8 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log("phone number");
     console.log(phoneData);
     console.log(lead);
+    console.log(`Identification ${lead.entity.customFieldValues.leadType}`);
+    console.log(`Identification json: ${JSON.stringify(lead.entity.customFieldValues.leadType)}`);
     const leadId = await getLeadIdByPhoneNumber(phoneData);
     if (leadId == null) {
         console.log('Lead is not updated to Zoho CRM');
@@ -116,19 +117,18 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         First_Name: lead.entity.firstName || "",
                         Last_Name: lead.entity.lastName || "",
                         Phone: (lead.entity.phoneNumbers[0].dialCode + lead.entity.phoneNumbers[0].value) || "",
+                        Street: lead.entity.address || "",
                         City: lead.entity.city || "",
                         State: lead.entity.state || "",
                         Zip_Code: lead.entity.zipcode || "",
                         Lead_Source: lead.entity.source.value || "",
                         Kylas_Owner: lead.entity.ownerId.value || "",
-                        Lead_Status: lead.entity.pipelineStage.value != null ? lead.entity.pipelineStage.value || "" : "",
-                        Acres_of_Land_if_Farmer:  lead.entity.customFieldValues.cfAcresOfLandIfFarmer != null ? lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "" : "",
-                        Identification: lead.entity.customFieldValues.leadType.value || "",
-                        Details_Updated: lead.entity.updatedViaName === 'User' ? true : false
+                        Lead_Status: lead.entity.pipelineStage.value || "",
+                        Acres_of_Land_if_Farmer:  lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
+                        Details_Updated: true
                     },
                 ],
             };
-
             const response = await updateLead(leadData, leadId);
             console.log('Lead updated to Zoho CRM successfully:', response.data);
         } catch (error) {
