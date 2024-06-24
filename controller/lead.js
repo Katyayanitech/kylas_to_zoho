@@ -2,8 +2,8 @@ const { json } = require("express");
 const twilio = require('twilio');
 const { postLeadToZohoCRM, updateLeadToZohoCRM } = require("../utils/leadHelper.js");
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = '';
+const authToken = '';
 const client = new twilio(accountSid, authToken);
 
 exports.postLeadToCRM = async (req, res) => {
