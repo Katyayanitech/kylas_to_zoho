@@ -22,9 +22,10 @@ const getWhoIdByPhonenumber = async (phoneNumber, entityType, entityName) => {
             }
         };
         const response = await axios(config);
-        if (response.data.data.length > 0) {
+        if (response.data && response.data.data && response.data.data.length > 0) {
             return response.data.data[0].id;
         } else {
+            console.log('Entity not found ');
             console.log(`${entityType} with phone number ${phoneNumber} not found.`);
             if (entityType === 'lead') {
                 return await createLead(phoneNumber, entityName);
