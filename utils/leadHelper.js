@@ -101,8 +101,11 @@ exports.updateLeadToZohoCRM = async (lead) => {
     console.log("phone number");
     console.log(phoneData);
     console.log(lead);
-    console.log(`Identification ${lead.entity.customFieldValues.leadType}`);
-    console.log(`Identification json: ${JSON.stringify(lead.entity.customFieldValues.leadType)}`);
+        console.log(`Identification ${lead.entity.customFieldValues.cfLeadCategory}`);
+    console.log(`Identification json: ${JSON.stringify(lead.entity.customFieldValues.cfLeadCategory)}`);
+    console.log(`Lead Status json: ${JSON.stringify(lead.entity.pipelineStage)}`);
+    console.log(`Lead_Source json: ${JSON.stringify(lead.entity.source)}`);
+
     const leadId = await getLeadIdByPhoneNumber(phoneData);
     if (leadId == null) {
         console.log('Lead is not updated to Zoho CRM');
@@ -124,11 +127,12 @@ exports.updateLeadToZohoCRM = async (lead) => {
                         Lead_Source: lead.entity.source.value || "",
                         Kylas_Owner: lead.entity.ownerId.value || "",
                         Lead_Status: lead.entity.pipelineStage.value || "",
-                        Acres_of_Land_if_Farmer:  lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
-                        Details_Updated: true
-                    },
+                        Acres_of_Land_if_Farmer: lead.entity.customFieldValues.cfAcresOfLandIfFarmer || "",
+                        Details_Updated: true,
+                    }
                 ],
             };
+
             const response = await updateLead(leadData, leadId);
             console.log('Lead updated to Zoho CRM successfully:', response.data);
         } catch (error) {
