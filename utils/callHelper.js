@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const getWhoIdByPhonenumber = async (phoneNumber, entityType) => {
+const getWhoIdByPhonenumber = async (phoneNumber, entityType, entityName) => {
     let apiUrl = '';
 
     if (entityType === 'lead') {
@@ -22,14 +22,89 @@ const getWhoIdByPhonenumber = async (phoneNumber, entityType) => {
             }
         };
         const response = await axios(config);
-        if (response.data.data.length > 0) {
+        if (response.data && response.data.data && response.data.data.length > 0) {
             return response.data.data[0].id;
         } else {
+            console.log('Entity not found ');
             console.log(`${entityType} with phone number ${phoneNumber} not found.`);
-            return null;
+            if (entityType === 'lead') {
+                return await createLead(phoneNumber, entityName);
+            } else if (entityType === 'contact') {
+                return await createContact(phoneNumber, entityName);
+            }
         }
     } catch (error) {
         console.log(`Error while searching in ${entityType}:`, error.message);
+        return null;
+    }
+};
+
+const createLead = async (phoneNumber, entityName) => {
+    const leadData = {
+        data: [
+            {
+                "Phone": phoneNumber,
+                "Last_Name": entityName
+            }
+        ]
+    };
+
+    const config = {
+        method: 'post',
+        url: 'https://www.zohoapis.in/crm/v2/Leads',
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(leadData)
+    };
+
+    try {
+        const response = await axios(config);
+        if (response.data.data.length > 0) {
+            print(`Contact created : ${response.data.data[0].id}`)
+            return response.data.data[0].id;
+        } else {
+            console.log('Failed to create lead.');
+            return null;
+        }
+    } catch (error) {
+        console.log('Error creating lead:', error.message);
+        return null;
+    }
+};
+
+const createContact = async (phoneNumber) => {
+    const contactData = {
+        data: [
+            {
+                "Phone": phoneNumber,
+                "Last_Name": entityName 
+            }
+        ]
+    };
+
+    const config = {
+        method: 'post',
+        url: 'https://www.zohoapis.in/crm/v2/Contacts',
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(contactData)
+    };
+
+    try {
+        const response = await axios(config);
+        if (response.data.data.length > 0) {
+            print(`Contact created : ${response.data.data[0].id}`)
+            return response.data.data[0].id;
+        } else {
+            console.log('Failed to create contact.');
+            return null;
+        }
+    } catch (error) {
+        console.log('Error creating contact:', error.message);
         return null;
     }
 };
@@ -57,6 +132,8 @@ exports.PostCallzoho = async (call) => {
     console.log("Call Data ");
     console.log(call);
 
+    const relatedTo = call.entity.relatedTo;
+
     const startTime = new Date(call.entity.startTime);
     const offsetMinutes = startTime.getTimezoneOffset();
     const offsetHours = Math.abs(offsetMinutes / 60);
@@ -68,7 +145,9 @@ exports.PostCallzoho = async (call) => {
 
     const relatedEntity = call.entity.relatedTo[0];
     const entityType = relatedEntity.entity;
-    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber, entityType);
+    const entityName = relatedEntity.name;
+    console.log(`entity name : ${entityName}`);
+    const whoId = await getWhoIdByPhonenumber(call.entity.phoneNumber, entityType , entityName);
 
     let callType = "";
     if (call.entity.callType == "outgoing") {
