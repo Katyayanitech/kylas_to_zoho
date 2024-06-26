@@ -109,7 +109,7 @@ exports.PostTaskzoho = async (task) => {
         };
 
         const response = await PostTask(Taskdata);
-        // console.log('Task posted to Zoho CRM successfully:', response.data);
+        console.log('Task posted to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.log('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
     }
