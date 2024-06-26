@@ -208,13 +208,20 @@ exports.updateTaskToZohoCRM = async (task) => {
     console.log(`System : ${systemApproved}`);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
+
+
+    console.log("Formatted Due Date:", formattedDueDate);
     console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
+
+
     try {
         const taskData = {
             data: [
     
                   {
-                     "Subject": task.entity.name || "",
+
+
+                    "Subject": task.entity.name || "",
                     "Description": task.entity.description || "",
                     "Status": systemApproved ? "System Approve" : task.entity.status.name,
                     "Priority": task.entity.priority.name || "",
