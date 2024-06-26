@@ -3,6 +3,7 @@ const { PostTaskzoho, updateTaskToZohoCRM } = require("../utils/taskHelper");
 exports.postTaskToCRM = async (req, res) => {
     try {
         const newTask = req.body;
+        console.log(`Task Data : ${JSON.stringify(newTask)}`);
         await PostTaskzoho(newTask);
         return res.status(200).send('Task processed successfully');
     } catch (error) {
@@ -13,8 +14,11 @@ exports.postTaskToCRM = async (req, res) => {
 
 exports.updateTaskToCRM = async (req, res) => {
     try {
-        console.log(`Update Task Log ${req.body}`);
+    
         const updatedTask = req.body;
+
+        console.log(`Update Task Log ${JSON.stringify(updatedTask)}`);
+
         await updateTaskToZohoCRM(updatedTask);
         return res.status(200).send('Task Updated successfully');
     } catch (error) {
