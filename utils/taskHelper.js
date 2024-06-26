@@ -220,6 +220,7 @@ exports.updateTaskToZohoCRM = async (task) => {
     
                   {
 
+
                     "Subject": task.entity.name || "",
                     "Description": task.entity.description || "",
                     "Status": systemApproved ? "System Approve" : task.entity.status.name,
@@ -233,13 +234,8 @@ exports.updateTaskToZohoCRM = async (task) => {
                 },
             ],
         };
-
-
         console.log(taskData)
-
-
         const response = await updateTask(taskData, taskId);
-
         console.log('Task updated to Zoho CRM successfully:', response.data);
     } catch (error) {
         console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
