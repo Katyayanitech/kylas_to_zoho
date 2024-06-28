@@ -1,243 +1,307 @@
-const axios = require('axios');
-const moment = require('moment');
+const axios = require("axios");
+const moment = require("moment");
+const { logErrorToGoogleSheet } = require("../googlesheet.js");
 
 const PostTask = async (Taskdata) => {
-    const config = {
-        method: 'post',
-        url: 'https://www.zohoapis.in/crm/v2/Tasks',
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(Taskdata)
-    };
+  const config = {
+    method: "post",
+    url: "https://www.zohoapis.in/crm/v2/Tasks",
+    headers: {
+      Authorization: `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify(Taskdata),
+  };
 
-    try {
-        return await axios(config);
-    } catch (error) {
-        console.log('Error in postTask function:', error);
-        throw error;
-    }
-}
+  try {
+    return await axios(config);
+  } catch (error) {
+    console.log("Error in postTask function:", error);
+    throw error;
+  }
+};
 
 exports.PostTaskzoho = async (task) => {
-    let entityType;
-    let entityId;
-    let entityName;
-    let entityNumber;
-    const dueDate = new Date(task.entity.dueDate);
-    const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
-    if (task.entity.relations != null) {
-        entityType = task.entity.relations[0].entityType;
-        entityId = task.entity.relations[0].entityId;
+  console.log(task);
+  let entityType;
+  let entityId;
+  let entityName;
+  let entityNumber;
+  const dueDate = new Date(task.entity.dueDate);
+  const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${dueDate.getDate().toString().padStart(2, "0")}`;
+  if (task.entity.relations != null) {
+    entityType = task.entity.relations[0].entityType;
+    entityId = task.entity.relations[0].entityId;
 
-        if (entityType === "LEAD") {
-            try {
-                const response = await axios.get(`https://api.kylas.io/v1/leads/${entityId}`, {
-                    headers: {
-                        'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
-                    }
-                });
-                const leadData = response.data;
-                entityName = leadData.lastName;
-                if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
-                    entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                } else {
-                    console.log("No phone number available for this lead.");
-                }
-            } catch (e) {
-                console.log("Error fetching lead data:", e.toString());
-            }
-
-        } else if (entityType === "DEAL") {
-            try {
-                const response = await axios.get(`https://api.kylas.io/v1/deals/${entityId}`, {
-                    headers: {
-                        'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
-                    }
-                });
-                const leadData = response.data;
-                entityName = leadData.lastName;
-                if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
-                    entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                } else {
-                    console.log("No phone number available for this Deal.");
-                }
-            } catch (e) {
-                console.log("Error fetching lead data:", e.toString());
-            }
+    if (entityType === "LEAD") {
+      try {
+        const response = await axios.get(
+          `https://api.kylas.io/v1/leads/${entityId}`,
+          {
+            headers: {
+              "api-key": "1e8d51e4-de78-4394-b5a9-e9d10b1e72d2",
+            },
+          }
+        );
+        const leadData = response.data;
+        entityName = leadData.lastName;
+        if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
+          entityNumber =
+            leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
+        } else {
+          console.log("No phone number available for this lead.");
         }
-        else if (entityType === "CONTACT") {
-            try {
-                const response = await axios.get(`https://api.kylas.io/v1/contacts/${entityId}`, {
-                    headers: {
-                        'api-key': '1e8d51e4-de78-4394-b5a9-e9d10b1e72d2'
-                    }
-                });
-                const leadData = response.data;
-                entityName = leadData.lastName;
-                if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
-                    entityNumber = leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
-                } else {
-                    console.log("No phone number available for this Contact.");
-                }
-            } catch (e) {
-                console.log("Error fetching lead data:", e.toString());
-            }
+      } catch (e) {
+        console.log(`catch data: ${task}`);
+        console.log("Error fetching lead data:", e.toString());
+      }
+    } else if (entityType === "DEAL") {
+      try {
+        const response = await axios.get(
+          `https://api.kylas.io/v1/deals/${entityId}`,
+          {
+            headers: {
+              "api-key": "1e8d51e4-de78-4394-b5a9-e9d10b1e72d2",
+            },
+          }
+        );
+        const leadData = response.data;
+        entityName = leadData.lastName;
+        if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
+          entityNumber =
+            leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
+        } else {
+          console.log("No phone number available for this Deal.");
         }
+      } catch (e) {
+        console.log("Error fetching lead data:", e.toString());
+      }
+    } else if (entityType === "CONTACT") {
+      try {
+        const response = await axios.get(
+          `https://api.kylas.io/v1/contacts/${entityId}`,
+          {
+            headers: {
+              "api-key": "1e8d51e4-de78-4394-b5a9-e9d10b1e72d2",
+            },
+          }
+        );
+        const leadData = response.data;
+        entityName = leadData.lastName;
+        if (leadData.phoneNumbers && leadData.phoneNumbers.length > 0) {
+          entityNumber =
+            leadData.phoneNumbers[0].dialCode + leadData.phoneNumbers[0].value;
+        } else {
+          console.log("No phone number available for this Contact.");
+        }
+      } catch (e) {
+        console.log("Error fetching lead data:", e.toString());
+      }
     }
+  }
 
-    try {
-        const Taskdata = {
-            data: [
-                {
-                    "Subject": task.entity.name || "",
-                    "Description": task.entity.description || "",
-                    "Status": task.entity.status.name || "",
-                    "Priority": task.entity.priority.name || "",
-                    "Due_Date": formattedDueDate || "",
-                    "send_notification": true,
-                    "Send_Notification_Email": true,
-                    "Kyla_s_Task_Id": task.entity.id.toString() || "",
-                    "kylas_task_owner": task.entity.assignedTo.name || "",
-                    "Entity": entityType || "",
-                    "Assosiated_Name": entityName || "",
-                    "Assosiated_Contact_Number": entityNumber || "",
-                    "Entity_Id": entityId.toString() || "",
-                },
-            ],
-        };
+  try {
+    const Taskdata = {
+      data: [
+        {
+          Subject: task.entity.name || "",
+          Description: task.entity.description || "",
+          Status: task.entity.status.name || "",
+          Priority: task.entity.priority.name || "",
+          Due_Date: formattedDueDate || "",
+          send_notification: true,
+          Send_Notification_Email: true,
+          Kyla_s_Task_Id: task.entity.id.toString() || "",
+          kylas_task_owner: task.entity.assignedTo.name || "",
+          Entity: entityType || "",
+          Assosiated_Name: entityName || "",
+          Assosiated_Contact_Number: entityNumber || "",
+          Entity_Id: entityId.toString() || "",
+        },
+      ],
+    };
 
-        const response = await PostTask(Taskdata);
-        // console.log('Task posted to Zoho CRM successfully:', response.data);
-    } catch (error) {
-        console.log('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
-    }
-}
+    const response = await PostTask(Taskdata);
+    // throw new Error("Intentional failure");
+    console.log('Task posted to Zoho CRM successfully:', response.data);
+  } catch (error) {
+    const errordata = error.response ? error.response.data : error;
+    console.log(errordata);
+    const data = [
+      task.entity.name || "",
+      task.entity.description || "",
+      task.entity.status.name || "",
+      task.entity.priority.name || "",
+      formattedDueDate || "",
+      false,
+      false,
+      task.entity.id.toString() || "",
+      task.entity.ownerId.value || "",
+      task.entity.assignedTo.name || "",
+      entityType || "",
+      entityName || "",
+      entityNumber || "",
+      entityId.toString() || "",
+      errordata.toString(),
+    ];
+    //console.log(data);
 
+    await logErrorToGoogleSheet(data, "Sheet2");
+
+    console.log(
+      "Error posting Task to Zoho CRM:",
+      error.response ? error.response.data : error
+    );
+  }
+};
 
 // Update Task
 const updateTask = async (taskData, taskId) => {
-    const config = {
-        method: 'put',
-        url: `https://www.zohoapis.in/crm/v2/Tasks/${taskId}`,
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(taskData)
-    };
+  const config = {
+    method: "put",
+    url: `https://www.zohoapis.in/crm/v2/Tasks/${taskId}`,
+    headers: {
+      Authorization: `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify(taskData),
+  };
 
-    try {
-        return await axios(config);
-    } catch (error) {
-        console.log('Error in updateTask function:', error);
-        return null;
-    }
-}
+  try {
+    return await axios(config);
+  } catch (error) {
+    console.log("Error in updateTask function:", error);
+    return null;
+  }
+};
 
 const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
-    const apiUrl = `https://www.zohoapis.in/crm/v2/Tasks/search?criteria=(Kyla_s_Task_Id:equals:${kylasTaskId})`;
+  const apiUrl = `https://www.zohoapis.in/crm/v2/Tasks/search?criteria=(Kyla_s_Task_Id:equals:${kylasTaskId})`;
 
-    const config = {
-        method: 'get',
-        url: apiUrl,
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        }
+  const config = {
+    method: "get",
+    url: apiUrl,
+    headers: {
+      Authorization: `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    const taskData = response.data.data[0];
+    return {
+      id: taskData.id,
+      AssociatedContactNumber: taskData.Assosiated_Contact_Number,
     };
-
-    try {
-        const response = await axios(config);
-        const taskData = response.data.data[0];
-        return {
-            id: taskData.id,
-            AssociatedContactNumber: taskData.Assosiated_Contact_Number
-        };
-    } catch (error) {
-        console.log('Error in getTaskIdAndContactByKylasTaskId function:', error);
-        console.log('KylasTask Id and Number Not found:', kylasTaskId);
-        return {
-            id: '',
-            AssociatedContactNumber: ''
-        };;
-    }
+  } catch (error) {
+    console.log("Error in getTaskIdAndContactByKylasTaskId function:", error);
+    console.log("KylasTask Id and Number Not found:", kylasTaskId);
+    return {
+      id: "",
+      AssociatedContactNumber: "",
+    };
+  }
 };
 
 const checkCallHistory = async (phoneNumber) => {
-    const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
+  const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
 
-    const config = {
-        method: 'get',
-        url: url,
-        headers: {
-            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        }
-    };
-    try {
-        const response = await axios(config);
-        const callData = response.data.data;
+  const config = {
+    method: "get",
+    url: url,
+    headers: {
+      Authorization: `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axios(config);
+    const callData = response.data.data;
 
-        const currentTime = moment();
+    const currentTime = moment();
 
-        let totalDuration = 0;
-        callData.forEach(call => {
-            const callStartTime = moment(call.Call_Start_Time);
-            const durationInSeconds = call.Call_Duration_in_seconds || 0;
-            if (currentTime.diff(callStartTime, 'hours') <= 1) {
-                totalDuration += durationInSeconds;
-            }
-        });
+    let totalDuration = 0;
+    callData.forEach((call) => {
+      const callStartTime = moment(call.Call_Start_Time);
+      const durationInSeconds = call.Call_Duration_in_seconds || 0;
+      if (currentTime.diff(callStartTime, "hours") <= 1) {
+        totalDuration += durationInSeconds;
+      }
+    });
 
-        return totalDuration >= 15;
-    } catch (error) {
-        console.log(`Error fetching or filtering calls: ${error}`);
-        return false;
-    }
-}
-
+    return totalDuration >= 15;
+  } catch (error) {
+    console.log(`Error fetching or filtering calls: ${error}`);
+    return false;
+  }
+};
 
 exports.updateTaskToZohoCRM = async (task) => {
-    const kylasTaskId = task.entity.id;
-    const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
-    const taskId = taskIdAndContact.id;
-    const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
-    const systemApproved = await checkCallHistory(associatedContactNumber);
-    console.log(`System : ${systemApproved}`);
-    const dueDate = new Date(task.entity.dueDate);
-    const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
+  const kylasTaskId = task.entity.id;
+  const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
+  const taskId = taskIdAndContact.id;
+  const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
+  const systemApproved = await checkCallHistory(associatedContactNumber);
+  console.log(`System : ${systemApproved}`);
+  const dueDate = new Date(task.entity.dueDate);
+  const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
 
 
-    console.log("Formatted Due Date:", formattedDueDate);
-    console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
+  console.log("Formatted Due Date:", formattedDueDate);
+  console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
 
 
-    try {
-        const taskData = {
-            data: [
-    
-                  {
+  try {
+    const taskData = {
+      data: [
 
+        {
 
-                    "Subject": task.entity.name || "",
-                    "Description": task.entity.description || "",
-                    "Status": systemApproved ? "System Approve" : task.entity.status.name,
-                    "Priority": task.entity.priority.name || "",
-                    "Due_Date": formattedDueDate || "",
-                    "send_notification": true,
-                    "Send_Notification_Email": true,
-                    "Kyla_s_Task_Id": task.entity.id.toString() || "",
-                    "kylas_task_owner": task.entity.assignedTo.name || "",
-                    "System_Updated": systemApproved ? true : false,
-                },
-            ],
-        };
-        console.log(taskData)
-        const response = await updateTask(taskData, taskId);
-        console.log('Task updated to Zoho CRM successfully:', response.data);
-    } catch (error) {
-        console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
-    }
-}
+          "Subject": task.entity.name || "",
+          "Description": task.entity.description || "",
+          "Status": systemApproved ? "System Approve" : task.entity.status.name,
+          "Priority": task.entity.priority.name || "",
+          "Due_Date": formattedDueDate || "",
+          "send_notification": true,
+          "Send_Notification_Email": true,
+          "Kyla_s_Task_Id": task.entity.id.toString() || "",
+          "kylas_task_owner": task.entity.assignedTo.name || "",
+          "System_Updated": systemApproved ? true : false,
+        },
+      ],
+    };
+
+    console.log(taskData);
+
+    const response = await updateTask(taskData, taskId);
+
+    console.log("Task updated to Zoho CRM successfully:", response.data);
+  } catch (error) {
+    const errordata = error.response ? error.response.data : error;
+    console.log(errordata);
+    const data = [
+      task.entity.name || "",
+      task.entity.description || "",
+      systemApproved ? "System Approve" : task.entity.status.name,
+      task.entity.priority.name || "",
+      formattedDueDate || "",
+      false,
+      false,
+      task.entity.id.toString() || "",
+      task.entity.ownerId.value || "",
+      task.entity.assignedTo.name || "",
+      systemApproved ? true : false,
+      errordata.toString(),
+    ];
+
+    await logErrorToGoogleSheet(data, "Sheet2");
+
+    console.log(
+      "Error updating Task to Zoho CRM:",
+      error.response ? error.response.data : error
+    );
+  }
+};
