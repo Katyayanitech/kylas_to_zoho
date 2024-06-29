@@ -253,6 +253,13 @@ exports.updateTaskToZohoCRM = async (task) => {
   console.log("Formatted Due Date:", formattedDueDate);
   console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
 
+   console.log("Formatted Due Date:", formattedDueDate);
+    console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
+
+    const updatedAtDate = new Date(task.entity.updatedAt);
+
+    const formattedDate = format(updatedAtDate, 'yyyy-MM-dd HH:mm:ss');
+
 
   try {
     const taskData = {
@@ -270,6 +277,7 @@ exports.updateTaskToZohoCRM = async (task) => {
           "Kyla_s_Task_Id": task.entity.id.toString() || "",
           "kylas_task_owner": task.entity.assignedTo.name || "",
           "System_Updated": systemApproved ? true : false,
+            "Stutas_Changed_Time": updatedAtDate,
         },
       ],
     };
