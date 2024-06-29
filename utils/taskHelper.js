@@ -216,7 +216,6 @@ exports.updateTaskToZohoCRM = async (task) => {
     const updatedAtDate = new Date(task.entity.updatedAt);
 
     const formattedDate = format(updatedAtDate, 'yyyy-MM-dd HH:mm:ss');
-
     try {
         const taskData = {
             data: [
