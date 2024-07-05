@@ -108,16 +108,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
 
     const leadId = await getLeadIdByPhoneNumber(phoneData);
     if (leadId == null) {
-        console.log('Lead is not updated to Zoho CRM');d);
-            console.log('Lead updated to Zoho CRM successfully:', response.data);
-        } catch (error) {
-            console.log('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
-        }
-
-    }
-}
-
-
+        console.log('Lead is not updated to Zoho CRM');
         await exports.postLeadToZohoCRM(lead);
     } else {
         console.log("leadId");
@@ -143,4 +134,12 @@ exports.updateLeadToZohoCRM = async (lead) => {
                 ],
             };
 
-            const response = await updateLead(leadData, leadI
+            const response = await updateLead(leadData, leadId);
+            console.log('Lead updated to Zoho CRM successfully:', response.data);
+        } catch (error) {
+            console.log('Error updating lead to Zoho CRM:', error.response ? error.response.data : error);
+        }
+
+    }
+}
+
