@@ -109,7 +109,7 @@ exports.updateLeadToZohoCRM = async (lead) => {
     const leadId = await getLeadIdByPhoneNumber(phoneData);
     if (leadId == null) {
         console.log('Lead is not updated to Zoho CRM');
-        await exports.postLeadToZohoCRM(lead);
+        //await exports.postLeadToZohoCRM(lead);
     } else {
         console.log("leadId");
         console.log(leadId);
