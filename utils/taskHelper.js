@@ -232,6 +232,7 @@ exports.updateTaskToZohoCRM = async (task) => {
                     "kylas_task_owner": task.entity.assignedTo.name || "",
                     "System_Updated": systemApproved ? true : false,
                     "Stutas_Changed_Time": updatedAtDate,
+                    
                 },
             ],
         };
