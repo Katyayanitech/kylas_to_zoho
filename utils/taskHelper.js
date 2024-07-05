@@ -184,29 +184,40 @@ const checkCallHistory = async (phoneNumber) => {
         const currentTime = moment();
 
         let totalDuration = 0;
+        let callAttempt = false;
+
         callData.forEach(call => {
             const callStartTime = moment(call.Call_Start_Time);
             const durationInSeconds = call.Call_Duration_in_seconds || 0;
             if (currentTime.diff(callStartTime, 'hours') <= 1) {
                 totalDuration += durationInSeconds;
             }
+            if (durationInSeconds === 0) {
+                callAttempt = true;
+            }
         });
 
-        return totalDuration >= 15;
+        return {
+            systemApproved: totalDuration >= 15,
+            callAttempt
+        };
     } catch (error) {
         console.log(`Error fetching or filtering calls: ${error}`);
-        return false;
+        return {
+            systemApproved: false,
+            callAttempt: false
+        };
     }
 }
-
 
 exports.updateTaskToZohoCRM = async (task) => {
     const kylasTaskId = task.entity.id;
     const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
     const taskId = taskIdAndContact.id;
     const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
-    const systemApproved = await checkCallHistory(associatedContactNumber);
-    console.log(`System : ${systemApproved}`);
+    const { systemApproved, callAttempt } = await checkCallHistory(associatedContactNumber);
+    console.log(`System Approved: ${systemApproved}`);
+    console.log(`Call Attempt: ${callAttempt}`);
     const dueDate = new Date(task.entity.dueDate);
     const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
 
@@ -219,8 +230,7 @@ exports.updateTaskToZohoCRM = async (task) => {
     try {
         const taskData = {
             data: [
-    
-                  {
+                {
                     "Subject": task.entity.name || "",
                     "Description": task.entity.description || "",
                     "Status": systemApproved ? "System Approve" : task.entity.status.name,
@@ -232,14 +242,12 @@ exports.updateTaskToZohoCRM = async (task) => {
                     "kylas_task_owner": task.entity.assignedTo.name || "",
                     "System_Updated": systemApproved ? true : false,
                     "Stutas_Changed_Time": updatedAtDate,
-                    
+                    "Call_Attempt": callAttempt ? "Attempted" : "Not Attempted"
                 },
             ],
         };
 
-
-        console.log(`taskData Body : ${taskData}`);
-
+        console.log(`taskData Body : ${JSON.stringify(taskData)}`);
 
         const response = await updateTask(taskData, taskId);
 
@@ -248,3 +256,4 @@ exports.updateTaskToZohoCRM = async (task) => {
         console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
     }
 }
+
