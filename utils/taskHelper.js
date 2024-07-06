@@ -1,6 +1,9 @@
-const axios = require("axios");
-const moment = require("moment");
+
+const axios = require('axios');
+const moment = require('moment');
+const { format } = require('date-fns');
 const { logErrorToGoogleSheet } = require("../googlesheet.js");
+
 
 const PostTask = async (Taskdata) => {
   const config = {
@@ -102,54 +105,34 @@ exports.PostTaskzoho = async (task) => {
     }
   }
 
-  try {
-    const Taskdata = {
-      data: [
-        {
-          Subject: task.entity.name || "",
-          Description: task.entity.description || "",
-          Status: task.entity.status.name || "",
-          Priority: task.entity.priority.name || "",
-          Due_Date: formattedDueDate || "",
-          send_notification: true,
-          Send_Notification_Email: true,
-          Kyla_s_Task_Id: task.entity.id.toString() || "",
-          kylas_task_owner: task.entity.assignedTo.name || "",
-          Entity: entityType || "",
-          Assosiated_Name: entityName || "",
-          Assosiated_Contact_Number: entityNumber || "",
-          Entity_Id: entityId.toString() || "",
-        },
-      ],
-    };
 
-    const response = await PostTask(Taskdata);
-    // throw new Error("Intentional failure");
-    console.log('Task posted to Zoho CRM successfully:', response.data);
-  } catch (error) {
-    const errordata = error.response ? error.response.data : error;
-    console.log(errordata);
-    const data = [
-      task.entity.name || "",
-      task.entity.description || "",
-      task.entity.status.name || "",
-      task.entity.priority.name || "",
-      formattedDueDate || "",
-      false,
-      false,
-      task.entity.id.toString() || "",
-      task.entity.ownerId.value || "",
-      task.entity.assignedTo.name || "",
-      entityType || "",
-      entityName || "",
-      entityNumber || "",
-      entityId.toString() || "",
-      errordata.toString(),
-    ];
-    //console.log(data);
+    try {
+        const Taskdata = {
+            data: [
+                {
+                    "Subject": task.entity.name || "",
+                    "Description": task.entity.description || "",
+                    "Status": task.entity.status.name || "",
+                    "Priority": task.entity.priority.name || "",
+                    "Due_Date": formattedDueDate || "",
+                    "send_notification": true,
+                    "Send_Notification_Email": true,
+                    "Kyla_s_Task_Id": task.entity.id.toString() || "",
+                    "kylas_task_owner": task.entity.assignedTo.name || "",
+                    "Entity": entityType || "",
+                    "Assosiated_Name": entityName || "",
+                    "Assosiated_Contact_Number": entityNumber || "",
+                    "Entity_Id": entityId.toString() || "",
+                },
+            ],
+        };
 
-    await logErrorToGoogleSheet(data, "Sheet2");
-
+        const response = await PostTask(Taskdata);
+        console.log('Task posted to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.log('Error posting Task to Zoho CRM:', error.response ? error.response.data : error);
+    }
+}
     console.log(
       "Error posting Task to Zoho CRM:",
       error.response ? error.response.data : error
@@ -207,107 +190,102 @@ const getTaskIdAndContactByKylasTaskId = async (kylasTaskId) => {
 };
 
 const checkCallHistory = async (phoneNumber) => {
-  const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
 
-  const config = {
-    method: "get",
-    url: url,
-    headers: {
-      Authorization: `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const response = await axios(config);
-    const callData = response.data.data;
+    const url = `https://www.zohoapis.in/crm/v2/Calls/search?criteria=(Phone_Number:equals:${phoneNumber})`;
 
-    const currentTime = moment();
+    const config = {
+        method: 'get',
+        url: url,
+        headers: {
+            'Authorization': `Zoho-oauthtoken ${ZOHO_CRM_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        }
+    };
+    try {
+        const response = await axios(config);
+        const callData = response.data.data;
 
-    let totalDuration = 0;
-    callData.forEach((call) => {
-      const callStartTime = moment(call.Call_Start_Time);
-      const durationInSeconds = call.Call_Duration_in_seconds || 0;
-      if (currentTime.diff(callStartTime, "hours") <= 1) {
-        totalDuration += durationInSeconds;
-      }
-    });
+        if (!callData || callData.length === 0) {
+            return {
+                systemApproved: false,
+                callAttempt: "Not Attempted"
+            };
+        }
 
-    return totalDuration >= 15;
-  } catch (error) {
-    console.log(`Error fetching or filtering calls: ${error}`);
-    return false;
-  }
-};
+        const currentTime = moment();
+        let totalDuration = 0;
+        let callAttempt = "Not Attempted";
+
+        callData.forEach(call => {
+            const callStartTime = moment(call.Call_Start_Time);
+            const durationInSeconds = call.Call_Duration_in_seconds || 0;
+            if (currentTime.diff(callStartTime, 'hours') <= 1) {
+                totalDuration += durationInSeconds;
+            }
+            if (durationInSeconds === 0) {
+                callAttempt = "Attempted";
+            }
+        });
+
+        return {
+            systemApproved: totalDuration >= 15,
+            callAttempt
+        };
+    } catch (error) {
+        console.log(`Error fetching or filtering calls: ${error}`);
+        return {
+            systemApproved: false,
+            callAttempt: "Not Attempted"
+        };
+    }
+}
 
 exports.updateTaskToZohoCRM = async (task) => {
-  const kylasTaskId = task.entity.id;
-  const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
-  const taskId = taskIdAndContact.id;
-  const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
-  const systemApproved = await checkCallHistory(associatedContactNumber);
-  console.log(`System : ${systemApproved}`);
-  const dueDate = new Date(task.entity.dueDate);
-  const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
+    const kylasTaskId = task.entity.id;
+    const taskIdAndContact = await getTaskIdAndContactByKylasTaskId(kylasTaskId);
+    const taskId = taskIdAndContact.id;
+    const associatedContactNumber = taskIdAndContact.AssociatedContactNumber;
+    const { systemApproved, callAttempt } = await checkCallHistory(associatedContactNumber);
+    console.log(`System Approved: ${systemApproved}`);
+    console.log(`Call Attempt: ${callAttempt}`);
+    const dueDate = new Date(task.entity.dueDate);
+    const formattedDueDate = `${dueDate.getFullYear()}-${(dueDate.getMonth() + 1).toString().padStart(2, '0')}-${dueDate.getDate().toString().padStart(2, '0')}`;
 
+    console.log("Formatted Due Date:", formattedDueDate);
 
-  console.log("Formatted Due Date:", formattedDueDate);
-  console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
-
-     console.log("Formatted Due Date:", formattedDueDate);
     console.log(`Task Status: ${JSON.stringify(task.entity.status)}`);
 
     const updatedAtDate = new Date(task.entity.updatedAt);
     const formattedDate = format(updatedAtDate, 'yyyy-MM-dd HH:mm:ss');
 
-  try {
-    const taskData = {
-      data: [
+    try {
+        const taskData = {
+            data: [
+                {
+                    "Subject": task.entity.name || "",
+                    "Description": task.entity.description || "",
+                    "Status": systemApproved ? "System Approve" : task.entity.status.name,
+                    "Priority": task.entity.priority.name || "",
+                    "Due_Date": formattedDueDate || "",
+                    "send_notification": true,
+                    "Send_Notification_Email": true,
+                    "Kyla_s_Task_Id": task.entity.id.toString() || "",
+                    "kylas_task_owner": task.entity.assignedTo.name || "",
+                    "System_Updated": systemApproved ? true : false,
+                    "Stutas_Changed_Time": updatedAtDate,
+                    "Call_Attempt": callAttempt
+                },
+            ],
+        };
 
-        {
+        console.log(`taskData Body: ${JSON.stringify(taskData)}`);
 
-          "Subject": task.entity.name || "",
-          "Description": task.entity.description || "",
-          "Status": systemApproved ? "System Approve" : task.entity.status.name,
-          "Priority": task.entity.priority.name || "",
-          "Due_Date": formattedDueDate || "",
-          "send_notification": true,
-          "Send_Notification_Email": true,
-          "Kyla_s_Task_Id": task.entity.id.toString() || "",
-          "kylas_task_owner": task.entity.assignedTo.name || "",
-          "System_Updated": systemApproved ? true : false,
-          "Stutas_Changed_Time": formattedDate,
-        },
-      ],
-    };
+        const response = await updateTask(taskData, taskId);
 
-    console.log(taskData);
+        console.log('Task updated to Zoho CRM successfully:', response.data);
+    } catch (error) {
+        console.log('Error updating Task to Zoho CRM:', error.response ? error.response.data : error);
+    }
+}
 
-    const response = await updateTask(taskData, taskId);
 
-    console.log("Task updated to Zoho CRM successfully:", response.data);
-  } catch (error) {
-    const errordata = error.response ? error.response.data : error;
-    console.log(errordata);
-    const data = [
-      task.entity.name || "",
-      task.entity.description || "",
-      systemApproved ? "System Approve" : task.entity.status.name,
-      task.entity.priority.name || "",
-      formattedDueDate || "",
-      false,
-      false,
-      task.entity.id.toString() || "",
-      task.entity.ownerId.value || "",
-      task.entity.assignedTo.name || "",
-      systemApproved ? true : false,
-      errordata.toString(),
-    ];
-
-    await logErrorToGoogleSheet(data, "Sheet2");
-
-    console.log(
-      "Error updating Task to Zoho CRM:",
-      error.response ? error.response.data : error
-    );
-  }
-};
